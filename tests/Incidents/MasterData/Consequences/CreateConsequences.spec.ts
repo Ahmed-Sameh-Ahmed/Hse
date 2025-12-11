@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 //Page
-import login from "../../../Pages/Login/Login";
-import Consequences from "../../../Pages/MasterData/Consequences/Consequences";
+import login from "../../../../Pages/Login/Login";
+import Consequences from "../../../../Pages/MasterData/Consequences/Consequences";
 //Data
-import Data from "../../../Data/MasterData/Consequences.json";
+import Data from "../../../../Data/MasterData/Consequences.json";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");

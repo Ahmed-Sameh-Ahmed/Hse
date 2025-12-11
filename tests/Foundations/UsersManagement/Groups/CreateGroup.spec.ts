@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 //Pages
-import Login from "../../../Pages/Login/Login";
-import Groups from "../../../Pages/UsersManagement/Groups/Groups";
+import Login from "../../../../Pages/Login/Login";
+import Groups from "../../../../Pages/UsersManagement/Groups/Groups";
 
 //Data
-import GroupsData from "../../../Data/UsersManagement/Group.json";
+import GroupsData from "../../../../Data/UsersManagement/Group.json";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
