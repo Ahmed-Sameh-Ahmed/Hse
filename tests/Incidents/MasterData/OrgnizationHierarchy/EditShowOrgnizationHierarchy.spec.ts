@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 //Page
-import login from "../../../Pages/Login/Login";
-import OrganizationHierarchy from "../../../Pages/MasterData/OrganizationHierarchy/OrganizationHierarchy";
+import login from "../../../../Pages/Login/Login";
+import OrganizationHierarchy from "../../../../Pages/MasterData/OrganizationHierarchy/OrganizationHierarchy";
 //Data
-import Data from "../../../Data/MasterData/OrganizationHierarchy.json";
+import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
@@ -17,7 +17,7 @@ test("Show & Edit Orgnization Hierarchy", async ({ page }) => {
     page,
     expect,
     Data.Show,
-    Data.Right
+    Data.Right.AllFields
   );
   await Organization_Hierarchy.ShowOrganizationHierarchy(
     page,
@@ -31,7 +31,7 @@ test("Show & Edit Orgnization Hierarchy", async ({ page }) => {
   await Organization_Hierarchy.EditOrganizationHierarchy(
     page,
     expect,
-    Data.Right
+    Data.Right.AllFields
   );
 });
 
@@ -47,6 +47,6 @@ test("Edit Orgnization Hierarchy Form Table", async ({ page }) => {
   await Organization_Hierarchy.EditOrganizationHierarchy(
     page,
     expect,
-    Data.Right
+    Data.Right.AllFields
   );
 });

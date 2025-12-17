@@ -18,7 +18,7 @@ test("Filter Orgnization Hierarchy", async ({ page }) => {
   await OrganizationHierarchyPage.FilterOrganizationHierarchy(
     page,
     expect,
-    Data.Right,
+    Data.Right.AllFields,
     Data.Filter
   );
 });

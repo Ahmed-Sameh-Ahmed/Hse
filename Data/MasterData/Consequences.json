@@ -1,15 +1,29 @@
 {
   "Right": {
-    "ConsequencesName": "Infection Spread",
-    "Description": "Description"
+    "Required": {
+      "ConsequencesName": "ConsequencesName",
+      "Description": ""
+    },
+    "AllFields": {
+      "ConsequencesName": "ConsequencesName",
+      "Description": "Description"
+    }
   },
   "Wrong": {
-    "ConsequencesName": "q",
-    "Description": "Description"
+    "ConsequencesNameExists": {
+      "ConsequencesName": "ConsequencesName",
+      "Description": "Description"
+    }
   },
 
-  "Edit": {},
-  "Show": {},
-  "ShowInTable": [],
+  "Edit": {
+    "ConsequencesName": "ConsequencesName",
+    "Description": "Description"
+  },
+  "Show": {
+    "ConsequencesName": "ConsequencesName",
+    "Description": "Description"
+  },
+  "ShowInTable": ["ConsequencesName", "Description"],
   "Filter": {}
 }

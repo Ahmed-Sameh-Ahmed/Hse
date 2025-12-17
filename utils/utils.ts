@@ -13,4 +13,10 @@ const CheckFilteredData = (result: [], expectedData: any) => {
   expect(result).toEqual(Array(result.length).fill(expectedData));
 };
 
-export { safeAction, CheckFilteredData };
+const ChangeStatus = async ({ page, Row }: { page: any; Row: any }) => {
+  await Row.locator(".self-center").click();
+  await page.getByRole("button", { name: "OK" }).click();
+  await page.waitForTimeout(3000);
+};
+
+export { safeAction, CheckFilteredData, ChangeStatus };

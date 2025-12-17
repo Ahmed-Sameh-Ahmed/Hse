@@ -1,28 +1,49 @@
 {
   "Right": {
-    "Name": "qqqq",
-    "Category": "tester",
-    "Severity": "High",
-    "Associated_Caution": "ss",
-    "How_to_Detect": "qqq",
-    "Contamination_Procedure": "qqqq"
+    "required": {
+      "Name": "name",
+      "Category": "Physical",
+      "Severity": "Low",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "",
+      "Contamination_Procedure": ""
+    },
+    "allFields": {
+      "Name": "name",
+      "Category": "Physical",
+      "Severity": "Low",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "like that",
+      "Contamination_Procedure": "call 911"
+    }
   },
   "Wrong": {
-    "Name": "q",
-    "Category": "tester",
-    "Severity": "High",
-    "Associated_Caution": "ss",
-    "How_to_Detect": "qqq",
-    "Contamination_Procedure": "qqqq"
+    "wrong": {
+      "Name": "q",
+      "Category": "Physical",
+      "Severity": "High",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "like that",
+      "Contamination_Procedure": "call 911"
+    },
+    "DuplicateData": {
+      "Name": "name",
+      "Category": "Physical",
+      "Severity": "Low",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "like that",
+      "Contamination_Procedure": "call 911"
+    }
   },
-  "ShowInTable": ["Infection Spread", "phyisical", "Critical", "Inactive"],
+  "ShowInTable": ["name", "Physical", "Low", "Inactive"],
+
   "Show": {
-    "Name": "Infection Spread",
-    "Category": "physical",
-    "Severity": "critical",
-    "Associated_Caution": "use hearing prtection",
-    "How_to_Detect": "Sound level > 85",
-    "Contamination_Procedure": "isolate area"
+    "Name": "name",
+    "Category": "Physical",
+    "Severity": "Low",
+    "Associated_Caution": "Warming",
+    "How_to_Detect": "like that",
+    "Contamination_Procedure": "call 911"
   },
   "FilterData": {
     "Name": "Infection Spread",
