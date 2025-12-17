@@ -1,4 +1,4 @@
-import { CheckFilteredData } from "../../../utils/utils";
+import { CheckFilteredData, ChangeStatus } from "../../../utils/utils";
 
 type TData = {
   LevelID: string;
@@ -63,7 +63,6 @@ class OrganizationHierarchy {
       }).click();
 
       await page.getByTestId("description").fill(data.Description);
-      await page.getByTestId("description").fill("");
 
       await page.getByTestId("save-button").click();
 
@@ -123,15 +122,13 @@ class OrganizationHierarchy {
     expect: any,
     data: TData
   ) {
-    const Rows = page.locator("table tbody tr", {
+    const Row = page.locator("table tbody tr", {
       has: page.locator("td"),
       hasText: data.LevelName,
     });
-    await Rows.locator(".self-center").click();
-    await page.getByRole("button", { name: "OK" }).click();
-    await page.waitForTimeout(3000);
-    expect(Rows.locator(".self-center")).toHaveText("Inactive");
-    await Rows.locator("a").first().click();
+    ChangeStatus({ page, Row: Row });
+    expect(Row.locator(".self-center")).toHaveText("Inactive");
+    await Row.locator("a").first().click();
     expect(page.url()).toContain("master-data/organization-hierarchy/edit/");
   }
   async EditOrganizationHierarchy(page: any, expect: any, data: TData) {
@@ -194,6 +191,8 @@ class OrganizationHierarchy {
     const RowCount = await page.locator("table tbody tr").count();
 
     if (RowCount > 0) {
+      await page.getByRole("button", { name: "Filter" }).click();
+      expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
       await page.getByRole("textbox", { name: "Level" }).click();
       await page
         .locator(".m_b1336c6")
@@ -209,6 +208,8 @@ class OrganizationHierarchy {
           .locator("table tbody tr td:nth-of-type(2)")
           .allTextContents();
         CheckFilteredData(AllLevels, FilterData.Level);
+        await page.getByRole("button", { name: "Filter" }).click();
+        expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
         await page.getByRole("textbox", { name: "Position Name" }).click();
         await page
           .locator(".m_b1336c6")
@@ -229,9 +230,11 @@ class OrganizationHierarchy {
             .allTextContents();
           CheckFilteredData(AllLevels, FilterData.Level);
           CheckFilteredData(AllPositionName, FilterData.PositionName);
+          await page.getByRole("button", { name: "Filter" }).click();
+          expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
           await page.getByRole("textbox", { name: "Reports To" }).click();
           await page
-            .locator("m_38a85659")
+            .locator("div[role='presentation']")
             .locator("span", { hasText: FilterData.ReportsTo })
             .click();
           await page.getByTestId("apply-filters").click();
@@ -252,10 +255,13 @@ class OrganizationHierarchy {
             CheckFilteredData(AllLevels, FilterData.Level);
             CheckFilteredData(AllPositionName, FilterData.PositionName);
             CheckFilteredData(AllReportsTo, FilterData.ReportsTo);
+            await page.getByRole("button", { name: "Filter" }).click();
+            expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
             await page.getByRole("textbox", { name: "Status" }).click();
             await page
               .locator(".m_38a85659")
               .locator("span", { hasText: FilterData.Status })
+              .first()
               .click();
             await page.getByTestId("apply-filters").click();
             await page.waitForSelector("table tbody tr");
@@ -279,7 +285,7 @@ class OrganizationHierarchy {
               CheckFilteredData(AllPositionName, FilterData.PositionName);
               CheckFilteredData(AllReportsTo, FilterData.ReportsTo);
               CheckFilteredData(AllStatus, FilterData.Status);
-              await page.getByTestId("reset-filters").click();
+              await page.getByRole("button", { name: "Reset" }).click();
               await page.waitForTimeout(3000);
             }
           }
