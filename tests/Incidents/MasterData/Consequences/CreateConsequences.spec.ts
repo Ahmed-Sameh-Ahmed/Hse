@@ -11,22 +11,65 @@ test.beforeEach(async ({ page }) => {
   await MasterDataPage.GoToConsequence(page, expect);
 });
 
-test("Create Consequence With Right Data", async ({ page }) => {
-  const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
-  await Consequence.CreateConsequences({
-    page: page,
-    Data: Data.Right,
-    expect: expect,
-  });
-});
 test("Empty Fields", async ({ page }) => {
   const Empty = true;
   const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
+  await Consequence.GoToCreateConsequences({ page, expect });
   await Consequence.CreateConsequences({
     page: page,
     Empty: Empty,
     expect: expect,
   });
+});
+
+test("Create Consequence With Right Data ( Required Fields )", async ({
+  page,
+}) => {
+  const Consequence = new Consequences();
+  await Consequence.GoToCreateConsequences({ page, expect });
+  await Consequence.CreateConsequences({
+    page: page,
+    Data: Data.Right.Required,
+    expect: expect,
+  });
+  await expect(page).toHaveURL("/master-data/consequences");
+  await page.getByRole("button", { name: "OK" }).click();
+});
+
+test("Create Consequence With Right Data ( All Fields )", async ({ page }) => {
+  const Consequence = new Consequences();
+  await Consequence.GoToCreateConsequences({ page, expect });
+  await Consequence.CreateConsequences({
+    page: page,
+    Data: Data.Right.AllFields,
+    expect: expect,
+  });
+  await expect(page).toHaveURL("/master-data/consequences");
+  await page.getByRole("button", { name: "OK" }).click();
+});
+
+test("Create Consequence With Wrong Data ( Consequences Name Exists )", async ({
+  page,
+}) => {
+  const Consequence = new Consequences();
+  await Consequence.GoToCreateConsequences({ page, expect });
+  await Consequence.CreateConsequences({
+    page: page,
+    Data: Data.Wrong.ConsequencesNameExists,
+    expect: expect,
+    Edit: true,
+  });
+  await Consequence.GoToCreateConsequences({ page, expect });
+  await Consequence.CreateConsequences({
+    page: page,
+    Data: Data.Wrong.ConsequencesNameExists,
+    expect: expect,
+    Edit: true,
+  });
+
+  await expect(
+    page.locator(".mb-3").locator("p", {
+      hasText: "Consequence with this name already exists.",
+    })
+  ).toBeVisible();
 });

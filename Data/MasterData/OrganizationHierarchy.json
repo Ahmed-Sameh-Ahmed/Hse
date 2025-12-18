@@ -7,27 +7,72 @@
     "Description": ""
   },
   "Right": {
-    "LevelID": "L1",
-    "LevelName": "LevelName",
-    "Position": "tester",
-    "ReportsTo": "developer",
-    "Description": "Description"
+    "Required": {
+      "LevelID": "L2",
+      "LevelName": "LevelName",
+      "Position": "Junior Developer",
+      "ReportsTo": "Senior Developer",
+      "Description": " "
+    },
+    "AllFields": {
+      "LevelID": "L2",
+      "LevelName": "LevelName",
+      "Position": "Junior Developer",
+      "ReportsTo": "Senior Developer",
+      "Description": "Description"
+    },
+    "Level1": {
+      "LevelID": "L1",
+      "LevelName": "LevelName",
+      "Position": "Junior Developer",
+      "ReportsTo": "",
+      "Description": "Description"
+    }
   },
   "Wrong": {
+    "Position_Is_The_Same_as_ReportsTo": {
+      "LevelID": "L2",
+      "LevelName": "LevelName",
+      "Position": "Junior Developer",
+      "ReportsTo": "Junior Developer",
+      "Description": "Description"
+    },
+    "Duplicate": {
+      "LevelID": "L2",
+      "LevelName": "LevelName",
+      "Position": "Junior Developer",
+      "ReportsTo": "Senior Developer",
+      "Description": "Description"
+    },
+    "Circular_Hierarchy": {
+      "LevelID": "L2",
+      "LevelName": "LevelName",
+      "Position": "Senior Developer",
+      "ReportsTo": "Junior Developer",
+      "Description": "Description"
+    }
+  },
+  "Edit": {
     "LevelID": "L2",
     "LevelName": "LevelName",
-    "Position": "tester",
-    "ReportsTo": "tester",
+    "Position": "Engineer",
+    "ReportsTo": "Senior Developer",
     "Description": "Description"
   },
   "Show": {
-    "LevelID": "L1",
-    "LevelName": "Top managment",
-    "Position": "HSE Manager",
-    "ReportsTo": "HSE Director",
-    "Description": "Bla bla bla"
+    "LevelID": "L2",
+    "LevelName": "LevelName28563814",
+    "Position": "Junior Developer",
+    "ReportsTo": "Senior Developer",
+    "Description": ""
   },
-  "ShowInTable": ["Top Management", "L1", "HSE Manager", "HSE Director", "1"],
+  "ShowInTable": [
+    "LevelName",
+    "L2",
+    "Junior Developer",
+    "Senior Developer",
+    "1"
+  ],
   "Filter": {
     "Level": "L1",
     "PositionName": "HSE Manager",
