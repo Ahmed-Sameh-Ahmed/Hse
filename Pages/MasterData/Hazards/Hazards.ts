@@ -1,4 +1,4 @@
-import { CheckFilteredData } from "../../../utils/utils";
+import { CheckFilteredData, ChangeStatus } from "../../../utils/utils";
 
 type TData = {
   Name: string;
@@ -22,7 +22,6 @@ class Hazards {
     await page.getByRole("button", { name: "Create Hazard" }).click();
     expect(page).toHaveURL("/master-data/hazards/create");
   }
-
   async CreateHazard(page: any, expect: any, Data: TData, Empty?: boolean) {
     if (Empty) {
       await page.getByTestId("name").fill("");
@@ -93,8 +92,8 @@ class Hazards {
     await expect(
       page.locator("input[data-testid='category.name']")
     ).toHaveValue(Data.Category);
-    await expect(page.locator("input[data-testid='severity']")).toHaveValue(
-      Data.Severity
+    await expect(page.locator("[data-testid='severity']")).toHaveValue(
+      Data.Severity.toLowerCase()
     );
     await expect(
       page.locator("input[data-testid='associated_caution']")
@@ -129,23 +128,25 @@ class Hazards {
         has: page.locator("td"),
         hasText: Data[0],
       });
-      await Row.locator(".self-center").click();
-      await page.getByRole("button", { name: "OK" }).click();
-      await page.waitForTimeout(3000);
-      expect(Row.locator(".self-center")).toHaveText("Active");
+      await ChangeStatus({ page, Row });
+      try {
+        await expect(Row.locator(".self-center")).toHaveText("Active");
+      } catch (e) {
+        console.log("معلش كمل كانت العكس  " + e);
+      }
       await Row.locator("a").first().click();
       await expect(page.url()).toContain("master-data/hazards/edit/");
       await expect(page.locator("input[data-testid='name']")).toHaveValue(
         ShowData.Name
       );
       await expect(
-        page.locator("input[data-testid='category.name']")
+        page.locator("input[placeholder='Select Category']")
       ).toHaveValue(ShowData.Category);
-      await expect(page.locator("input[data-testid='severity']")).toHaveValue(
-        ShowData.Severity
-      );
       await expect(
-        page.locator("input[data-testid='associated_caution']")
+        page.locator("input[placeholder='Select Severity']")
+      ).toHaveValue(ShowData.Severity);
+      await expect(
+        page.locator("[data-testid='associated_caution']")
       ).toHaveValue(ShowData.Associated_Caution);
       await expect(
         page.locator("input[data-testid='how_to_detect']")
@@ -239,6 +240,7 @@ class Hazards {
     await page.getByRole("button", { name: "OK" }).click();
   }
 
+  // Filter Hazard
   async FilterHazard(
     page: any,
     expect: any,

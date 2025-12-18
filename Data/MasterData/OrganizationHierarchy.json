@@ -74,9 +74,9 @@
     "1"
   ],
   "Filter": {
-    "Level": "L1",
-    "PositionName": "HSE Manager",
-    "ReportsTo": "HSE Director",
+    "Level": "L2",
+    "PositionName": "Junior Developer",
+    "ReportsTo": "Senior Developer",
     "Status": "Active"
   }
 }

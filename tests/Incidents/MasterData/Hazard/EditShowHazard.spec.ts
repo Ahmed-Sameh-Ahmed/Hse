@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 //Page
-import login from "../../../Pages/Login/Login";
-import Hazards from "../../../Pages/MasterData/Hazards/Hazards";
+import login from "../../../../Pages/Login/Login";
+import Hazards from "../../../../Pages/MasterData/Hazards/Hazards";
 //Data
-import Data from "../../../Data/MasterData/Hazard.json";
+import Data from "../../../../Data/MasterData/Hazard.json";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
@@ -13,10 +13,15 @@ test.beforeEach(async ({ page }) => {
 
 test("Show & Edit Hazard", async ({ page }) => {
   const hazard = new Hazards();
-  await hazard.GoToShowHazard(page, expect, Data.ShowInTable, Data.Right);
-  await hazard.ShowHazard(page, expect, Data.Show);
+  await hazard.GoToShowHazard(
+    page,
+    expect,
+    Data.ShowInTable,
+    Data.Right.allFields
+  );
+  await hazard.ShowHazard(page, expect, Data.Right.required);
   await hazard.GoToEditHazardFormShow(page, expect);
-  await hazard.EditHazard(page, expect, Data.Right, Data.Wrong);
+  await hazard.EditHazard(page, expect, Data.Right.allFields, Data.Wrong.wrong);
 });
 
 test("Edit From Table", async ({ page }) => {
@@ -26,8 +31,8 @@ test("Edit From Table", async ({ page }) => {
     page,
     expect,
     Data.ShowInTable,
-    Data.Right,
-    Data.Show
+    Data.Right.allFields,
+    Data.Right.required
   );
-  await hazard.EditHazard(page, expect, Data.Right, Data.Wrong);
+  await hazard.EditHazard(page, expect, Data.Right.allFields, Data.Wrong.wrong);
 });

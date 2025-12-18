@@ -1,11 +1,11 @@
 {
   "Right": {
     "Required": {
-      "ConsequencesName": "name",
+      "ConsequencesName": "ConsequencesName",
       "Description": ""
     },
     "AllFields": {
-      "ConsequencesName": "name",
+      "ConsequencesName": "ConsequencesName",
       "Description": "Description"
     }
   },
