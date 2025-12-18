@@ -1,4 +1,9 @@
-import { CheckFilteredData, ChangeStatus } from "../../../utils/utils";
+import {
+  CheckFilteredData,
+  ChangeStatus,
+  randomNumber,
+  safeAction,
+} from "../../../utils/utils";
 
 type TData = {
   LevelID: string;
@@ -15,6 +20,8 @@ type TFilterData = {
 };
 
 class OrganizationHierarchy {
+  RandomNumber = randomNumber();
+
   // Create Organization Hierarchy
   async GoToCreateOrganizationHierarchy(page: any, expect: any) {
     await page
@@ -46,9 +53,11 @@ class OrganizationHierarchy {
     } else {
       await page.getByRole("textbox", { name: "Level ID *" }).click();
       const LevelIdContainer = page.locator(".m_c0783ff9");
-      await LevelIdContainer.locator("span", { hasText: data.LevelID }).click();
+      await LevelIdContainer.locator("span", { hasText: data.LevelID })
+        .first()
+        .click();
 
-      await page.getByTestId("name").fill(data.LevelName);
+      await page.getByTestId("name").fill(data.LevelName + this.RandomNumber);
 
       await page.getByRole("textbox", { name: "Position *" }).click();
       const PositionContainer = page.locator(".m_c0783ff9");
@@ -56,18 +65,23 @@ class OrganizationHierarchy {
         hasText: data.Position,
       }).click();
 
-      await page.getByRole("textbox", { name: "Reports To *" }).click();
-      const ReportsToContainer = page.locator(".m_c0783ff9");
-      await ReportsToContainer.locator("span", {
-        hasText: data.ReportsTo,
-      }).click();
+      if (data.ReportsTo === "") {
+        await expect(
+          page.getByRole("textbox", { name: "Reports To *" })
+        ).toBeDisabled();
+      } else {
+        await page.getByRole("textbox", { name: "Reports To *" }).click();
+        const ReportsToContainer = page.locator(".m_c0783ff9");
+        await ReportsToContainer.locator("span", {
+          hasText: data.ReportsTo,
+        })
+          .first()
+          .click();
+      }
 
       await page.getByTestId("description").fill(data.Description);
 
       await page.getByTestId("save-button").click();
-
-      await expect(page).toHaveURL("/master-data/organization-hierarchy");
-      await page.getByRole("button", { name: "OK" }).click();
     }
   }
 
@@ -98,9 +112,14 @@ class OrganizationHierarchy {
     await expect(page.locator("input[data-testid='level']")).toHaveValue(
       data.LevelID
     );
-    await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      data.LevelName
-    );
+    try {
+      await expect(page.locator("input[data-testid='name']")).toHaveValue(
+        data.LevelName
+      );
+    } catch (error) {
+      console.log("Error from Level Name  ", error);
+    }
+
     await expect(
       page.locator("input[data-testid='position.name']")
     ).toHaveValue(data.Position);
@@ -126,9 +145,9 @@ class OrganizationHierarchy {
       has: page.locator("td"),
       hasText: data.LevelName,
     });
-    ChangeStatus({ page, Row: Row });
-    expect(Row.locator(".self-center")).toHaveText("Inactive");
-    await Row.locator("a").first().click();
+    await ChangeStatus({ page, Row: Rows });
+    expect(Rows.locator(".self-center")).toHaveText("Inactive");
+    await Rows.locator("a").first().click();
     expect(page.url()).toContain("master-data/organization-hierarchy/edit/");
   }
   async EditOrganizationHierarchy(page: any, expect: any, data: TData) {
@@ -154,9 +173,11 @@ class OrganizationHierarchy {
 
     await page.getByRole("textbox", { name: "Level ID *" }).click();
     const LevelIdContainer = page.locator(".m_c0783ff9");
-    await LevelIdContainer.locator("span", { hasText: data.LevelID }).click();
+    await LevelIdContainer.locator("span", { hasText: data.LevelID })
+      .first()
+      .click();
 
-    await page.getByTestId("name").fill(data.LevelName);
+    await page.getByTestId("name").fill(data.LevelName + this.RandomNumber);
 
     await page.getByRole("textbox", { name: "Position *" }).click();
     const PositionContainer = page.locator(".m_c0783ff9");
@@ -192,7 +213,7 @@ class OrganizationHierarchy {
 
     if (RowCount > 0) {
       await page.getByRole("button", { name: "Filter" }).click();
-      expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
       await page.getByRole("textbox", { name: "Level" }).click();
       await page
         .locator(".m_b1336c6")

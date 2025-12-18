@@ -52,13 +52,19 @@
       "Description": "Description"
     }
   },
-
-  "Show": {
+  "Edit": {
     "LevelID": "L2",
     "LevelName": "LevelName",
-    "Position": "Junior Developer",
+    "Position": "Engineer",
     "ReportsTo": "Senior Developer",
     "Description": "Description"
+  },
+  "Show": {
+    "LevelID": "L2",
+    "LevelName": "LevelName28563814",
+    "Position": "Junior Developer",
+    "ReportsTo": "Senior Developer",
+    "Description": ""
   },
   "ShowInTable": [
     "LevelName",

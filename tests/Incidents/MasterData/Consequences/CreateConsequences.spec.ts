@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 test("Empty Fields", async ({ page }) => {
   const Empty = true;
   const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
+  await Consequence.GoToCreateConsequences({ page, expect });
   await Consequence.CreateConsequences({
     page: page,
     Empty: Empty,
@@ -26,25 +26,25 @@ test("Create Consequence With Right Data ( Required Fields )", async ({
   page,
 }) => {
   const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
+  await Consequence.GoToCreateConsequences({ page, expect });
   await Consequence.CreateConsequences({
     page: page,
     Data: Data.Right.Required,
     expect: expect,
   });
-  await expect(page).toHaveURL("/master-data/consequences/create");
+  await expect(page).toHaveURL("/master-data/consequences");
   await page.getByRole("button", { name: "OK" }).click();
 });
 
 test("Create Consequence With Right Data ( All Fields )", async ({ page }) => {
   const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
+  await Consequence.GoToCreateConsequences({ page, expect });
   await Consequence.CreateConsequences({
     page: page,
     Data: Data.Right.AllFields,
     expect: expect,
   });
-  await expect(page).toHaveURL("/master-data/consequences/create");
+  await expect(page).toHaveURL("/master-data/consequences");
   await page.getByRole("button", { name: "OK" }).click();
 });
 
@@ -52,11 +52,19 @@ test("Create Consequence With Wrong Data ( Consequences Name Exists )", async ({
   page,
 }) => {
   const Consequence = new Consequences();
-  await Consequence.GoToCreateConsequences(page, expect);
+  await Consequence.GoToCreateConsequences({ page, expect });
   await Consequence.CreateConsequences({
     page: page,
     Data: Data.Wrong.ConsequencesNameExists,
     expect: expect,
+    Edit: true,
+  });
+  await Consequence.GoToCreateConsequences({ page, expect });
+  await Consequence.CreateConsequences({
+    page: page,
+    Data: Data.Wrong.ConsequencesNameExists,
+    expect: expect,
+    Edit: true,
   });
 
   await expect(

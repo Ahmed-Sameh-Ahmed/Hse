@@ -11,19 +11,21 @@
   },
   "Wrong": {
     "ConsequencesNameExists": {
-      "ConsequencesName": "ConsequencesName",
+      "ConsequencesName": "name",
       "Description": "Description"
     }
   },
 
   "Edit": {
-    "ConsequencesName": "ConsequencesName",
-    "Description": "Description"
-  },
-  "Show": {
-    "ConsequencesName": "ConsequencesName",
-    "Description": "Description"
-  },
-  "ShowInTable": ["ConsequencesName", "Description"],
-  "Filter": {}
+    "Before": {
+      "ConsequencesName": "Edit",
+      "Description": "Description",
+      "Status": "Active"
+    },
+    "After": {
+      "ConsequencesName": "Edit",
+      "Description": "Description",
+      "Status": "Active"
+    }
+  }
 }

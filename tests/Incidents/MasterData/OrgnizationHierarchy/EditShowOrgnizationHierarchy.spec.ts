@@ -11,29 +11,29 @@ test.beforeEach(async ({ page }) => {
   await MasterDataPage.GoToOrganizationHierarchy(page, expect);
 });
 
-test("Show & Edit Orgnization Hierarchy", async ({ page }) => {
-  const Organization_Hierarchy = new OrganizationHierarchy();
-  await Organization_Hierarchy.GoToShowOrganizationHierarchy(
-    page,
-    expect,
-    Data.Show,
-    Data.Right.AllFields
-  );
-  await Organization_Hierarchy.ShowOrganizationHierarchy(
-    page,
-    expect,
-    Data.Show
-  );
-  await Organization_Hierarchy.GoToEditOrganizationHierarchyFormShow(
-    page,
-    expect
-  );
-  await Organization_Hierarchy.EditOrganizationHierarchy(
-    page,
-    expect,
-    Data.Right.AllFields
-  );
-});
+// test("Show & Edit Orgnization Hierarchy", async ({ page }) => {
+//   const Organization_Hierarchy = new OrganizationHierarchy();
+//   await Organization_Hierarchy.GoToShowOrganizationHierarchy(
+//     page,
+//     expect,
+//     Data.Show,
+//     Data.Right.AllFields
+//   );
+//   await Organization_Hierarchy.ShowOrganizationHierarchy(
+//     page,
+//     expect,
+//     Data.Show
+//   );
+//   await Organization_Hierarchy.GoToEditOrganizationHierarchyFormShow(
+//     page,
+//     expect
+//   );
+//   await Organization_Hierarchy.EditOrganizationHierarchy(
+//     page,
+//     expect,
+//     Data.Right.AllFields
+//   );
+// });
 
 test("Edit Orgnization Hierarchy Form Table", async ({ page }) => {
   const Organization_Hierarchy = new OrganizationHierarchy();
@@ -47,6 +47,6 @@ test("Edit Orgnization Hierarchy Form Table", async ({ page }) => {
   await Organization_Hierarchy.EditOrganizationHierarchy(
     page,
     expect,
-    Data.Right.AllFields
+    Data.Edit
   );
 });

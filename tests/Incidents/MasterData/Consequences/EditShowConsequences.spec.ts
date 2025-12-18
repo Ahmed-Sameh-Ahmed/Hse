@@ -24,28 +24,23 @@ test.beforeEach(async ({ page }) => {
   await MasterDataPage.GoToConsequence(page, expect);
 });
 
-test("Show & Edit Consequence", async ({ page }) => {
+test(" Edit Consequence", async ({ page }) => {
+  const consequence = new Consequences();
+
+  await consequence.GoToEditConsequencesFormTable({
+    Data: Data.Edit.Before,
+    page,
+    expect,
+  });
+  await consequence.EditConsequences({ page, Data: Data.Edit.After, expect });
+});
+
+test(" Show Consequence", async ({ page }) => {
   const consequence = new Consequences();
   await consequence.GoToShowConsequences({
-    page: page,
-    expect: expect,
-    showInTable: Data.ShowInTable,
-    Data: Data.Right.AllFields,
+    page,
+    Data: Data.Edit.Before,
+    expect,
   });
-  await consequence.ShowConsequences({
-    page: page,
-    Data: Data.Show,
-    expect: expect,
-  });
-  await consequence.GoToEditConsequencesFormShowPage({
-    page: page,
-    expect: expect,
-  });
-  await consequence.EditConsequences({
-    page: page,
-    Data: Data.Edit,
-    expect: expect,
-  });
-  await expect(page).toHaveURL("/master-data/consequences");
-  await page.getByRole("button", { name: "OK" }).click();
+  await consequence.ShowConsequences({ page, Data: Data.Edit.Before, expect });
 });
