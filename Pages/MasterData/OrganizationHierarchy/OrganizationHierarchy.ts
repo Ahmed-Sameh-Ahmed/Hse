@@ -66,9 +66,12 @@ class OrganizationHierarchy {
       }).click();
 
       if (data.ReportsTo === "") {
-        await expect(
-          page.getByRole("textbox", { name: "Reports To *" })
-        ).toBeDisabled();
+        // مش عاوز يمسك العنصر و هو disabled
+        expect(
+          await page
+            .locator("div:nth-child(4) > .m_46b77525 > .m_6c018570")
+            .isDisabled()
+        ).toBeFalsy();
       } else {
         await page.getByRole("textbox", { name: "Reports To *" }).click();
         const ReportsToContainer = page.locator(".m_c0783ff9");

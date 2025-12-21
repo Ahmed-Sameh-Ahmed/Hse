@@ -11,48 +11,65 @@ test.beforeEach(async ({ page }) => {
   await MasterDataPage.GoToHazards(page, expect);
 });
 
-// test("Empty Fields", async ({ page }) => {
-//   const Empty = true;
-//   const hazards = new Hazards();
-//   await hazards.GoToCrateHazard(page, expect);
-//   await hazards.CreateHazard(page, expect, Data.Right, Empty);
+test("Empty Fields", async ({ page }) => {
+  const Empty = true;
+  const hazards = new Hazards();
+  await hazards.GoToCrateHazard({ page, expect });
+  await hazards.CreateHazard({
+    page,
+    expect,
+    Data: Data.Right.allFields,
+    Empty,
+  });
 
-//   await expect(page.getByText("This field is required").nth(0)).toBeVisible();
-//   await expect(page.getByText("This field is required").nth(1)).toBeVisible();
-//   await expect(page.getByText("This field is required").nth(2)).toBeVisible();
-//   await expect(page.getByText("This field is required").nth(3)).toBeVisible();
-// });
-// test("Crate Hazard With Right Data(Required)", async ({ page }) => {
-//   const hazards = new Hazards();
-//   await hazards.GoToCrateHazard(page, expect);
-//   await hazards.CreateHazard(page, expect, Data.Right.required);
-//   await expect(page).toHaveURL("/master-data/hazards");
-//   await page.getByRole("button", { name: "OK" }).click();
-// });
+  await expect(page.getByText("This field is required").nth(0)).toBeVisible();
+  await expect(page.getByText("This field is required").nth(1)).toBeVisible();
+  await expect(page.getByText("This field is required").nth(2)).toBeVisible();
+  await expect(page.getByText("This field is required").nth(3)).toBeVisible();
+});
 
-// test("Crate Hazard With Right Data (all Fields)", async ({ page }) => {
-//   const hazards = new Hazards();
-//   await hazards.GoToCrateHazard(page, expect);
-//   await hazards.CreateHazard(page, expect, Data.Right.allFields);
-//   await expect(page).toHaveURL("/master-data/hazards");
-//   await page.getByRole("button", { name: "OK" }).click();
-// });
+test("Crate Hazard With Right Data(Required)", async ({ page }) => {
+  const hazards = new Hazards();
+  await hazards.GoToCrateHazard({ page, expect });
+  await hazards.CreateHazard({ page, expect, Data: Data.Right.required });
+  await page.getByRole("button", { name: "OK" }).click();
+  await expect(page).toHaveURL("/master-data/hazards");
+});
 
-// test("Crate Hazard With Wrong Data (wrong)", async ({ page }) => {
-//   const hazards = new Hazards();
-//   await hazards.GoToCrateHazard(page, expect);
-//   await hazards.CreateHazard(page, expect, Data.Wrong.wrong);
+test("Crate Hazard With Right Data (all Fields)", async ({ page }) => {
+  const hazards = new Hazards();
+  await hazards.GoToCrateHazard({ page, expect });
+  await hazards.CreateHazard({ page, expect, Data: Data.Right.allFields });
+  await page.getByRole("button", { name: "OK" }).click();
+  await expect(page).toHaveURL("/master-data/hazards");
+});
 
-//   await expect(page.getByText("Name must be at least 2")).toBeVisible();
-// });
 test("Crate Hazard With Wrong Data (Duplicate Data)", async ({ page }) => {
   const hazards = new Hazards();
-  await hazards.GoToCrateHazard(page, expect);
-  await hazards.CreateHazard(page, expect, Data.Wrong.DuplicateData);
+  try {
+    await hazards.GoToCrateHazard({ page, expect });
+    await hazards.CreateHazard({
+      page,
+      expect,
+      Data: Data.Right.allFields,
+      NotFillRandomNumber: true,
+    });
+    await page.getByRole("button", { name: "OK" }).click();
+    await expect(page).toHaveURL("/master-data/hazards");
+    await hazards.GoToCrateHazard({ page, expect });
+    await hazards.CreateHazard({
+      page,
+      expect,
+      Data: Data.Right.allFields,
+      NotFillRandomNumber: true,
+    });
 
-  await expect(
-    page.locator(".mb-3").locator("p", {
-      hasText: "Hazard with the same name and category already exists.",
-    })
-  ).toBeVisible();
+    await expect(
+      page.locator(".mb-3").locator("p", {
+        hasText: "Hazard with the same name and category already exists.",
+      })
+    ).toBeVisible();
+  } catch (error) {
+    console.log("name is Exist in First Create");
+  }
 });

@@ -5,11 +5,11 @@ import OrganizationHierarchy from "../../../../Pages/MasterData/OrganizationHier
 //Data
 import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 
-// test.beforeEach(async ({ page }) => {
-//   const Home = await new Login().login(page, "admin@admin.com", "123456");
-//   const MasterDataPage = await Home.GoToMasterData(page, expect);
-//   await MasterDataPage.GoToOrganizationHierarchy(page, expect);
-// });
+test.beforeEach(async ({ page }) => {
+  const Home = await new Login().login(page, "admin@admin.com", "123456");
+  const MasterDataPage = await Home.GoToMasterData(page, expect);
+  await MasterDataPage.GoToOrganizationHierarchy(page, expect);
+});
 
 // test("Create Organization Hierarchy With Empty Data", async ({ page }) => {
 //   const empty = true;
@@ -25,7 +25,6 @@ import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 //   await expect(page.getByText("Level ID is required")).toBeVisible();
 //   await expect(page.getByText("Level name is required")).toBeVisible();
 //   await expect(page.getByText("Position is required")).toBeVisible();
-//   await expect(page.getByText("Reports To is required")).toBeVisible();
 // });
 
 // test("Create Organization Hierarchy With Right Data (required)", async ({
@@ -56,20 +55,21 @@ import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 //   await page.getByRole("button", { name: "OK" }).click();
 // });
 
-// // لسه متصلحتش
-// test("Create Organization Hierarchy With Right Data (Level1 didn't have Report to) ", async ({
-//   page,
-// }) => {
-//   const Organization_Hierarchy = new OrganizationHierarchy();
-//   await Organization_Hierarchy.GoToCreateOrganizationHierarchy(page, expect);
-//   await Organization_Hierarchy.CreateOrganizationHierarchy(
-//     page,
-//     expect,
-//     Data.Right.Level1
-//   );
-//   await expect(page).toHaveURL("/master-data/organization-hierarchy");
-//   await page.getByRole("button", { name: "OK" }).click();
-// });
+// لسه متصلحتش
+
+test("Create Organization Hierarchy With Right Data (Level1 didn't have Report to) ", async ({
+  page,
+}) => {
+  const Organization_Hierarchy = new OrganizationHierarchy();
+  await Organization_Hierarchy.GoToCreateOrganizationHierarchy(page, expect);
+  await Organization_Hierarchy.CreateOrganizationHierarchy(
+    page,
+    expect,
+    Data.Right.Level1
+  );
+  await expect(page).toHaveURL("/master-data/organization-hierarchy");
+  await page.getByRole("button", { name: "OK" }).click();
+});
 
 // test("Create Organization Hierarchy With Wrong Data (position is the same as report to)", async ({
 //   page,
@@ -100,7 +100,7 @@ import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 //     page.getByText("This position is already assigned to a hierarchy level.")
 //   ).toBeVisible();
 // });
-// // لسه ميعرفهوهاش سلاما مردش
+
 // test("Create Organization Hierarchy With Wrong Data (circular hierarchies)", async ({
 //   page,
 // }) => {

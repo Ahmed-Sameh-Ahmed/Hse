@@ -1,87 +1,84 @@
-import {
-  ChangeStatus,
-  CheckFilteredData,
-  randomNumber,
-} from "../../../utils/utils";
-
-type props = {
-  page: any;
-  Data?: TData;
-  expect: any;
-  Empty?: Boolean;
-  Edit?: Boolean;
-  CreateData?: TData;
-  showInTable?: string[];
-};
+import { randomNumber, ChangeStatus } from "../../../utils/utils";
 
 type TData = {
-  ConsequencesName: string;
+  name: string;
   Description: string;
-  Status?: any;
 };
 
-class Consequences {
+class AssetTypes {
   randomNumber = randomNumber();
-  isNotFound = true;
-
-  // Create Consequences
-  async GoToCreateConsequences({ page, expect }: props) {
-    await page.getByRole("button", { name: "Add Consequence" }).click();
-    await expect(page).toHaveURL("/master-data/consequences/create");
+  // Create
+  async GoToCreateAssetType({ page, expect }: { page: any; expect: any }) {
+    await page.getByRole("button", { name: "Add Asset Type" }).click();
+    await expect(page).toHaveURL("/master-data/asset-types/create");
   }
-  async CreateConsequences({ page, Data, expect, Empty, Edit }: props) {
-    await page
-      .getByTestId("name")
-      .fill(
-        Empty
-          ? ""
-          : Edit
-          ? Data?.ConsequencesName
-          : `${Data?.ConsequencesName}${this.randomNumber}`
-      );
-    await page.getByTestId("description").fill(Empty ? "" : Data?.Description);
-
+  async CreateAssetType({
+    page,
+    expect,
+    Data,
+    Empty,
+    NotRandomNumber,
+    Duplicate,
+  }: {
+    page: any;
+    expect: any;
+    Data?: TData;
+    Empty?: boolean;
+    NotRandomNumber?: boolean;
+    Duplicate?: boolean;
+  }) {
     if (Empty) {
+      await page.getByTestId("save-button").click();
       await expect(
-        await page
-          .locator(".mb-3")
-          .locator(".text-red-600", { hasText: "This field is required" })
+        await page.getByText("This field is required").nth(0)
       ).toBeVisible();
     } else {
+      await page
+        .getByTestId("name")
+        .fill(
+          NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`
+        );
+      await page.getByTestId("description").fill(Data?.Description);
       await page.getByTestId("save-button").click();
-      await expect(page).toHaveURL("/master-data/consequences");
-      await page.getByRole("button", { name: "OK" }).click();
+      if (Duplicate) {
+        await expect(
+          page.getByText("Asset Type already exists.")
+        ).toBeVisible();
+      } else {
+        await expect(page).toHaveURL("/master-data/asset-types");
+        await page.getByRole("button", { name: "OK" }).click();
+      }
     }
   }
 
-  //Edit Consequences
-  async GoToEditConsequencesFormTable({ page, Data, expect }: props) {
-    // while (this.isNotFound) {
-    // }
+  //Edit
 
+  async GoToEditAssetType({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: TData;
+  }) {
+    // // Go To Edit
     // await page.waitForSelector("table tbody tr");
-    // const Row = await page.locator("table tbody tr", {
-    //   has: page.locator("td"),
-    //   hasText: Data?.ConsequencesName,
+    // const Row = page.locator("table tbody tr", {
+    //   has: page.locator("td", { hasText: Data.name }),
     // });
     // console.log(await Row.count());
-
     // if ((await Row.count()) !== 0) {
     //   await ChangeStatus({ page, Row });
     //   await Row.locator("a").first().click();
     // } else {
-    //   await this.GoToCreateConsequences({ page, expect });
-    //   await this.CreateConsequences({
-    //     page: page,
-    //     Data: Data,
-    //     expect: expect,
-    //     Edit: true,
-    //   });
-    //   await expect(page).toHaveURL("/master-data/consequences");
-    //   await page.getByRole("button", { name: "OK" }).click();
-    //   await this.GoToEditConsequencesFormTable({ page, Data, expect });
+    //   await this.GoToCreateAssetType({ page, expect });
+    //   await this.CreateAssetType({ page, expect, Data, NotRandomNumber: true });
+    //   // go to Create
+    //   // create
+    //   // Go to same fun
+    //   await this.GoToEditAssetType({ page, expect, Data });
     // }
-
     // متغير لمعرفة ما إذا وجدنا الصف أم لا
     let isFound = false;
 
@@ -92,7 +89,7 @@ class Consequences {
       // تحديد الصف الذي نبحث عنه
       const Row = page.locator("table tbody tr", {
         has: page.locator("td"),
-        hasText: Data?.ConsequencesName,
+        hasText: Data?.name,
       });
 
       const rowCount = await Row.count();
@@ -134,45 +131,57 @@ class Consequences {
 
     // --- إذا انتهى البحث في كل الصفحات ولم نجد الصف ---
     if (!isFound) {
-      await this.GoToCreateConsequences({ page, expect });
-      await this.CreateConsequences({
-        page: page,
-        Data: Data,
-        expect: expect,
-        Edit: true,
-      });
-      await expect(page).toHaveURL("/master-data/consequences");
+      await this.GoToCreateAssetType({ page, expect });
+      await this.CreateAssetType({ page, expect, Data, NotRandomNumber: true });
+      await expect(page).toHaveURL("/master-data/asset-types");
       await page.getByRole("button", { name: "OK" }).click();
-      await this.GoToEditConsequencesFormTable({ page, Data, expect });
+      await this.GoToEditAssetType({ page, expect, Data });
     }
   }
-  async EditConsequences({ page, Data, expect }: props) {
-    await expect(page.getByTestId("name")).toHaveValue(Data?.ConsequencesName);
+  async EditAssetType({
+    page,
+    expect,
+    DataBefore,
+    DataAfter,
+  }: {
+    page: any;
+    expect: any;
+    DataBefore: TData;
+    DataAfter: TData;
+  }) {
+    await expect(page.getByTestId("name")).toHaveValue(DataBefore.name);
     await page.getByTestId("name").clear();
+
     await expect(page.getByTestId("description")).toHaveValue(
-      Data?.Description
+      DataBefore.Description
     );
     await page.getByTestId("description").clear();
 
-    await page.getByTestId("name").fill(Data?.ConsequencesName);
-    await page.getByTestId("description").fill(Data?.Description);
+    await page.getByTestId("name").fill(DataAfter.name);
+    await page.getByTestId("description").fill(DataAfter.Description);
+
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/consequences");
+    await expect(page).toHaveURL("/master-data/asset-types");
     await page.getByRole("button", { name: "OK" }).click();
   }
 
-  //Show Consequences
-  async GoToShowConsequences({ page, Data, expect }: props) {
+  //Show
+  async GoToShowAssetType({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: TData;
+  }) {
     // await page.waitForSelector("table tbody tr");
-
     // const Row = page.locator("table tbody tr", {
-    //   has: page.locator("td"),
-    //   hasText: Data?.ConsequencesName,
+    //   has: page.locator("td", { hasText: Data.name }),
     // });
+    // console.log(await Row.count());
     // await Row.locator("a").last().click();
-    // await expect(page.url()).toContain("master-data/consequences/show/");
-
-    // متغير لمعرفة ما إذا وجدنا الصف أم لا
+    // await expect(page.url()).toContain("master-data/asset-types/show/");
     let isFound = false;
 
     while (true) {
@@ -182,7 +191,7 @@ class Consequences {
       // تحديد الصف الذي نبحث عنه
       const Row = page.locator("table tbody tr", {
         has: page.locator("td"),
-        hasText: Data?.ConsequencesName,
+        hasText: Data?.name,
       });
 
       const rowCount = await Row.count();
@@ -193,7 +202,7 @@ class Consequences {
         isFound = true;
         await ChangeStatus({ page, Row });
         await Row.locator("a").last().click();
-        await expect(page.url()).toContain("master-data/consequences/show/");
+        await expect(page.url()).toContain("master-data/asset-types/show/");
 
         break; // نخرج من الـ Loop لأننا وجدنا المطلوب
       } else {
@@ -218,66 +227,29 @@ class Consequences {
           // يمكنك استبدال هذا السطر بـ: await page.waitForSelector('.loading-spinner', { state: 'detached' });
           await page.waitForTimeout(1000);
         } else {
+          // وصلنا لآخر صفحة ولم نجد الزر، نخرج من الـ Loop
+          console.log("Can't Find Data");
           break;
         }
       }
     }
   }
-  async ShowConsequences({ page, Data, expect }: props) {
+  async ShowAssetType({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: TData;
+  }) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      Data?.ConsequencesName
+      Data.name
     );
     await expect(
       page.locator("textarea[data-testid='description']")
-    ).toHaveValue(Data?.Description);
-  }
-
-  // Filter Consequences
-  async FilterConsequences({ page, Data, expect }: props) {
-    await page.getByRole("button", { name: "Filter" }).click();
-    await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
-
-    await page.getByTestId("name").fill(Data?.ConsequencesName);
-    await page.getByTestId("apply-filters").click();
-
-    await page.waitForSelector("table tbody tr");
-    const RowCount = await page.locator("table tbody tr").count();
-
-    if (RowCount === 0) {
-      console.log("No Data with this filter");
-    } else {
-      const AllNames = await page
-        .locator("table tbody tr td:nth-of-type(1)")
-        .allTextContents();
-
-      await CheckFilteredData(AllNames, Data?.ConsequencesName);
-
-      await page.getByRole("button", { name: "Filter" }).click();
-      await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
-      await page.getByRole("textbox", { name: "Status" }).click();
-      await page.getByRole("option", { name: "Active", exact: true }).click();
-
-      await page.getByTestId("apply-filters").click();
-
-      if (RowCount === 0) {
-        console.log("No Data with this filter");
-      } else {
-        const AllNames = await page
-          .locator("table tbody tr td:nth-of-type(1)")
-          .allTextContents();
-        await CheckFilteredData(AllNames, Data?.ConsequencesName);
-
-        const AllStatus = await page
-          .locator("table tbody tr td:nth-of-type(3)")
-          .allTextContents();
-        await CheckFilteredData(AllStatus, Data?.Status, true);
-      }
-    }
-
-    await page.waitForTimeout(2000);
-    await page.getByRole("button", { name: "Reset" }).click();
-    await page.waitForTimeout(3000);
+    ).toHaveValue(Data.Description);
   }
 }
 
-export default Consequences;
+export default AssetTypes;

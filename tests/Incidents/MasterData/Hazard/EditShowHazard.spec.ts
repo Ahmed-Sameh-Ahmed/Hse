@@ -11,28 +11,24 @@ test.beforeEach(async ({ page }) => {
   await MasterDataPage.GoToHazards(page, expect);
 });
 
-test("Show & Edit Hazard", async ({ page }) => {
+test("Edit Hazard", async ({ page }) => {
   const hazard = new Hazards();
-  await hazard.GoToShowHazard(
+  await hazard.GoToEditHazardFromTable({
     page,
     expect,
-    Data.ShowInTable,
-    Data.Right.allFields
-  );
-  await hazard.ShowHazard(page, expect, Data.Right.required);
-  await hazard.GoToEditHazardFormShow(page, expect);
-  await hazard.EditHazard(page, expect, Data.Right.allFields, Data.Wrong.wrong);
+    Data: Data.Edit.Before,
+  });
+  await hazard.EditHazard({
+    page,
+    expect,
+    currentData: Data.Edit.Before,
+    newData: Data.Edit.After,
+  });
 });
 
-test("Edit From Table", async ({ page }) => {
+test("Show Hazard", async ({ page }) => {
   const hazard = new Hazards();
+  await hazard.GoToShowHazard({ page, expect, Data: Data.Edit.Before });
 
-  await hazard.GoToEditHazardFormTable(
-    page,
-    expect,
-    Data.ShowInTable,
-    Data.Right.allFields,
-    Data.Right.required
-  );
-  await hazard.EditHazard(page, expect, Data.Right.allFields, Data.Wrong.wrong);
+  await hazard.ShowHazard({ page, expect, Data: Data.Edit.Before });
 });

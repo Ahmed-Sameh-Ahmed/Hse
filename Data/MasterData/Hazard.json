@@ -35,6 +35,27 @@
       "Contamination_Procedure": "call 911"
     }
   },
+
+  "Edit": {
+    "Before": {
+      "Name": "Edit",
+      "Category": "Physical",
+      "Severity": "Low",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "like that",
+      "Contamination_Procedure": "call 911",
+      "Status": "Active"
+    },
+    "After": {
+      "Name": "Edit",
+      "Category": "Physical",
+      "Severity": "Low",
+      "Associated_Caution": "Warming",
+      "How_to_Detect": "like that",
+      "Contamination_Procedure": "call 911",
+      "Status": "Active"
+    }
+  },
   "ShowInTable": ["name", "Physical", "Low", "Inactive"],
 
   "Show": {
