@@ -1,0 +1,52 @@
+{
+  "Right": {
+    "Category": {
+      "Required": {
+        "Name": "Cause",
+        "Type": "Category",
+        "Description": ""
+      },
+      "AllFields": {
+        "Name": "Cause",
+        "Type": "Category",
+        "Description": "Description"
+      }
+    },
+    "SubCause": {
+      "Required": {
+        "Name": "Sub-Cause",
+        "Type": "Sub-Cause",
+        "ParentCause": "Cause",
+        "Description": ""
+      },
+      "AllFields": {
+        "Name": "Sub-Cause",
+        "Type": "Sub-Cause",
+        "ParentCause": "Cause",
+        "Description": "Description"
+      }
+    }
+  },
+  "Edit": {
+    "Before": {
+      "Name": "Edit",
+      "Type": "Sub-Cause",
+      "ParentCause": "Cause",
+      "Description": "",
+      "Status": "Active"
+    },
+    "After": {
+      "Name": "Edit",
+      "Type": "Sub-Cause",
+      "ParentCause": "Cause",
+      "Description": "",
+      "Status": "Active"
+    },
+    "AfterCategory": {
+      "Name": "cause",
+      "Type": "Category",
+      "Description": "",
+      "Status": "Active"
+    }
+  }
+}

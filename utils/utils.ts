@@ -21,6 +21,7 @@ const CheckFilteredData = async (
   } else {
     result.forEach((result: any, index: any) => {
       expect(result).toContain(expectedData);
+      console.log("All Statussssss are ");
     });
   }
 };
@@ -35,10 +36,4 @@ const randomNumber = () => {
   return Math.floor(Math.random() * 99999999); // مثال: رقم لحد 8 digits
 };
 
-const ChangeStatus = async ({ page, Row }: { page: any; Row: any }) => {
-  await Row.locator(".self-center").click();
-  await page.getByRole("button", { name: "OK" }).click();
-  await page.waitForTimeout(3000);
-};
-
-export { safeAction, CheckFilteredData, ChangeStatus };
+export { safeAction, CheckFilteredData, ChangeStatus, randomNumber };

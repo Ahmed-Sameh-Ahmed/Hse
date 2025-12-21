@@ -1,0 +1,20 @@
+{
+  "Required": {
+    "name": "name",
+    "Description": ""
+  },
+  "AllFields": {
+    "name": "name",
+    "Description": "Description"
+  },
+  "Edit": {
+    "Before": {
+      "name": "Edit",
+      "Description": ""
+    },
+    "After": {
+      "name": "Edit",
+      "Description": ""
+    }
+  }
+}

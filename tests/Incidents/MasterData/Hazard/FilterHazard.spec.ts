@@ -13,10 +13,9 @@ test.beforeEach(async ({ page }) => {
 
 test("Filter Data", async ({ page }) => {
   const hazard = new Hazards();
-  await hazard.FilterHazard(
+  await hazard.FilterHazard({
     page,
     expect,
-    Data.FilterData,
-    Data.Right.allFields
-  );
+    DataBefore: Data.Edit.Before,
+  });
 });

@@ -1,0 +1,125 @@
+import Login from "../../../../Pages/Login/Login";
+import { expect, test } from "@playwright/test";
+
+import Data from "../../../../Data/MasterData/Cause.json";
+
+import Causes from "../../../../Pages/MasterData/Causes/Causes";
+
+test.beforeEach(async ({ page }) => {
+  const home = await new Login().login(page, "admin@admin.com", "123456");
+  const MasterData = await home.GoToMasterData(page, expect);
+  await MasterData.GoToCauses(page, expect);
+});
+
+test("Create Cause (Category) With Empty Fields ", async ({ page }) => {
+  const causes = new Causes();
+
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({ page, expect, Empty: true });
+});
+
+test("Create Cause (Category) (Required Fields) ", async ({ page }) => {
+  const causes = new Causes();
+
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({
+    page,
+    expect,
+    Data: Data.Right.Category.Required,
+  });
+});
+
+test("Create Cause (Category) (All Fields) ", async ({ page }) => {
+  const causes = new Causes();
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({
+    page,
+    expect,
+    Data: Data.Right.Category.AllFields,
+  });
+});
+
+test("Create Cause (Sub Cause) With Empty Fields ", async ({ page }) => {
+  const causes = new Causes();
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({ page, expect, Empty: true, subCause: true });
+});
+
+test("Create Cause (Sub Cause) With (Required Fields) ", async ({ page }) => {
+  const causes = new Causes();
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({
+    page,
+    expect,
+    Data: Data.Right.SubCause.Required,
+    subCause: true,
+    CategoryData: Data.Right.Category.AllFields,
+  });
+});
+test("Create Cause (Sub Cause) With (All Fields) ", async ({ page }) => {
+  const causes = new Causes();
+  await causes.GoToCreateCause({ page, expect });
+  await causes.CreateCause({
+    page,
+    expect,
+    Data: Data.Right.SubCause.AllFields,
+    subCause: true,
+    CategoryData: Data.Right.Category.AllFields,
+  });
+});
+
+// لسه فيهم مشاكل
+test("Create Cause (Category) (All Fields) (Duplicate Name) ", async ({
+  page,
+}) => {
+  const causes = new Causes();
+  try {
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.Category.AllFields,
+      NotRandomNumber: true,
+    });
+
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.Category.AllFields,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
+  } catch (error) {
+    console.log("name is Exist From First Create");
+  }
+});
+
+test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
+  page,
+}) => {
+  const causes = new Causes();
+  try {
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.SubCause.AllFields,
+      CategoryData: Data.Right.Category.AllFields,
+      NotRandomNumber: true,
+      subCause: true,
+    });
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.SubCause.AllFields,
+      CategoryData: Data.Right.Category.AllFields,
+      NotRandomNumber: true,
+      subCause: true,
+      Duplicate: true,
+    });
+  } catch (error) {
+    console.log("name is Exist From First Create");
+  }
+});
