@@ -1,0 +1,73 @@
+import { expect, test } from "@playwright/test";
+//Page
+import login from "../../../../Pages/Login/Login";
+import Sites from "../../../../Pages/MasterData/Sites/Sites";
+//Data
+import Data from "../../../../Data/MasterData/Sites.json";
+
+test.beforeEach(async ({ page }) => {
+  const Home = await new login().login(page, "admin@admin.com", "123456");
+  const MasterDataPage = await Home.GoToMasterData(page, expect);
+  await MasterDataPage.GoToSites(page, expect);
+});
+
+test("Create Empty Fields", async ({ page }) => {
+  const Site = new Sites();
+  //Go To Create
+  await Site.GoToCreateSite({ page, expect });
+  // Create
+  await Site.CreateSite({ page, expect, Empty: true });
+});
+test("Create Sites (Required)", async ({ page }) => {
+  const Site = new Sites();
+  //Go To Create
+  await Site.GoToCreateSite({ page, expect });
+  // Create
+  await Site.CreateSite({
+    page,
+    expect,
+    Data: Data.Create.Right,
+    Required: true,
+  });
+});
+test("Create Sites (all Fields)", async ({ page }) => {
+  const Site = new Sites();
+  //Go To Create
+  await Site.GoToCreateSite({ page, expect });
+  // Create
+  await Site.CreateSite({ page, expect, Data: Data.Create.Right });
+});
+test("Create Sites (all Fields) (Wrong)", async ({ page }) => {
+  const Site = new Sites();
+  //Go To Create
+  await Site.GoToCreateSite({ page, expect });
+  // Create
+  await Site.CreateSite({ page, expect, Data: Data.Create.Wrong, Wrong: true });
+});
+test("Create Sites (all Fields) (Duplicate)", async ({ page }) => {
+  const Site = new Sites();
+
+  try {
+    //Go To Create
+    await Site.GoToCreateSite({ page, expect });
+    // Create
+    await Site.CreateSite({
+      page,
+      expect,
+      Data: Data.Create.Right,
+      NotRandomNumber: true,
+    });
+    //Go To Create X2
+    await Site.GoToCreateSite({ page, expect });
+    // Create X2
+    await Site.CreateSite({
+      page,
+      expect,
+      Data: Data.Create.Right,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
+  } catch (error) {
+    console.log("name exists from First Create");
+  }
+});

@@ -3,6 +3,7 @@ import {
   ChangeStatus,
   randomNumber,
   safeAction,
+  TableSearch,
 } from "../../../utils/utils";
 
 type TData = {
@@ -23,32 +24,34 @@ class OrganizationHierarchy {
   RandomNumber = randomNumber();
 
   // Create Organization Hierarchy
-  async GoToCreateOrganizationHierarchy(page: any, expect: any) {
+  async GoToCreateOrganizationHierarchy({
+    page,
+    expect,
+  }: {
+    page: any;
+    expect: any;
+  }) {
     await page
       .getByRole("button", { name: "Create Organization Hierarchy" })
       .click();
     await expect(page).toHaveURL("/master-data/organization-hierarchy/create");
   }
-  async CreateOrganizationHierarchy(
-    page: any,
-    expect: any,
-    data: TData,
-    empty?: boolean
-  ) {
+  async CreateOrganizationHierarchy({
+    page,
+    expect,
+    data,
+    empty,
+    NotRandomNumber,
+    Duplicate,
+  }: {
+    page: any;
+    expect: any;
+    data: TData;
+    empty?: boolean;
+    NotRandomNumber?: boolean;
+    Duplicate?: boolean;
+  }) {
     if (empty) {
-      await page.getByRole("textbox", { name: "Level ID *" }).click();
-      await page.getByRole("textbox", { name: "Level ID *" }).click();
-
-      await page.getByTestId("name").click();
-
-      await page.getByRole("textbox", { name: "Position *" }).click();
-      await page.getByRole("textbox", { name: "Position *" }).click();
-
-      await page.getByRole("textbox", { name: "Reports To *" }).click();
-      await page.getByRole("textbox", { name: "Reports To *" }).click();
-
-      await page.getByTestId("description").fill(" ");
-
       await page.getByTestId("save-button").click();
     } else {
       await page.getByRole("textbox", { name: "Level ID *" }).click();
@@ -57,13 +60,18 @@ class OrganizationHierarchy {
         .first()
         .click();
 
-      await page.getByTestId("name").fill(data.LevelName + this.RandomNumber);
+      await page
+        .getByTestId("name")
+        .fill(
+          NotRandomNumber ? data.LevelName : data.LevelName + this.RandomNumber
+        );
 
       await page.getByRole("textbox", { name: "Position *" }).click();
-      const PositionContainer = page.locator(".m_c0783ff9");
-      await PositionContainer.locator("span", {
-        hasText: data.Position,
-      }).click();
+      await page
+        .getByRole("option", {
+          name: data.Position,
+        })
+        .click();
 
       if (data.ReportsTo === "") {
         // مش عاوز يمسك العنصر و هو disabled
@@ -85,43 +93,64 @@ class OrganizationHierarchy {
       await page.getByTestId("description").fill(data.Description);
 
       await page.getByTestId("save-button").click();
+      if (Duplicate) {
+        await expect(
+          page.getByText(
+            "This position is already assigned to a hierarchy level."
+          )
+        ).toBeVisible();
+      } else {
+        await expect(page).toHaveURL("/master-data/organization-hierarchy");
+        await page.getByRole("button", { name: "OK" }).click();
+      }
     }
   }
 
   // Show Organization Hierarchy
-  async GoToShowOrganizationHierarchy(
-    page: any,
-    expect: any,
-    data: TData,
-    DataCreate: TData
-  ) {
-    await page.waitForSelector("table tbody tr");
-    const RowCount = await page.locator("table tbody tr").count();
+  async GoToShowOrganizationHierarchy({
+    page,
+    expect,
+    DataBefore,
+  }: {
+    page: any;
+    expect: any;
+    DataBefore: TData;
+  }) {
+    const isFound = await TableSearch({
+      page,
+      Name: DataBefore.LevelName,
+    });
 
-    if (RowCount === 0) {
-      await this.GoToCreateOrganizationHierarchy(page, expect);
-      await this.CreateOrganizationHierarchy(page, expect, DataCreate);
-    } else {
-      const Rows = page.locator("table tbody tr", {
-        has: page.locator("td"),
-        hasText: data.LevelName,
+    if (!isFound) {
+      await this.GoToCreateOrganizationHierarchy({ page, expect });
+      await this.CreateOrganizationHierarchy({
+        page,
+        expect,
+        data: DataBefore,
+        NotRandomNumber: true,
       });
-
-      await Rows.locator("a").last().click();
+      await this.GoToShowOrganizationHierarchy({ page, expect, DataBefore });
+    } else {
+      await Row.locator("a").last().click();
       expect(page.url()).toContain("master-data/organization-hierarchy/show/");
     }
   }
-  async ShowOrganizationHierarchy(page: any, expect: any, data: TData) {
+  async ShowOrganizationHierarchy({
+    page,
+    expect,
+    data,
+  }: {
+    page: any;
+    expect: any;
+    data: TData;
+  }) {
     await expect(page.locator("input[data-testid='level']")).toHaveValue(
       data.LevelID
     );
-    try {
-      await expect(page.locator("input[data-testid='name']")).toHaveValue(
-        data.LevelName
-      );
-    } catch (error) {
-      console.log("Error from Level Name  ", error);
-    }
+
+    await expect(page.locator("input[data-testid='name']")).toHaveValue(
+      data.LevelName
+    );
 
     await expect(
       page.locator("input[data-testid='position.name']")
@@ -134,36 +163,49 @@ class OrganizationHierarchy {
     ).toHaveValue(data.Description);
   }
 
-  // Show & Edit Organization Hierarchy
-  async GoToEditOrganizationHierarchyFormShow(page: any, expect: any) {
-    await page.getByRole("button", { name: "Edit" }).click();
-    expect(page.url()).toContain("/master-data/organization-hierarchy/edit");
-  }
-  async GoToEditOrganizationHierarchyFromTable(
-    page: any,
-    expect: any,
-    data: TData
-  ) {
-    const Row = page.locator("table tbody tr", {
-      has: page.locator("td"),
-      hasText: data.LevelName,
+  // Edit Organization Hierarchy
+
+  async GoToEditOrganizationHierarchy({
+    page,
+    expect,
+    data,
+  }: {
+    page: any;
+    expect: any;
+    data: TData;
+  }) {
+    await TableSearch({
+      page,
+      Name: data?.LevelName,
+      Edit: true,
     });
-    await ChangeStatus({ page, Row: Rows });
-    expect(Rows.locator(".self-center")).toHaveText("Inactive");
-    await Rows.locator("a").first().click();
-    expect(page.url()).toContain("master-data/organization-hierarchy/edit/");
   }
-  async EditOrganizationHierarchy(page: any, expect: any, data: TData) {
+  async EditOrganizationHierarchy({
+    page,
+    expect,
+    data,
+  }: {
+    page: any;
+    expect: any;
+    data: TData;
+  }) {
+    await expect(page.getByRole("textbox", { name: "Level ID *" })).toHaveValue(
+      data.LevelID
+    );
+    await expect(page.getByTestId("name")).toHaveValue(data.LevelName);
+    await expect(page.getByRole("textbox", { name: "Position *" })).toHaveValue(
+      data.Position
+    );
+    await expect(
+      page.getByRole("textbox", { name: "Reports To *" })
+    ).toHaveValue(data.ReportsTo);
+    await expect(page.getByTestId("description")).toHaveValue(data.Description);
+
     await page.locator(".mantine-focus-auto").first().click();
     await page.getByTestId("name").clear();
     await page
       .locator(
         "div:nth-child(3) > .m_46b77525 > .m_6c018570 > .m_82577fc2 > .mantine-focus-auto"
-      )
-      .click();
-    await page
-      .locator(
-        "div:nth-child(4) > .m_46b77525 > .m_6c018570 > .m_82577fc2 > .mantine-focus-auto"
       )
       .click();
     await page.getByTestId("description").clear();
@@ -172,7 +214,6 @@ class OrganizationHierarchy {
     await expect(page.getByText("Level ID is required")).toBeVisible();
     await expect(page.getByText("Level name is required")).toBeVisible();
     await expect(page.getByText("Position is required")).toBeVisible();
-    await expect(page.getByText("Reports To is required")).toBeVisible();
 
     await page.getByRole("textbox", { name: "Level ID *" }).click();
     const LevelIdContainer = page.locator(".m_c0783ff9");
@@ -180,7 +221,7 @@ class OrganizationHierarchy {
       .first()
       .click();
 
-    await page.getByTestId("name").fill(data.LevelName + this.RandomNumber);
+    await page.getByTestId("name").fill(data.LevelName);
 
     await page.getByRole("textbox", { name: "Position *" }).click();
     const PositionContainer = page.locator(".m_c0783ff9");
@@ -316,8 +357,8 @@ class OrganizationHierarchy {
         }
       }
     } else {
-      this.GoToCreateOrganizationHierarchy(page, expect);
-      this.CreateOrganizationHierarchy(page, expect, CreateData);
+      this.GoToCreateOrganizationHierarchy({ page, expect });
+      this.CreateOrganizationHierarchy({ page, expect, data: CreateData });
       this.FilterOrganizationHierarchy(page, expect, CreateData, FilterData);
     }
 

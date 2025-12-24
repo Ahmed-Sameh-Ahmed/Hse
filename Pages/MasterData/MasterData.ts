@@ -3,6 +3,9 @@ import Hazards from "./Hazards/Hazards";
 import Consequences from "./Consequences/Consequences";
 import Causes from "./Causes/Causes";
 import AssetTypes from "./AssetTypes/AssetTypes";
+import TaskAnalysis from "./TaskAnalysis/TaskAnalysis";
+import Sites from "./Sites/Sites";
+import Classification from "./Classification/Classification";
 
 class MasterData {
   async GoToOrganizationHierarchy(page: any, expect: any) {
@@ -31,6 +34,21 @@ class MasterData {
     await page.getByRole("link", { name: "Asset Types" }).click();
     await expect(page).toHaveURL("/master-data/asset-types");
     return new AssetTypes();
+  }
+  async GoToTaskAnalysis(page: any, expect: any) {
+    await page.getByRole("link", { name: "Task Analysis" }).click();
+    await expect(page).toHaveURL("/master-data/task-analysis");
+    return new TaskAnalysis();
+  }
+  async GoToSites(page: any, expect: any) {
+    await page.getByRole("link", { name: "Sites" }).click();
+    await expect(page).toHaveURL("/master-data/sites");
+    return new Sites();
+  }
+  async GoToClassifications(page: any, expect: any) {
+    await page.getByRole("link", { name: "Classifications" }).click();
+    await expect(page).toHaveURL("/master-data/classifications");
+    return new Classification();
   }
 }
 

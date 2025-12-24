@@ -1,0 +1,28 @@
+{
+  "Create": {
+    "Primary": {
+      "Required": {
+        "Name": "Name",
+        "Parent": "",
+        "Description": ""
+      },
+      "AllFields": {
+        "Name": "Name",
+        "Parent": "",
+        "Description": "Description"
+      }
+    },
+    "Secondary": {
+      "Required": {
+        "Name": "Name",
+        "Parent": "Near Miss (HiPo – High Potential Incident)",
+        "Description": ""
+      },
+      "AllFields": {
+        "Name": "Name",
+        "Parent": "Near Miss (HiPo – High Potential Incident)",
+        "Description": "Description"
+      }
+    }
+  }
+}
