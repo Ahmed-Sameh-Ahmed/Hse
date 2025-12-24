@@ -3,6 +3,7 @@ import {
   randomNumber,
   ChangeStatus,
   CheckFilteredData,
+  TableSearch,
 } from "../../../utils/utils";
 
 type TData = {
@@ -111,81 +112,8 @@ class Causes {
     expect: any;
     Data: TData;
   }) {
-    // //go to edit & change status
-
-    // await page.waitForSelector("table tbody tr");
-    // const Row = await page.locator("table tbody tr", {
-    //   has: page.locator("td", { hasText: Data?.Name }),
-    // });
-    // console.log(await Row.count());
-
-    // if ((await Row.count()) !== 0) {
-    //   await ChangeStatus({ page, Row });
-    //   await Row.locator("a").first().click();
-    // } else {
-    //   // go to create
-    //   await this.GoToCreateCause({ page, expect });
-    //   // create with same data
-    //   await this.CreateCause({
-    //     page,
-    //     expect,
-    //     Data: Data,
-    //     NotRandomNumber: true,
-    //     subCause: true,
-    //   });
-    //   // this function again
-    //   await this.GoToEditCause({ page, Data, expect });
-    // }
-    // متغير لمعرفة ما إذا وجدنا الصف أم لا
-    let isFound = false;
-
-    while (true) {
-      // انتظار تحميل الجدول
-      await page.waitForSelector("table tbody tr");
-
-      // تحديد الصف الذي نبحث عنه
-      const Row = page.locator("table tbody tr", {
-        has: page.locator("td"),
-        hasText: Data?.Name,
-      });
-
-      const rowCount = await Row.count();
-      console.log(`Checking page... Found count: ${rowCount}`);
-
-      if (rowCount > 0) {
-        // --- الحالة الأولى: تم العثور على الصف ---
-        isFound = true;
-        await ChangeStatus({ page, Row });
-        await Row.locator("a").first().click();
-        break; // نخرج من الـ Loop لأننا وجدنا المطلوب
-      } else {
-        // --- الحالة الثانية: لم يتم العثور عليه في هذه الصفحة ---
-
-        // !!!!!!! (يجب تعديل هذا الجزء يدويًا) !!!!!!!
-        // ضع هنا السليكتور الخاص بزر "الصفحة التالية" في جدولك
-        // مثال: page.getByRole('button', { name: 'Next' }) أو page.locator('.pagination-next')
-        const nextButton = page
-          .locator(
-            "div [class='flex justify-center !text-primary px-2 mt-4 rtl:flex-row-reverse']"
-          )
-          .locator("button")
-          .last();
-
-        // نتحقق مما إذا كان زر التالي موجوداً وقابلاً للضغط
-        // (بعض الجداول تخفي الزر، وبعضها يجعله disabled في آخر صفحة)
-        if ((await nextButton.isVisible()) && (await nextButton.isEnabled())) {
-          await nextButton.click();
-
-          // انتظار بسيط لتحميل البيانات الجديدة (فيفضل انتظار اختفاء علامة التحميل loading spinner إن وجدت)
-          // يمكنك استبدال هذا السطر بـ: await page.waitForSelector('.loading-spinner', { state: 'detached' });
-          await page.waitForTimeout(1000);
-        } else {
-          // وصلنا لآخر صفحة ولم نجد الزر، نخرج من الـ Loop
-          break;
-        }
-      }
-    }
-
+    //go to edit & change status
+    const isFound = await TableSearch({ page, Name: Data?.Name, Edit: true });
     // --- إذا انتهى البحث في كل الصفحات ولم نجد الصف ---
     if (!isFound) {
       await this.GoToCreateCause({ page, expect });
@@ -266,14 +194,10 @@ class Causes {
     expect: any;
     Data: TData;
   }) {
-    await page.waitForSelector("table tbody tr");
-
-    const Row = page.locator("table tbody tr", {
-      has: page.locator("td"),
-      hasText: Data.Name,
+    await TableSearch({
+      page,
+      Name: Data?.Name,
     });
-    await Row.locator("a").last().click();
-    await expect(page.url()).toContain("master-data/causes/show/");
   }
 
   async ShowCause({

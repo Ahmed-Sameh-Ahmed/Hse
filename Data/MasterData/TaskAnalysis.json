@@ -1,0 +1,31 @@
+{
+  "TaskAnalysisQuestion": {
+    "Create": { "Label": "QuestionLabel" },
+    "Edit": {
+      "Before": { "Label": "Edit" },
+      "After": { "Label": "Edit" }
+    }
+  },
+  "TaskClassification": {
+    "Create": {
+      "ID": "ClassificationID",
+      "Name": "ClassificationName",
+      "Description": "Description",
+      "Example": "Example"
+    },
+    "Edit": {
+      "Before": {
+        "ID": "ID",
+        "Name": "Edit",
+        "Description": "Description",
+        "Example": "Example"
+      },
+      "After": {
+        "ID": "ID",
+        "Name": "Edit",
+        "Description": "Description",
+        "Example": "Example"
+      }
+    }
+  }
+}

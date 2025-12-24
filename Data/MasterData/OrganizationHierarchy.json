@@ -53,11 +53,22 @@
     }
   },
   "Edit": {
-    "LevelID": "L2",
-    "LevelName": "LevelName",
-    "Position": "Engineer",
-    "ReportsTo": "Senior Developer",
-    "Description": "Description"
+    "Before": {
+      "LevelID": "L2",
+      "LevelName": "Edit",
+      "Position": "Intern",
+      "ReportsTo": "Senior Developer",
+      "Description": "Description",
+      "Status": "Active"
+    },
+    "After": {
+      "LevelID": "L2",
+      "LevelName": "Edit",
+      "Position": "Intern",
+      "ReportsTo": "Senior Developer",
+      "Description": "Description",
+      "Status": "Active"
+    }
   },
   "Show": {
     "LevelID": "L2",

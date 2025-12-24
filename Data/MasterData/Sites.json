@@ -1,0 +1,33 @@
+{
+  "Create": {
+    "Right": {
+      "name": "name",
+      "Coordinates": "215.864",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "ResponsiblePerson": "Max Crona",
+      "Status": "Active"
+    },
+    "Wrong": {
+      "name": "name",
+      "Coordinates": "asdw",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "ResponsiblePerson": "Max Crona"
+    }
+  },
+  "Edit": {
+    "Before": {
+      "name": "Edit",
+      "Coordinates": "215.864",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "ResponsiblePerson": "Max Crona",
+      "Status": "Active"
+    },
+    "After": {
+      "name": "Edit",
+      "Coordinates": "215.864",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "ResponsiblePerson": "Max Crona",
+      "Status": "Active"
+    }
+  }
+}
