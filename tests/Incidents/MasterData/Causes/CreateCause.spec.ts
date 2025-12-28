@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 import Data from "../../../../Data/MasterData/Cause.json";
 
 import Causes from "../../../../Pages/MasterData/Causes/Causes";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const home = await new Login().login(page, "admin@admin.com", "123456");
@@ -39,6 +40,8 @@ test("Create Cause (Category) (All Fields) ", async ({ page }) => {
   });
 });
 
+// --------------------------------------------------------------------
+
 test("Create Cause (Sub Cause) With Empty Fields ", async ({ page }) => {
   const causes = new Causes();
   await causes.GoToCreateCause({ page, expect });
@@ -68,17 +71,24 @@ test("Create Cause (Sub Cause) With (All Fields) ", async ({ page }) => {
   });
 });
 
-// لسه فيهم مشاكل
+// --------------------------------------------------------------------
+
 test("Create Cause (Category) (All Fields) (Duplicate Name) ", async ({
   page,
 }) => {
   const causes = new Causes();
-  try {
+
+  const Found = await TableSearch({
+    page,
+    Name: Data.Right.Category.Required.Name,
+  });
+
+  if (!Found) {
     await causes.GoToCreateCause({ page, expect });
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.Category.AllFields,
+      Data: Data.Right.Category.Required,
       NotRandomNumber: true,
     });
 
@@ -86,12 +96,19 @@ test("Create Cause (Category) (All Fields) (Duplicate Name) ", async ({
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.Category.AllFields,
+      Data: Data.Right.Category.Required,
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name is Exist From First Create");
+  } else {
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.Category.Required,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });
 
@@ -99,16 +116,33 @@ test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
   page,
 }) => {
   const causes = new Causes();
-  try {
+
+  const Found = await TableSearch({
+    page,
+    Name: Data.Right.SubCause.Required.Name,
+  });
+
+  if (!Found) {
     await causes.GoToCreateCause({ page, expect });
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.SubCause.AllFields,
-      CategoryData: Data.Right.Category.AllFields,
+      Data: Data.Right.SubCause.Required,
+      CategoryData: Data.Right.Category.Required,
       NotRandomNumber: true,
       subCause: true,
     });
+    await causes.GoToCreateCause({ page, expect });
+    await causes.CreateCause({
+      page,
+      expect,
+      Data: Data.Right.SubCause.Required,
+      CategoryData: Data.Right.Category.Required,
+      NotRandomNumber: true,
+      subCause: true,
+      Duplicate: true,
+    });
+  } else {
     await causes.GoToCreateCause({ page, expect });
     await causes.CreateCause({
       page,
@@ -119,7 +153,5 @@ test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
       subCause: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name is Exist From First Create");
   }
 });

@@ -1,3 +1,4 @@
+import { table } from "console";
 import { randomNumber, ChangeStatus, TableSearch } from "../../../utils/utils";
 
 type TData = {
@@ -52,11 +53,12 @@ class Sites {
           .fill(`${Data?.name}${this.randomNumber}`);
         await page.getByRole("textbox", { name: "Location *" }).click();
         await page.getByRole("option", { name: Data?.Location }).click();
+        await page.getByRole("combobox").fill(Data?.ResponsiblePerson);
+        await page.waitForTimeout(2000);
         await page
-          .getByRole("textbox", { name: "Responsible Person *" })
-          .click();
-        await page
-          .getByRole("option", { name: Data?.ResponsiblePerson })
+          .locator("#react-select-3-listbox", {
+            hasText: Data?.ResponsiblePerson,
+          })
           .click();
         await page.getByTestId("save-button").click();
         await page.getByRole("button", { name: "OK" }).click();
@@ -70,18 +72,16 @@ class Sites {
         await page.getByTestId("goe_coordinates").fill(Data?.Coordinates);
         await page.getByRole("textbox", { name: "Location *" }).click();
         await page.getByRole("option", { name: Data?.Location }).click();
+        await page.getByRole("combobox").fill(Data?.ResponsiblePerson);
+        await page.waitForTimeout(2000);
         await page
-          .getByRole("textbox", { name: "Responsible Person *" })
-          .click();
-
-        await page
-          .getByRole("option", { name: Data?.ResponsiblePerson })
+          .locator("#react-select-3-listbox", {
+            hasText: Data?.ResponsiblePerson,
+          })
           .click();
         await page.getByTestId("save-button").click();
         if (Wrong) {
-          await expect(
-            page.getByText("Geo Coordinates must be number")
-          ).toBeVisible();
+          await expect(page.getByText("Must be a valid number")).toBeVisible();
         } else if (Duplicate) {
           await expect(
             page.getByText("Site with this name already")
@@ -131,9 +131,12 @@ class Sites {
     await expect(page.locator("input[id='location.id']")).toHaveValue(
       Data.Location
     );
-    await expect(page.locator("input[id='responsible_person.id']")).toHaveValue(
-      Data.ResponsiblePerson
-    );
+    await expect(
+      page
+        .locator(".react-select-container")
+        .locator("div", { hasText: Data.ResponsiblePerson })
+        .nth(2)
+    ).toHaveText(Data.ResponsiblePerson);
 
     await page.locator("input[data-testid='site_name']").clear();
     await page.locator("input[data-testid='goe_coordinates']").clear();
@@ -142,19 +145,19 @@ class Sites {
       .filter({ hasText: /^Location \*$/ })
       .locator("button")
       .click();
-    await page
-      .locator("div")
-      .filter({ hasText: /^Responsible Person \*$/ })
-      .locator("button")
-      .click();
+    await page.locator(".react-select-container").locator("svg").nth(0).click();
 
     await page.getByTestId("site_name").fill(Data.name);
     await page.getByTestId("goe_coordinates").fill(Data.Coordinates);
     await page.getByRole("textbox", { name: "Location *" }).click();
     await page.getByRole("option", { name: Data?.Location }).click();
-    await page.getByRole("textbox", { name: "Responsible Person *" }).click();
-
-    await page.getByRole("option", { name: Data?.ResponsiblePerson }).click();
+    await page.getByRole("combobox").fill(Data?.ResponsiblePerson);
+    await page.waitForTimeout(2000);
+    await page
+      .locator("#react-select-3-listbox", {
+        hasText: Data?.ResponsiblePerson,
+      })
+      .click();
     await page.getByTestId("edit-button").click();
     await page.getByRole("button", { name: "OK" }).click();
     await expect(page).toHaveURL("/master-data/sites");
@@ -170,16 +173,7 @@ class Sites {
     expect: any;
     Data: TData;
   }) {
-    await page.waitForSelector("table tbody tr");
-    const Row = await page.locator("table tbody tr").filter({
-      has: page.getByText(Data.name, { exact: true }),
-    });
-    if ((await Row.count()) == 0) {
-      console.log("No Data Found");
-    } else {
-      await Row.locator("a").last().click();
-      await expect(page.url()).toContain("/master-data/sites/show");
-    }
+    await TableSearch({ page, Name: Data.name, Show: true });
   }
   async ShowSite({
     page,

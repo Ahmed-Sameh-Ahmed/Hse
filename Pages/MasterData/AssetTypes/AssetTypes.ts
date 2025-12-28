@@ -110,7 +110,7 @@ class AssetTypes {
     expect: any;
     Data: TData;
   }) {
-    await TableSearch({ page, Name: Data?.name });
+    await TableSearch({ page, Name: Data?.name, Show: true });
   }
   async ShowAssetType({
     page,

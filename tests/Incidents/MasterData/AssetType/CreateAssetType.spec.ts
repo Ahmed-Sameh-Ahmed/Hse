@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 import Data from "../../../../Data/MasterData/AssetType.json";
 
 import AssetTypes from "../../../../Pages/MasterData/AssetTypes/AssetTypes";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const home = await new Login().login(page, "admin@admin.com", "123456");
@@ -40,9 +41,12 @@ test("Create Asset type (All Fields)", async ({ page }) => {
 });
 
 test("Create Asset type (Required) (duplicate)", async ({ page }) => {
-  try {
+  const AssetType = new AssetTypes();
+
+  const Found = await TableSearch({ page, Name: Data.Required.name });
+
+  if (!Found) {
     //go to create
-    const AssetType = new AssetTypes();
     await AssetType.GoToCreateAssetType({ page, expect });
 
     //create
@@ -65,7 +69,17 @@ test("Create Asset type (Required) (duplicate)", async ({ page }) => {
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name is exist from first Create");
+  } else {
+    //go to create
+    await AssetType.GoToCreateAssetType({ page, expect });
+
+    //create
+    await AssetType.CreateAssetType({
+      page,
+      expect,
+      Data: Data.Required,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });

@@ -4,6 +4,7 @@ import login from "../../../../Pages/Login/Login";
 import Sites from "../../../../Pages/MasterData/Sites/Sites";
 //Data
 import Data from "../../../../Data/MasterData/Sites.json";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
@@ -47,7 +48,9 @@ test("Create Sites (all Fields) (Wrong)", async ({ page }) => {
 test("Create Sites (all Fields) (Duplicate)", async ({ page }) => {
   const Site = new Sites();
 
-  try {
+  const Found = await TableSearch({ page, Name: Data.Create.Right.name });
+
+  if (!Found) {
     //Go To Create
     await Site.GoToCreateSite({ page, expect });
     // Create
@@ -67,7 +70,16 @@ test("Create Sites (all Fields) (Duplicate)", async ({ page }) => {
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name exists from First Create");
+  } else {
+    //Go To Create X2
+    await Site.GoToCreateSite({ page, expect });
+    // Create X2
+    await Site.CreateSite({
+      page,
+      expect,
+      Data: Data.Create.Right,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });

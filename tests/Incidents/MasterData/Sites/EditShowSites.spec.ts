@@ -13,7 +13,6 @@ test.beforeEach(async ({ page }) => {
 
 test("Edit Site", async ({ page }) => {
   const sites = new Sites();
-
   // Go To Edit Site
 
   await sites.GoToEditSite({ page, expect, Data: Data.Edit.Before });

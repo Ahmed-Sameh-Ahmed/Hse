@@ -13,6 +13,7 @@ type props = {
   Edit?: Boolean;
   CreateData?: TData;
   showInTable?: string[];
+  Duplicate?: boolean;
 };
 
 type TData = {
@@ -30,7 +31,14 @@ class Consequences {
     await page.getByRole("button", { name: "Add Consequence" }).click();
     await expect(page).toHaveURL("/master-data/consequences/create");
   }
-  async CreateConsequences({ page, Data, expect, Empty, Edit }: props) {
+  async CreateConsequences({
+    page,
+    Data,
+    expect,
+    Empty,
+    Edit,
+    Duplicate,
+  }: props) {
     await page
       .getByTestId("name")
       .fill(
@@ -50,8 +58,16 @@ class Consequences {
       ).toBeVisible();
     } else {
       await page.getByTestId("save-button").click();
-      await expect(page).toHaveURL("/master-data/consequences");
-      await page.getByRole("button", { name: "OK" }).click();
+      if (Duplicate) {
+        await expect(
+          page.locator(".mb-3").locator("p", {
+            hasText: "Consequence with this name already exists.",
+          })
+        ).toBeVisible();
+      } else {
+        await expect(page).toHaveURL("/master-data/consequences");
+        await page.getByRole("button", { name: "OK" }).click();
+      }
     }
   }
 
@@ -59,7 +75,7 @@ class Consequences {
   async GoToEditConsequencesFormTable({ page, Data, expect }: props) {
     const isFound = await TableSearch({
       page,
-      Name: Data?.ConsequencesName,
+      Name: Data!.ConsequencesName,
       Edit: true,
     });
     // --- إذا انتهى البحث في كل الصفحات ولم نجد الصف ---
@@ -93,8 +109,7 @@ class Consequences {
 
   //Show Consequences
   async GoToShowConsequences({ page, Data, expect }: props) {
-    // متغير لمعرفة ما إذا وجدنا الصف أم لا
-    await TableSearch({ page, Name: Data?.ConsequencesName });
+    await TableSearch({ page, Name: Data!.ConsequencesName, Show: true });
   }
   async ShowConsequences({ page, Data, expect }: props) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(

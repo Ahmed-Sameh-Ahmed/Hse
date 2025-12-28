@@ -13,7 +13,11 @@ test.beforeEach(async ({ page }) => {
 
 test("Filter Cause(sub cause)", async ({ page }) => {
   const cause = new Causes();
-  await cause.FilterCause({ page, expect, DataAfter: Data.Edit.After });
+  await cause.FilterCause({
+    page,
+    expect,
+    DataAfter: Data.Edit.SubCause.After,
+  });
 });
 
 test("Filter Cause(Category)", async ({ page }) => {
@@ -22,8 +26,8 @@ test("Filter Cause(Category)", async ({ page }) => {
   await cause.FilterCause({
     page,
     expect,
-    DataAfter: Data.Edit.After,
+    DataAfter: Data.Edit.Cause.After,
     isCategory: true,
-    DataAfterCategory: Data.Edit.AfterCategory,
+    DataAfterCategory: Data.Edit.Cause.After,
   });
 });

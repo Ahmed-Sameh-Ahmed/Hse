@@ -13,30 +13,52 @@ test.beforeEach(async ({ page }) => {
 
 test("Edit Cause (Sub-cause) (Required)", async ({ page }) => {
   const cause = new Causes();
-  await cause.GoToEditCause({ page, expect, Data: Data.Edit.Before });
+  await cause.GoToEditCause({
+    page,
+    expect,
+    Data: Data.Edit.SubCause.Before,
+    subCause: true,
+  });
   //بيضرب علي ال description
   await cause.EditCause({
     page,
-    DataBefore: Data.Edit.Before,
-    DataAfter: Data.Edit.After,
+    DataBefore: Data.Edit.SubCause.Before,
+    DataAfter: Data.Edit.SubCause.After,
     expect,
   });
 });
 
-// test("Edit Cause (Category) (Required)", async ({ page }) => {
-//   const cause = new Causes();
-//   await cause.GoToEditCause({ page, expect, Data: Data.Edit.Before });
-//   await cause.EditCause({
-//     page,
-//     DataBefore: Data.Edit.Before,
-//     DataAfter: Data.Edit.After,
-//     expect,
-//     Category: true,
-//   });
-// });
+test("Edit Cause (Category) (Required)", async ({ page }) => {
+  const cause = new Causes();
+  await cause.GoToEditCause({
+    page,
+    expect,
+    Data: Data.Edit.Cause.Before,
+    subCause: false,
+  });
+  await cause.EditCause({
+    page,
+    DataBefore: Data.Edit.Cause.Before,
+    DataAfter: Data.Edit.Cause.After,
+    expect,
+    Category: true,
+  });
+});
+
+// --------------------------------------------------------------------------------
 
 test("Show Cause (Sub-cause) (Required)", async ({ page }) => {
   const cause = new Causes();
-  await cause.GoToShowCause({ page, expect, Data: Data.Edit.After });
-  await cause.ShowCause({ page, expect, Data: Data.Edit.After });
+  await cause.GoToShowCause({ page, expect, Data: Data.Edit.SubCause.After });
+  await cause.ShowCause({ page, expect, Data: Data.Edit.SubCause.After });
+});
+test("Show Cause (Category) (Required)", async ({ page }) => {
+  const cause = new Causes();
+  await cause.GoToShowCause({ page, expect, Data: Data.Edit.Cause.After });
+  await cause.ShowCause({
+    page,
+    expect,
+    Data: Data.Edit.Cause.After,
+    Category: true,
+  });
 });

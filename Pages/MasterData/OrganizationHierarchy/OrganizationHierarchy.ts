@@ -119,6 +119,7 @@ class OrganizationHierarchy {
     const isFound = await TableSearch({
       page,
       Name: DataBefore.LevelName,
+      Show: true,
     });
 
     if (!isFound) {
@@ -130,9 +131,6 @@ class OrganizationHierarchy {
         NotRandomNumber: true,
       });
       await this.GoToShowOrganizationHierarchy({ page, expect, DataBefore });
-    } else {
-      await Row.locator("a").last().click();
-      expect(page.url()).toContain("master-data/organization-hierarchy/show/");
     }
   }
   async ShowOrganizationHierarchy({
