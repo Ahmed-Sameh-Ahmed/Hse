@@ -4,6 +4,7 @@ import login from "../../../../Pages/Login/Login";
 import Hazards from "../../../../Pages/MasterData/Hazards/Hazards";
 //Data
 import Data from "../../../../Data/MasterData/Hazard.json";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
@@ -21,55 +22,49 @@ test("Empty Fields", async ({ page }) => {
     Data: Data.Right.allFields,
     Empty,
   });
-
-  await expect(page.getByText("This field is required").nth(0)).toBeVisible();
-  await expect(page.getByText("This field is required").nth(1)).toBeVisible();
-  await expect(page.getByText("This field is required").nth(2)).toBeVisible();
-  await expect(page.getByText("This field is required").nth(3)).toBeVisible();
 });
 
 test("Crate Hazard With Right Data(Required)", async ({ page }) => {
   const hazards = new Hazards();
   await hazards.GoToCrateHazard({ page, expect });
   await hazards.CreateHazard({ page, expect, Data: Data.Right.required });
-  await page.getByRole("button", { name: "OK" }).click();
-  await expect(page).toHaveURL("/master-data/hazards");
 });
 
 test("Crate Hazard With Right Data (all Fields)", async ({ page }) => {
   const hazards = new Hazards();
   await hazards.GoToCrateHazard({ page, expect });
   await hazards.CreateHazard({ page, expect, Data: Data.Right.allFields });
-  await page.getByRole("button", { name: "OK" }).click();
-  await expect(page).toHaveURL("/master-data/hazards");
 });
 
 test("Crate Hazard With Wrong Data (Duplicate Data)", async ({ page }) => {
   const hazards = new Hazards();
-  try {
-    await hazards.GoToCrateHazard({ page, expect });
-    await hazards.CreateHazard({
-      page,
-      expect,
-      Data: Data.Right.allFields,
-      NotFillRandomNumber: true,
-    });
-    await page.getByRole("button", { name: "OK" }).click();
-    await expect(page).toHaveURL("/master-data/hazards");
-    await hazards.GoToCrateHazard({ page, expect });
-    await hazards.CreateHazard({
-      page,
-      expect,
-      Data: Data.Right.allFields,
-      NotFillRandomNumber: true,
-    });
 
-    await expect(
-      page.locator(".mb-3").locator("p", {
-        hasText: "Hazard with the same name and category already exists.",
-      })
-    ).toBeVisible();
-  } catch (error) {
-    console.log("name is Exist in First Create");
+  const Found = await TableSearch({ page, Name: Data.Right.allFields.Name });
+
+  if (!Found) {
+    await hazards.GoToCrateHazard({ page, expect });
+    await hazards.CreateHazard({
+      page,
+      expect,
+      Data: Data.Right.allFields,
+      NotFillRandomNumber: true,
+    });
+    await hazards.GoToCrateHazard({ page, expect });
+    await hazards.CreateHazard({
+      page,
+      expect,
+      Data: Data.Right.allFields,
+      NotFillRandomNumber: true,
+      Duplicate: true,
+    });
+  } else {
+    await hazards.GoToCrateHazard({ page, expect });
+    await hazards.CreateHazard({
+      page,
+      expect,
+      Data: Data.Right.allFields,
+      NotFillRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });

@@ -35,28 +35,29 @@ class Hazards {
     Data,
     Empty,
     NotFillRandomNumber,
+    Duplicate,
   }: {
     page: any;
     expect: any;
     Data: TData;
     Empty?: boolean;
+    Duplicate?: boolean;
     NotFillRandomNumber?: boolean;
   }) {
     if (Empty) {
-      await page.getByTestId("name").fill("");
-
-      await page.getByRole("textbox", { name: "Category *" }).click();
-      await page.getByRole("textbox", { name: "Category *" }).click();
-
-      await page.getByRole("textbox", { name: "Severity *" }).click();
-      await page.getByRole("textbox", { name: "Severity *" }).click();
-
-      await page.getByTestId("associated_caution").fill("");
-
-      await page.getByTestId("how_to_detect").fill("");
-
-      await page.getByTestId("contamination_procedure").fill("");
       await page.getByTestId("save-button").click();
+      await expect(
+        page.getByText("This field is required").nth(0)
+      ).toBeVisible();
+      await expect(
+        page.getByText("This field is required").nth(1)
+      ).toBeVisible();
+      await expect(
+        page.getByText("This field is required").nth(2)
+      ).toBeVisible();
+      await expect(
+        page.getByText("This field is required").nth(3)
+      ).toBeVisible();
     } else {
       await page
         .getByTestId("name")
@@ -81,6 +82,16 @@ class Hazards {
         .fill(Data.Contamination_Procedure);
 
       await page.getByTestId("save-button").click();
+      if (Duplicate) {
+        await expect(
+          page.locator(".mb-3").locator("p", {
+            hasText: "Hazard with the same name and category already exists.",
+          })
+        ).toBeVisible();
+      } else {
+        await page.getByRole("button", { name: "OK" }).click();
+        await expect(page).toHaveURL("/master-data/hazards");
+      }
     }
   }
 
@@ -192,6 +203,7 @@ class Hazards {
     await TableSearch({
       page,
       Name: Data?.Name,
+      Show: true,
     });
   }
 

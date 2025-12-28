@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 import Data from "../../../../Data/MasterData/Classification.json";
 
 import Classification from "../../../../Pages/MasterData/Classification/Classification";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const home = await new Login().login(page, "admin@admin.com", "123456");
@@ -43,7 +44,7 @@ test("Create Classification (Primary) (AllFields) ", async ({ page }) => {
     Data: Data.Create.Primary.AllFields,
   });
 });
-
+//Classification Secondary
 test("Create Classification (Secondary) (Required) ", async ({ page }) => {
   //Go To Create
   const classifications = new Classification();
@@ -68,16 +69,20 @@ test("Create Classification (Secondary) (AllFields)", async ({ page }) => {
     Data: Data.Create.Secondary.AllFields,
   });
 });
-
-//  Duplicate          عيد عليهم تاني
+//Duplicate
 test("Create Classification (AllFields) (Secondary) (Duplicate)", async ({
   page,
 }) => {
   //Go To Create
   const classifications = new Classification();
-  await classifications.GoToCreateClassification({ page, expect });
-  //Create
-  try {
+
+  const Found = await TableSearch({
+    page,
+    Name: Data.Create.Secondary.AllFields.Name,
+  });
+
+  if (!Found) {
+    await classifications.GoToCreateClassification({ page, expect });
     await classifications.CreateClassification({
       page,
       expect,
@@ -94,8 +99,16 @@ test("Create Classification (AllFields) (Secondary) (Duplicate)", async ({
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name exists From First time ");
+  } else {
+    await classifications.GoToCreateClassification({ page, expect });
+    await classifications.CreateClassification({
+      page,
+      expect,
+      Status: "Secondary_AllFields",
+      Data: Data.Create.Secondary.AllFields,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });
 test("Create Classification (AllFields) (Primary) (Duplicate)", async ({
@@ -103,9 +116,14 @@ test("Create Classification (AllFields) (Primary) (Duplicate)", async ({
 }) => {
   //Go To Create
   const classifications = new Classification();
-  await classifications.GoToCreateClassification({ page, expect });
-  //Create
-  try {
+
+  const Found = await TableSearch({
+    page,
+    Name: Data.Create.Primary.AllFields.Name,
+  });
+
+  if (Found) {
+    await classifications.GoToCreateClassification({ page, expect });
     await classifications.CreateClassification({
       page,
       expect,
@@ -122,7 +140,15 @@ test("Create Classification (AllFields) (Primary) (Duplicate)", async ({
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name exists From First time ");
+  } else {
+    await classifications.GoToCreateClassification({ page, expect });
+    await classifications.CreateClassification({
+      page,
+      expect,
+      Status: "Primary_AllFields",
+      Data: Data.Create.Primary.AllFields,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });

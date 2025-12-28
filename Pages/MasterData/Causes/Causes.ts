@@ -80,17 +80,9 @@ class Causes {
       if (subCause) {
         await page.getByRole("textbox", { name: "Parent Cause *" }).click();
 
-        // علشان لو فاضيه
-        try {
-          await page.getByRole("presentation").locator("span").nth(0).click();
-        } catch (error) {
-          //يكريت كوز الاول
-          this.CreateCause({ page, expect, Data: CategoryData });
-          this.GoToCreateCause({ page, expect });
-          this.CreateCause({ page, expect, subCause: true, Data });
-          // يرجع هنا تاني
-        }
+        await page.getByRole("option", { name: Data?.ParentCause }).click();
       }
+      await page.getByTestId("description").fill(Data?.Description);
       await page.getByTestId("save-button").click();
       if (Duplicate) {
         await expect(
@@ -107,10 +99,12 @@ class Causes {
     page,
     expect,
     Data,
+    subCause,
   }: {
     page: any;
     expect: any;
     Data: TData;
+    subCause?: boolean;
   }) {
     //go to edit & change status
     const isFound = await TableSearch({ page, Name: Data?.Name, Edit: true });
@@ -123,11 +117,10 @@ class Causes {
         expect,
         Data: Data,
         NotRandomNumber: true,
-        subCause: true,
+        subCause,
       });
       await expect(page).toHaveURL("/master-data/causes");
-      await page.getByRole("button", { name: "OK" }).click();
-      await this.GoToEditCause({ page, Data, expect });
+      await this.GoToEditCause({ page, Data, expect, subCause });
     }
   }
 
@@ -148,10 +141,11 @@ class Causes {
     await expect(page.getByRole("textbox", { name: "Type *" })).toHaveValue(
       DataBefore.Type
     );
-    await expect(
-      page.getByRole("textbox", { name: "Parent Cause *" })
-      // Cause1
-    ).toHaveValue(DataBefore?.ParentCause?.toLowerCase() + "1");
+    if (!Category) {
+      await expect(
+        page.getByRole("textbox", { name: "Parent Cause *" })
+      ).toHaveValue(DataBefore?.ParentCause);
+    }
     await page.getByTestId("name").clear();
     await page.locator(".mantine-focus-auto").first().click();
 
@@ -173,7 +167,7 @@ class Causes {
 
       await page
         .getByRole("option", {
-          name: DataBefore?.ParentCause?.toLowerCase() + "1",
+          name: DataBefore?.ParentCause,
           exact: true,
         })
         .click();
@@ -197,6 +191,7 @@ class Causes {
     await TableSearch({
       page,
       Name: Data?.Name,
+      Show: true,
     });
   }
 
@@ -204,19 +199,22 @@ class Causes {
     page,
     Data,
     expect,
+    Category,
   }: {
     page: any;
     expect: any;
     Data: TData;
+    Category?: boolean;
   }) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
       Data?.Name
     );
     await expect(page.locator("input[id='type']")).toHaveValue(Data?.Type);
-    await expect(
-      page.locator("input[data-testid='parent_cause.name']")
-      //cause1
-    ).toHaveValue(Data?.ParentCause?.toLowerCase() + "1");
+    if (!Category) {
+      await expect(
+        page.locator("input[data-testid='parent_cause.name']")
+      ).toHaveValue(Data?.ParentCause);
+    }
     await expect(
       page.locator("textarea[data-testid='description']")
     ).toHaveValue(Data?.Description);
@@ -238,7 +236,9 @@ class Causes {
   }) {
     if (isCategory) {
       await page.getByRole("button", { name: "Filter" }).click();
-      await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
+      await expect(
+        await page.getByRole("heading", { name: "Filter" })
+      ).toBeVisible();
       await page.getByTestId("name").fill(DataAfterCategory?.Name);
       await page.getByTestId("apply-filters").click();
       await page.waitForSelector("table tbody tr");
@@ -363,7 +363,9 @@ class Causes {
             page.getByRole("heading", { name: "Filter" })
           ).toBeVisible();
           await page.getByRole("textbox", { name: "Parent Cause" }).click();
-          await page.getByRole("option", { name: "cause1" }).click();
+          await page
+            .getByRole("option", { name: DataAfter.ParentCause })
+            .click();
           await page.getByTestId("apply-filters").click();
           await page.waitForSelector("table tbody tr");
           const RowCount = await page
@@ -385,7 +387,7 @@ class Causes {
             await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
             await CheckFilteredData(
               AllParentCause,
-              `${DataAfter?.ParentCause?.toLowerCase()}1`
+              `${DataAfter?.ParentCause}`
             );
             page.getByRole("button", { name: "Filter" }).click();
             await expect(
@@ -419,7 +421,7 @@ class Causes {
               await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
               await CheckFilteredData(
                 AllParentCause,
-                `${DataAfter?.ParentCause?.toLowerCase()}1`
+                `${DataAfter?.ParentCause}`
               );
               await CheckFilteredData(AllStatus, DataAfter.Status, true);
             }

@@ -8,20 +8,20 @@
   },
   "TaskClassification": {
     "Create": {
-      "ID": "ClassificationID",
-      "Name": "ClassificationName",
+      "ID": "ID",
+      "Name": "Name",
       "Description": "Description",
       "Example": "Example"
     },
     "Edit": {
       "Before": {
-        "ID": "ID",
+        "ID": "ID1",
         "Name": "Edit",
         "Description": "Description",
         "Example": "Example"
       },
       "After": {
-        "ID": "ID",
+        "ID": "ID1",
         "Name": "Edit",
         "Description": "Description",
         "Example": "Example"

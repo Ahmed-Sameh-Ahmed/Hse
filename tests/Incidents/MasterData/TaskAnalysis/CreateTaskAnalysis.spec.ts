@@ -4,6 +4,7 @@ import Login from "../../../../Pages/Login/Login";
 import TaskAnalysis from "../../../../Pages/MasterData/TaskAnalysis/TaskAnalysis";
 //Data
 import Data from "../../../../Data/MasterData/TaskAnalysis.json";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
@@ -32,7 +33,13 @@ test("Create (Questions) (1 Field)", async ({ page }) => {
 });
 test("Create (Questions) Duplicate (Label)", async ({ page }) => {
   const taskAnalysis = new TaskAnalysis();
-  try {
+
+  const Found = await TableSearch({
+    page,
+    Name: Data.TaskAnalysisQuestion.Create.Label,
+  });
+
+  if (!Found) {
     await taskAnalysis.GoToCreateTaskAnalysisQuestions({ page, expect });
     await taskAnalysis.CreateTaskAnalysisQuestions({
       page,
@@ -40,11 +47,9 @@ test("Create (Questions) Duplicate (Label)", async ({ page }) => {
       Data: Data.TaskAnalysisQuestion.Create,
       NotRandomNumber: true,
     });
-
     await taskAnalysis.GoToCreateTaskAnalysisQuestions({
       page,
       expect,
-      Duplicate: true,
     });
     await taskAnalysis.CreateTaskAnalysisQuestions({
       page,
@@ -53,13 +58,22 @@ test("Create (Questions) Duplicate (Label)", async ({ page }) => {
       NotRandomNumber: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("Name exist from first Create");
+  } else {
+    await taskAnalysis.GoToCreateTaskAnalysisQuestions({
+      page,
+      expect,
+    });
+    await taskAnalysis.CreateTaskAnalysisQuestions({
+      page,
+      expect,
+      Data: Data.TaskAnalysisQuestion.Create,
+      NotRandomNumber: true,
+      Duplicate: true,
+    });
   }
 });
 
 //-------------------------------------------------------------------------------------
-
 test("Create (Classification) (Empty)", async ({ page }) => {
   const taskAnalysis = new TaskAnalysis();
   await taskAnalysis.GoToCreateTaskAnalysisClassification({ page, expect });
@@ -91,16 +105,13 @@ test("Create (Classification (AllFields) )", async ({ page }) => {
 });
 test("Create (Classification Duplicate(ID || Name)  )", async ({ page }) => {
   const taskAnalysis = new TaskAnalysis();
+  await page.getByRole("button", { name: "Task Classifications" }).click();
+  const Found = await TableSearch({
+    page,
+    Name: Data.TaskClassification.Create.Name,
+  });
 
-  try {
-    await taskAnalysis.GoToCreateTaskAnalysisClassification({ page, expect });
-    await taskAnalysis.CreateTaskAnalysisClassification({
-      page,
-      expect,
-      Data: Data.TaskClassification.Create,
-      NotRandomNumber: true,
-      Required: true,
-    });
+  if (!Found) {
     await taskAnalysis.GoToCreateTaskAnalysisClassification({
       page,
       expect,
@@ -112,9 +123,32 @@ test("Create (Classification Duplicate(ID || Name)  )", async ({ page }) => {
       Data: Data.TaskClassification.Create,
       NotRandomNumber: true,
       Required: true,
+    });
+    await taskAnalysis.GoToCreateTaskAnalysisClassification({
+      page,
+      expect,
+    });
+
+    await taskAnalysis.CreateTaskAnalysisClassification({
+      page,
+      expect,
+      Data: Data.TaskClassification.Create,
+      NotRandomNumber: true,
+      Required: true,
       Duplicate: true,
     });
-  } catch (error) {
-    console.log("name or id exist from first Create");
+  } else {
+    await taskAnalysis.GoToCreateTaskAnalysisClassification({
+      page,
+      expect,
+    });
+    await taskAnalysis.CreateTaskAnalysisClassification({
+      page,
+      expect,
+      Data: Data.TaskClassification.Create,
+      NotRandomNumber: true,
+      Required: true,
+      Duplicate: true,
+    });
   }
 });

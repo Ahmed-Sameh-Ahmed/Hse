@@ -1,5 +1,6 @@
 import { duplexPair } from "stream";
-import { randomNumber } from "../../../utils/utils";
+import { randomNumber, TableSearch } from "../../../utils/utils";
+import { table } from "console";
 
 type TQuestions = {
   Label: string;
@@ -23,14 +24,10 @@ class TaskAnalysis {
     expect: any;
     Duplicate?: boolean;
   }) {
-    if (Duplicate) {
-      expect(page.getByText("Question label must be unique.")).toBeVisible();
-    } else {
-      await page.getByRole("button", { name: "Add Question" }).click();
-      await expect(
-        page.getByRole("heading", { name: "Add Task Analysis Question" })
-      ).toBeVisible();
-    }
+    await page.getByRole("button", { name: "Add Question" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Add Task Analysis Question" })
+    ).toBeVisible();
   }
   async CreateTaskAnalysisQuestions({
     page,
@@ -74,12 +71,14 @@ class TaskAnalysis {
     expect: any;
     Data: TQuestions;
   }) {
-    await page.waitForSelector("table tbody tr");
-    const Row = await page.locator("table tbody tr").filter({
-      has: page.getByText(Data.Label, { exact: true }),
+    const Found = await TableSearch({
+      page,
+      Name: Data.Label,
+      Edit: true,
+      Button: true,
     });
 
-    if ((await Row.count()) == 0) {
+    if (!Found) {
       await this.GoToCreateTaskAnalysisQuestions({ page, expect });
       await this.CreateTaskAnalysisQuestions({
         page,
@@ -90,11 +89,6 @@ class TaskAnalysis {
 
       await page.waitForTimeout(3000);
       await this.GoToEditTaskAnalysisQuestions({ page, expect, Data });
-    } else {
-      await Row.locator("button").first().click();
-      await expect(
-        page.getByRole("heading", { name: "Edit Task Analysis Question" })
-      ).toBeVisible();
     }
   }
 
@@ -121,20 +115,23 @@ class TaskAnalysis {
     page: any;
     Data: TQuestions;
   }) {
-    try {
-      await page.waitForSelector("table tbody tr");
-      const Row = await page.locator("table tbody tr", {
-        hasText: Data.Label,
-      });
+    const Found = await TableSearch({
+      page,
+      Name: Data.Label,
+      Show: true,
+      Button: true,
+    });
 
-      await Row.locator("button").last().click();
+    if (Found) {
       await page.getByRole("button", { name: "OK" }).click();
       await page.waitForTimeout(3000);
-    } catch (error) {
-      console.log("name not Found");
+    } else {
+      console.log("No Data Found Delete Task Analysis Questions");
     }
   }
 
+  // ------------------------------------------------------
+  // ------------------------------------------------------
   // ------------------------------------------------------
 
   //Create Task Analysis Classification
@@ -186,9 +183,7 @@ class TaskAnalysis {
       if (Required) {
         await page
           .getByTestId("class_id")
-          .fill(
-            NotRandomNumber ? Data.ID : Data.ID + "Required" + this.RandomNumber
-          );
+          .fill(NotRandomNumber ? Data.ID : Data.ID + this.RandomNumber);
         await page
           .getByTestId("title")
           .fill(NotRandomNumber ? Data.Name : Data.Name + this.RandomNumber);
@@ -232,24 +227,14 @@ class TaskAnalysis {
     Duplicate?: boolean;
     Data: TClassification;
   }) {
-    // if (Duplicate) {
-    //   await page.getByRole("button", { name: "Add Classification" }).click();
-    // } else {
-    //   await page.getByRole("button", { name: "Task Classifications" }).click();
-    //   await page.getByRole("button", { name: "Add Classification" }).click();
-    // }
-    // await expect(
-    //   page.getByRole("heading", { name: "Add Task Classification" })
-    // ).toBeVisible();
-
     await page.getByRole("button", { name: "Task Classifications" }).click();
-
-    await page.waitForSelector("table tbody tr");
-    const Row = await page.locator("table tbody tr").filter({
-      has: page.getByText(Data.Name, { exact: true }),
+    const Found = await TableSearch({
+      page,
+      Name: Data.Name,
+      Edit: true,
+      Button: true,
     });
-
-    if ((await Row.count()) == 0) {
+    if (!Found) {
       await this.GoToCreateTaskAnalysisClassification({ page, expect });
       await this.CreateTaskAnalysisClassification({
         page,
@@ -259,11 +244,6 @@ class TaskAnalysis {
       });
       await page.waitForTimeout(3000);
       await this.GoToEditTaskAnalysisClassification({ page, expect, Data });
-    } else {
-      await Row.locator("button").first().click();
-      await expect(
-        page.getByRole("heading", { name: "Edit Task Classification" })
-      ).toBeVisible();
     }
   }
   async EditTaskAnalysisClassification({
@@ -303,18 +283,19 @@ class TaskAnalysis {
     page: any;
     Data: TClassification;
   }) {
-    try {
-      await page.getByRole("button", { name: "Task Classifications" }).click();
-      await page.waitForSelector("table tbody tr");
-      const Row = await page.locator("table tbody tr", {
-        hasText: Data.Name,
-      });
+    await page.getByRole("button", { name: "Task Classifications" }).click();
+    const Found = await TableSearch({
+      page,
+      Name: Data.Name,
+      Show: true,
+      Button: true,
+    });
 
-      await Row.locator("button").last().click();
+    if (Found) {
       await page.getByRole("button", { name: "OK" }).click();
       await page.waitForTimeout(3000);
-    } catch (error) {
-      console.log("name not Found");
+    } else {
+      console.log("No Data Found From Delete Task Analysis Classification");
     }
   }
 }

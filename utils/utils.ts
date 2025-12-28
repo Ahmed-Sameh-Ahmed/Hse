@@ -40,10 +40,14 @@ const TableSearch = async ({
   page,
   Name,
   Edit,
+  Show,
+  Button,
 }: {
   page: any;
   Name: string;
   Edit?: boolean;
+  Show?: boolean;
+  Button?: boolean;
 }) => {
   let isFound = false;
 
@@ -63,11 +67,24 @@ const TableSearch = async ({
       // --- الحالة الأولى: تم العثور على الصف ---
       isFound = true;
       if (Edit) {
-        await ChangeStatus({ page, Row });
-        await Row.locator("a").first().click();
+        if (Button) {
+          await Row.locator("button").first().click();
+        } else {
+          await ChangeStatus({ page, Row });
+          await Row.locator("a").first().click();
+          await expect(page.url()).toContain("/edit");
+        }
+        break;
+      } else if (Show) {
+        if (Button) {
+          await Row.locator("button").last().click();
+        } else {
+          await Row.locator("a").last().click();
+          await expect(page.url()).toContain("/show");
+        }
         break;
       } else {
-        await Row.locator("a").last().click();
+        console.log("hi we found the  row");
         break;
       }
       // نخرج من الـ Loop لأننا وجدنا المطلوب

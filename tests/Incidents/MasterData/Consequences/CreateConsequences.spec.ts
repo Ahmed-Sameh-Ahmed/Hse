@@ -4,6 +4,7 @@ import login from "../../../../Pages/Login/Login";
 import Consequences from "../../../../Pages/MasterData/Consequences/Consequences";
 //Data
 import Data from "../../../../Data/MasterData/Consequences.json";
+import { TableSearch } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
@@ -48,28 +49,36 @@ test("Create Consequence With Wrong Data ( Consequences Name Exists )", async ({
   page,
 }) => {
   const Consequence = new Consequences();
-  try {
-    await Consequence.GoToCreateConsequences({ page, expect });
-    await Consequence.CreateConsequences({
-      page: page,
-      Data: Data.Wrong.ConsequencesNameExists,
-      expect: expect,
-      Edit: true,
-    });
-    await Consequence.GoToCreateConsequences({ page, expect });
-    await Consequence.CreateConsequences({
-      page: page,
-      Data: Data.Wrong.ConsequencesNameExists,
-      expect: expect,
-      Edit: true,
-    });
 
-    await expect(
-      page.locator(".mb-3").locator("p", {
-        hasText: "Consequence with this name already exists.",
-      })
-    ).toBeVisible();
-  } catch (error) {
-    console.log("the name is Exists From First try ");
+  const Found = await TableSearch({
+    page,
+    Name: Data.Wrong.ConsequencesNameExists.ConsequencesName,
+  });
+
+  if (!Found) {
+    await Consequence.GoToCreateConsequences({ page, expect });
+    await Consequence.CreateConsequences({
+      page: page,
+      Data: Data.Wrong.ConsequencesNameExists,
+      expect: expect,
+      Edit: true,
+    });
+    await Consequence.GoToCreateConsequences({ page, expect });
+    await Consequence.CreateConsequences({
+      page: page,
+      Data: Data.Wrong.ConsequencesNameExists,
+      expect: expect,
+      Edit: true,
+      Duplicate: true,
+    });
+  } else {
+    await Consequence.GoToCreateConsequences({ page, expect });
+    await Consequence.CreateConsequences({
+      page: page,
+      Data: Data.Wrong.ConsequencesNameExists,
+      expect: expect,
+      Edit: true,
+      Duplicate: true,
+    });
   }
 });
