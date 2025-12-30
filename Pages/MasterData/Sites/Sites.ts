@@ -81,7 +81,7 @@ class Sites {
           .click();
         await page.getByTestId("save-button").click();
         if (Wrong) {
-          await expect(page.getByText("Must be a valid number")).toBeVisible();
+          await expect(page.getByText("Invalid format")).toBeVisible();
         } else if (Duplicate) {
           await expect(
             page.getByText("Site with this name already")
