@@ -7,6 +7,7 @@ import TaskAnalysis from "./TaskAnalysis/TaskAnalysis";
 import Sites from "./Sites/Sites";
 import Classification from "./Classification/Classification";
 import Assets from "./Assets/Assets";
+import RootCauseAnalysis from "./RootCauseAnalysis/RootCauseAnalysis";
 
 class MasterData {
   async GoToOrganizationHierarchy(page: any, expect: any) {
@@ -55,6 +56,11 @@ class MasterData {
     await page.getByRole("link", { name: "Assets" }).click();
     await expect(page).toHaveURL("/master-data/assets");
     return new Assets();
+  }
+  async GoToRootCauseAnalysis(page: any, expect: any) {
+    await page.getByRole("link", { name: "Root Cause Analysis" }).click();
+    await expect(page).toHaveURL("/master-data/root-cause-pillars");
+    return new RootCauseAnalysis();
   }
 }
 

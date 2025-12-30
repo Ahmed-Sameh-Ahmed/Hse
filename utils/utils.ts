@@ -52,20 +52,34 @@ const TableSearch = async ({
   let isFound = false;
 
   while (true) {
-    // انتظار تحميل الجدول
     await page.waitForSelector("table tbody tr");
 
-    // تحديد الصف الذي نبحث عنه
-    const Row = page.locator("table tbody tr").filter({
-      has: page.getByText(Name, { exact: true }),
-    });
+    // 1. جلب جميع الصفوف الموجودة في الصفحة الحالية
+    const allRows = page.locator("table tbody tr");
+    const rowCount = await allRows.count();
 
-    const rowCount = await Row.count();
-    console.log(`Checking page... Found count: ${rowCount}`);
+    let matchedRow = null;
 
-    if (rowCount > 0) {
-      // --- الحالة الأولى: تم العثور على الصف ---
-      isFound = true;
+    // 2. الدوران على الصفوف صفاً بصف
+    for (let i = 0; i < rowCount; i++) {
+      const currentRow = allRows.nth(i);
+
+      // نتحقق من النص داخل أول خلية (td) في الصف الحالي
+      // إذا كنت تريد البحث في الصف كله وليس الخلية الأولى فقط، استخدم currentRow مباشرة
+      const firstCellText = await currentRow.locator("td").first().innerText();
+
+      if (firstCellText.trim() === Name) {
+        matchedRow = currentRow; // وجدنا الصف المطلوب
+        isFound = true;
+        break; // نخرج من الـ for loop لنبدأ التعامل مع الصف
+      }
+    }
+
+    if (isFound && matchedRow) {
+      // --- الحالة الأولى: تم العثور على الصف المطابق ---
+      // هنا الـ Row الذي سنمرره هو "matchedRow"
+      const Row = matchedRow;
+
       if (Edit) {
         if (Button) {
           await Row.locator("button").first().click();
@@ -74,7 +88,6 @@ const TableSearch = async ({
           await Row.locator("a").first().click();
           await expect(page.url()).toContain("/edit");
         }
-        break;
       } else if (Show) {
         if (Button) {
           await Row.locator("button").last().click();
@@ -82,18 +95,10 @@ const TableSearch = async ({
           await Row.locator("a").last().click();
           await expect(page.url()).toContain("/show");
         }
-        break;
-      } else {
-        console.log("hi we found the  row");
-        break;
       }
-      // نخرج من الـ Loop لأننا وجدنا المطلوب
+      break; // نخرج من الـ while loop
     } else {
-      // --- الحالة الثانية: لم يتم العثور عليه في هذه الصفحة ---
-
-      // !!!!!!! (يجب تعديل هذا الجزء يدويًا) !!!!!!!
-      // ضع هنا السليكتور الخاص بزر "الصفحة التالية" في جدولك
-      // مثال: page.getByRole('button', { name: 'Next' }) أو page.locator('.pagination-next')
+      // --- الحالة الثانية: لم نجد التطابق في هذه الصفحة، ننتقل للتالي ---
       const nextButton = page
         .locator(
           "div [class='flex justify-center !text-primary px-2 mt-4 rtl:flex-row-reverse']"
@@ -101,17 +106,11 @@ const TableSearch = async ({
         .locator("button")
         .last();
 
-      // نتحقق مما إذا كان زر التالي موجوداً وقابلاً للضغط
-      // (بعض الجداول تخفي الزر، وبعضها يجعله disabled في آخر صفحة)
       if ((await nextButton.isVisible()) && (await nextButton.isEnabled())) {
         await nextButton.click();
-
-        // انتظار بسيط لتحميل البيانات الجديدة (فيفضل انتظار اختفاء علامة التحميل loading spinner إن وجدت)
-        // يمكنك استبدال هذا السطر بـ: await page.waitForSelector('.loading-spinner', { state: 'detached' });
         await page.waitForTimeout(1000);
       } else {
-        // وصلنا لآخر صفحة ولم نجد الزر، نخرج من الـ Loop
-        break;
+        break; // وصلنا للنهاية ولم نجد شيئاً
       }
     }
   }

@@ -4,7 +4,25 @@
     "Type": "Edit",
     "Serial": "asas11",
     "Location": "Alexandria – Borg El Arab Industrial Zone",
-    "Site": "Edit",
+    "Site": "name",
     "Responsible_Person": "Leonie Gerhold"
+  },
+  "Edit": {
+    "Before": {
+      "name": "Edit2",
+      "Type": "Edit",
+      "Serial": "asas11",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "Site": "name",
+      "Responsible_Person": "Leonie Gerhold"
+    },
+    "After": {
+      "name": "Edit2",
+      "Type": "Edit",
+      "Serial": "asas11",
+      "Location": "Alexandria – Borg El Arab Industrial Zone",
+      "Site": "name",
+      "Responsible_Person": "Leonie Gerhold"
+    }
   }
 }
