@@ -230,7 +230,7 @@ class TaskAnalysis {
     await page.getByRole("button", { name: "Task Classifications" }).click();
     const Found = await TableSearch({
       page,
-      Name: Data.Name,
+      Name: Data.ID,
       Edit: true,
       Button: true,
     });
@@ -286,7 +286,7 @@ class TaskAnalysis {
     await page.getByRole("button", { name: "Task Classifications" }).click();
     const Found = await TableSearch({
       page,
-      Name: Data.Name,
+      Name: Data.ID,
       Show: true,
       Button: true,
     });

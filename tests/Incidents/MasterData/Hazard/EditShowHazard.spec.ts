@@ -5,10 +5,14 @@ import Hazards from "../../../../Pages/MasterData/Hazards/Hazards";
 //Data
 import Data from "../../../../Data/MasterData/Hazard.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
-  await MasterDataPage.GoToHazards(page, expect);
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterData.GoToHazards(page, expect);
 });
 
 test("Edit Hazard", async ({ page }) => {

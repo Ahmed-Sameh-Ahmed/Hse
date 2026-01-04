@@ -6,10 +6,14 @@ import TaskAnalysis from "../../../../Pages/MasterData/TaskAnalysis/TaskAnalysis
 import Data from "../../../../Data/MasterData/TaskAnalysis.json";
 import { TableSearch } from "../../../../utils/utils";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
-  await MasterDataPage.GoToTaskAnalysis(page, expect);
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterData.GoToTaskAnalysis(page, expect);
 });
 
 test("Create (Questions) Empty Fields", async ({ page }) => {
@@ -74,6 +78,7 @@ test("Create (Questions) Duplicate (Label)", async ({ page }) => {
 });
 
 //-------------------------------------------------------------------------------------
+
 test("Create (Classification) (Empty)", async ({ page }) => {
   const taskAnalysis = new TaskAnalysis();
   await taskAnalysis.GoToCreateTaskAnalysisClassification({ page, expect });
@@ -108,7 +113,7 @@ test("Create (Classification Duplicate(ID || Name)  )", async ({ page }) => {
   await page.getByRole("button", { name: "Task Classifications" }).click();
   const Found = await TableSearch({
     page,
-    Name: Data.TaskClassification.Create.Name,
+    Name: Data.TaskClassification.Create.ID,
   });
 
   if (!Found) {

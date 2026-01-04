@@ -140,7 +140,7 @@ class Consequences {
 
       await CheckFilteredData(AllNames, Data?.ConsequencesName);
 
-      await page.getByRole("button", { name: "Filter" }).click();
+      await page.getByRole("button", { name: "Filter" }).first().click();
       await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
       await page.getByRole("textbox", { name: "Status" }).click();
       await page.getByRole("option", { name: "Active", exact: true }).click();

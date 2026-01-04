@@ -3,12 +3,12 @@
     "Category": {
       "Required": {
         "Name": "Cause",
-        "Type": "Category",
+        "Type": "Parent Cause",
         "Description": ""
       },
       "AllFields": {
         "Name": "Cause",
-        "Type": "Category",
+        "Type": "Parent Cause",
         "Description": "Description"
       }
     },
@@ -16,13 +16,13 @@
       "Required": {
         "Name": "Sub-Cause",
         "Type": "Sub-Cause",
-        "ParentCause": "Cause707",
+        "ParentCause": "name",
         "Description": ""
       },
       "AllFields": {
         "Name": "Sub-Cause",
         "Type": "Sub-Cause",
-        "ParentCause": "Cause707",
+        "ParentCause": "name",
         "Description": "Description"
       }
     }
@@ -31,15 +31,16 @@
     "Cause": {
       "Before": {
         "Name": "Edit_C",
-        "Type": "Category",
-        "ParentCause": "Cause707",
+        "Type": "Parent Cause",
+        "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       },
       "After": {
         "Name": "Edit_C",
-        "Type": "Category",
-        "ParentCause": "Cause707",
+        "Type": "Parent Cause",
+        "CustomType": "Parent-Cause",
+        "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       }
@@ -48,14 +49,14 @@
       "Before": {
         "Name": "Edit_S",
         "Type": "Sub-Cause",
-        "ParentCause": "Cause707",
+        "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       },
       "After": {
         "Name": "Edit_S",
         "Type": "Sub-Cause",
-        "ParentCause": "Cause707",
+        "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       }

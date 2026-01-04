@@ -5,10 +5,14 @@ import RootCauseAnalysis from "../../../../Pages/MasterData/RootCauseAnalysis/Ro
 //Data
 import Data from "../../../../Data/MasterData/RootCauseAnalysis.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
-  await MasterDataPage.GoToRootCauseAnalysis(page, expect);
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterData.GoToRootCauseAnalysis(page, expect);
 });
 
 test("Create Root Cause Analysis", async ({ page }) => {

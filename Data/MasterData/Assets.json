@@ -1,28 +1,28 @@
 {
   "Create": {
     "name": "name",
-    "Type": "Edit",
+    "Type": "name712",
     "Serial": "asas11",
     "Location": "Alexandria – Borg El Arab Industrial Zone",
-    "Site": "name",
-    "Responsible_Person": "Leonie Gerhold"
+    "Site": "name410",
+    "Responsible_Person": "Super Admin"
   },
   "Edit": {
     "Before": {
-      "name": "Edit2",
-      "Type": "Edit",
-      "Serial": "asas11",
+      "name": "Edit",
+      "Type": "name712",
+      "Serial": "1122aass",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
-      "Site": "name",
-      "Responsible_Person": "Leonie Gerhold"
+      "Site": "name410",
+      "Responsible_Person": "Super Admin"
     },
     "After": {
-      "name": "Edit2",
-      "Type": "Edit",
-      "Serial": "asas11",
+      "name": "Edit",
+      "Type": "name712",
+      "Serial": "1122aass",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
-      "Site": "name",
-      "Responsible_Person": "Leonie Gerhold"
+      "Site": "name410",
+      "Responsible_Person": "Super Admin"
     }
   }
 }

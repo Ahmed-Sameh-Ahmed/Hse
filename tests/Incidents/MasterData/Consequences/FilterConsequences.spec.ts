@@ -5,10 +5,14 @@ import Consequences from "../../../../Pages/MasterData/Consequences/Consequences
 //Data
 import Data from "../../../../Data/MasterData/Consequences.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
-  await MasterDataPage.GoToConsequence(page, expect);
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterData.GoToConsequence(page, expect);
 });
 
 test("Filter Consequence ", async ({ page }) => {

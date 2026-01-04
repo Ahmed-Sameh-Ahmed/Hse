@@ -5,9 +5,13 @@ import Data from "../../../../Data/MasterData/Cause.json";
 
 import Causes from "../../../../Pages/MasterData/Causes/Causes";
 
-test.beforeEach(async ({ page }) => {
-  const home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterData = await home.GoToMasterData(page, expect);
+test.beforeEach(async ({ page }, { project }) => {
+  const Home = await new Login().login(page, "admin@admin.com", "123456");
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterData.GoToCauses(page, expect);
 });
 
@@ -28,7 +32,7 @@ test("Edit Cause (Sub-cause) (Required)", async ({ page }) => {
   });
 });
 
-test("Edit Cause (Category) (Required)", async ({ page }) => {
+test("Edit Cause (Parent Cause) (Required)", async ({ page }) => {
   const cause = new Causes();
   await cause.GoToEditCause({
     page,
@@ -52,7 +56,7 @@ test("Show Cause (Sub-cause) (Required)", async ({ page }) => {
   await cause.GoToShowCause({ page, expect, Data: Data.Edit.SubCause.After });
   await cause.ShowCause({ page, expect, Data: Data.Edit.SubCause.After });
 });
-test("Show Cause (Category) (Required)", async ({ page }) => {
+test("Show Cause (Parent Cause) (Required)", async ({ page }) => {
   const cause = new Causes();
   await cause.GoToShowCause({ page, expect, Data: Data.Edit.Cause.After });
   await cause.ShowCause({

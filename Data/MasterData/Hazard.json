@@ -6,7 +6,8 @@
       "Severity": "Low",
       "Associated_Caution": "Warming",
       "How_to_Detect": "",
-      "Contamination_Procedure": ""
+      "Contamination_Procedure": "",
+      "Image": "Assets/hazardimg.jpg"
     },
     "allFields": {
       "Name": "name",
@@ -14,7 +15,8 @@
       "Severity": "Low",
       "Associated_Caution": "Warming",
       "How_to_Detect": "like that",
-      "Contamination_Procedure": "call 911"
+      "Contamination_Procedure": "call 911",
+      "Image": "Assets/hazardimg.jpg"
     }
   },
   "Wrong": {
@@ -24,7 +26,8 @@
       "Severity": "High",
       "Associated_Caution": "Warming",
       "How_to_Detect": "like that",
-      "Contamination_Procedure": "call 911"
+      "Contamination_Procedure": "call 911",
+      "Image": "Assets/hazardimg.jpg"
     },
     "DuplicateData": {
       "Name": "name",
@@ -32,7 +35,8 @@
       "Severity": "Low",
       "Associated_Caution": "Warming",
       "How_to_Detect": "like that",
-      "Contamination_Procedure": "call 911"
+      "Contamination_Procedure": "call 911",
+      "Image": "Assets/hazardimg.jpg"
     }
   },
 
@@ -44,6 +48,7 @@
       "Associated_Caution": "Warming",
       "How_to_Detect": "like that",
       "Contamination_Procedure": "call 911",
+      "Image": "Assets/hazardimg.jpg",
       "Status": "Active"
     },
     "After": {
@@ -53,6 +58,7 @@
       "Associated_Caution": "Warming",
       "How_to_Detect": "like that",
       "Contamination_Procedure": "call 911",
+      "Image": "Assets/hazardimg.jpg",
       "Status": "Active"
     }
   },
@@ -64,7 +70,8 @@
     "Severity": "Low",
     "Associated_Caution": "Warming",
     "How_to_Detect": "like that",
-    "Contamination_Procedure": "call 911"
+    "Contamination_Procedure": "call 911",
+    "Image": "Assets/hazardimg.jpg"
   },
   "FilterData": {
     "Name": "Infection Spread",

@@ -6,20 +6,24 @@ import Data from "../../../../Data/MasterData/Cause.json";
 import Causes from "../../../../Pages/MasterData/Causes/Causes";
 import { TableSearch } from "../../../../utils/utils";
 
-test.beforeEach(async ({ page }) => {
-  const home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterData = await home.GoToMasterData(page, expect);
+test.beforeEach(async ({ page }, { project }) => {
+  const Home = await new Login().login(page, "admin@admin.com", "123456");
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterData.GoToCauses(page, expect);
 });
 
-test("Create Cause (Category) With Empty Fields ", async ({ page }) => {
+test("Create Cause (Parent Cause) With Empty Fields ", async ({ page }) => {
   const causes = new Causes();
 
   await causes.GoToCreateCause({ page, expect });
   await causes.CreateCause({ page, expect, Empty: true });
 });
 
-test("Create Cause (Category) (Required Fields) ", async ({ page }) => {
+test("Create Cause (Parent Cause) (Required Fields) ", async ({ page }) => {
   const causes = new Causes();
 
   await causes.GoToCreateCause({ page, expect });
@@ -30,7 +34,7 @@ test("Create Cause (Category) (Required Fields) ", async ({ page }) => {
   });
 });
 
-test("Create Cause (Category) (All Fields) ", async ({ page }) => {
+test("Create Cause (Parent Cause) (All Fields) ", async ({ page }) => {
   const causes = new Causes();
   await causes.GoToCreateCause({ page, expect });
   await causes.CreateCause({
@@ -73,7 +77,7 @@ test("Create Cause (Sub Cause) With (All Fields) ", async ({ page }) => {
 
 // --------------------------------------------------------------------
 
-test("Create Cause (Category) (All Fields) (Duplicate Name) ", async ({
+test("Create Cause (Parent Cause) (All Fields) (Duplicate Name) ", async ({
   page,
 }) => {
   const causes = new Causes();

@@ -70,6 +70,10 @@ class Sites {
             NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`
           );
         await page.getByTestId("goe_coordinates").fill(Data?.Coordinates);
+        if (Wrong) {
+          await page.getByRole("textbox", { name: "Location *" }).click();
+          await expect(page.getByText("Invalid format")).toBeVisible();
+        }
         await page.getByRole("textbox", { name: "Location *" }).click();
         await page.getByRole("option", { name: Data?.Location }).click();
         await page.getByRole("combobox").fill(Data?.ResponsiblePerson);
