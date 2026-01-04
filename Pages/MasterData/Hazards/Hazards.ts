@@ -12,6 +12,7 @@ type TData = {
   Associated_Caution: string;
   How_to_Detect: string;
   Contamination_Procedure: string;
+  Image?: string;
 };
 
 type TFilterData = {
@@ -58,6 +59,9 @@ class Hazards {
       await expect(
         page.getByText("This field is required").nth(3)
       ).toBeVisible();
+      await expect(
+        page.getByText("This field is required").nth(4)
+      ).toBeVisible();
     } else {
       await page
         .getByTestId("name")
@@ -72,7 +76,6 @@ class Hazards {
         .locator(".m_88b62a41")
         .locator("span", { hasText: Data.Severity })
         .click();
-
       await page
         .getByTestId("associated_caution")
         .fill(Data.Associated_Caution);
@@ -80,6 +83,8 @@ class Hazards {
       await page
         .getByTestId("contamination_procedure")
         .fill(Data.Contamination_Procedure);
+
+      await page.getByTestId("image").setInputFiles(Data.Image);
 
       await page.getByTestId("save-button").click();
       if (Duplicate) {
@@ -115,8 +120,6 @@ class Hazards {
         expect: expect,
         NotFillRandomNumber: true,
       });
-      await expect(page).toHaveURL("/master-data/hazards");
-      await page.getByRole("button", { name: "OK" }).click();
       await this.GoToEditHazardFromTable({ page, Data, expect });
     }
   }
@@ -147,6 +150,10 @@ class Hazards {
     await expect(page.getByTestId("contamination_procedure")).toHaveValue(
       currentData.Contamination_Procedure
     );
+    await expect(
+      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl")
+    ).toBeVisible();
+
     await page.getByTestId("name").clear();
     await page.locator(".mantine-focus-auto").first().click();
     await page
@@ -157,12 +164,15 @@ class Hazards {
     await page.getByTestId("associated_caution").clear();
     await page.getByTestId("how_to_detect").clear();
     await page.getByTestId("contamination_procedure").clear();
+    await page.locator(".cursor-pointer.shrink-0").click();
+
     await page.getByTestId("edit-button").click();
 
     await expect(page.getByText("This field is required").nth(0)).toBeVisible();
     await expect(page.getByText("This field is required").nth(1)).toBeVisible();
     await expect(page.getByText("This field is required").nth(2)).toBeVisible();
     await expect(page.getByText("This field is required").nth(3)).toBeVisible();
+    await expect(page.getByText("This field is required").nth(4)).toBeVisible();
 
     await page.getByTestId("name").fill(newData.Name);
     await page.getByRole("textbox", { name: "Category *" }).click();
@@ -183,6 +193,8 @@ class Hazards {
     await page
       .getByTestId("contamination_procedure")
       .fill(newData.Contamination_Procedure);
+
+    await page.getByTestId("image").setInputFiles(newData.Image);
 
     await page.getByTestId("edit-button").click();
     await page.getByRole("button", { name: "OK" }).click();
@@ -234,6 +246,9 @@ class Hazards {
     await expect(
       page.locator("input[data-testid='contamination_procedure']")
     ).toHaveValue(Data.Contamination_Procedure);
+    await expect(
+      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl")
+    ).toBeVisible();
   }
 
   // Filter Hazard
@@ -264,7 +279,7 @@ class Hazards {
         .locator("table tbody tr td:nth-of-type(1)")
         .allTextContents();
       await CheckFilteredData(AllNames, DataBefore.Name);
-      await page.getByRole("button", { name: "Filter" }).click();
+      await page.getByRole("button", { name: "Filter" }).first().click();
       await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
       await page.getByRole("textbox", { name: "Category" }).click();
       await page
@@ -292,7 +307,7 @@ class Hazards {
         } catch (error) {
           console.log("معلش كمل ");
         }
-        await page.getByRole("button", { name: "Filter" }).click();
+        await page.getByRole("button", { name: "Filter" }).first().click();
 
         await expect(
           page.getByRole("heading", { name: "Filter" })
@@ -328,7 +343,7 @@ class Hazards {
           } catch (error) {
             console.log("معلش كمل ");
           }
-          await page.getByRole("button", { name: "Filter" }).click();
+          await page.getByRole("button", { name: "Filter" }).first().click();
 
           await expect(
             page.getByRole("heading", { name: "Filter" })

@@ -10,6 +10,7 @@ type TData = {
   Name: string;
   Type: string;
   ParentCause?: string;
+  CustomType?: string;
   Description?: string;
   Status?: string;
 };
@@ -154,7 +155,7 @@ class Causes {
       await page.getByRole("textbox", { name: "Type *" }).click();
       await page
         .locator(".m_c0783ff9")
-        .locator("span", { hasText: "Category" })
+        .locator("span", { hasText: DataAfter.Type })
         .click();
     } else {
       await page.getByRole("textbox", { name: "Type *" }).click();
@@ -235,7 +236,7 @@ class Causes {
     isCategory?: boolean;
   }) {
     if (isCategory) {
-      await page.getByRole("button", { name: "Filter" }).click();
+      await page.getByRole("button", { name: "Filter" }).first().click();
       await expect(
         await page.getByRole("heading", { name: "Filter" })
       ).toBeVisible();
@@ -252,7 +253,7 @@ class Causes {
           .locator("table tbody tr td:nth-of-type(1)")
           .allTextContents();
         await CheckFilteredData(AllNames, DataAfterCategory?.Name);
-        await page.getByRole("button", { name: "Filter" }).click();
+        await page.getByRole("button", { name: "Filter" }).first().click();
         await expect(
           page.getByRole("heading", { name: "Filter" })
         ).toBeVisible();
@@ -278,9 +279,9 @@ class Causes {
           await CheckFilteredData(AllNames, DataAfterCategory?.Name);
           await CheckFilteredData(
             AllTypes,
-            DataAfterCategory?.Type.toLowerCase()
+            DataAfterCategory?.CustomType?.toLowerCase()
           );
-          await page.getByRole("button", { name: "Filter" }).click();
+          await page.getByRole("button", { name: "Filter" }).first().click();
           await expect(
             page.getByRole("heading", { name: "Filter" })
           ).toBeVisible();
@@ -311,14 +312,14 @@ class Causes {
             await CheckFilteredData(AllNames, DataAfterCategory?.Name);
             await CheckFilteredData(
               AllTypes,
-              DataAfterCategory?.Type.toLowerCase()
+              DataAfterCategory?.CustomType?.toLowerCase()
             );
             await CheckFilteredData(AllStatus, DataAfterCategory?.Status, true);
           }
         }
       }
     } else {
-      await page.getByRole("button", { name: "Filter" }).click();
+      await page.getByRole("button", { name: "Filter" }).first().click();
       await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
       await page.getByTestId("name").fill(DataAfter.Name);
       await page.getByTestId("apply-filters").click();
@@ -333,7 +334,7 @@ class Causes {
           .locator("table tbody tr td:nth-of-type(1)")
           .allTextContents();
         await CheckFilteredData(AllNames, DataAfter.Name);
-        await page.getByRole("button", { name: "Filter" }).click();
+        await page.getByRole("button", { name: "Filter" }).first().click();
         await expect(
           page.getByRole("heading", { name: "Filter" })
         ).toBeVisible();
@@ -358,7 +359,7 @@ class Causes {
             .allTextContents();
           await CheckFilteredData(AllNames, DataAfter.Name);
           await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
-          await page.getByRole("button", { name: "Filter" }).click();
+          await page.getByRole("button", { name: "Filter" }).first().click();
           await expect(
             page.getByRole("heading", { name: "Filter" })
           ).toBeVisible();
@@ -389,7 +390,7 @@ class Causes {
               AllParentCause,
               `${DataAfter?.ParentCause}`
             );
-            page.getByRole("button", { name: "Filter" }).click();
+            page.getByRole("button", { name: "Filter" }).first().click();
             await expect(
               page.getByRole("heading", { name: "Filter" })
             ).toBeVisible();

@@ -63,7 +63,9 @@ class Classification {
       await page.getByTestId("save-button").click();
 
       if (Duplicate) {
-        await page.getByText("Classification with this name already exists");
+        await expect(
+          page.getByText("Classification with this name already exists")
+        ).toBeVisible();
       } else {
         await expect(page).toHaveURL("/master-data/classifications");
         await page.getByRole("button", { name: "OK" }).click();
@@ -77,7 +79,10 @@ class Classification {
       await page
         .getByRole("textbox", { name: "Parent Classification" })
         .click();
-      await page.getByRole("option", { name: Data?.Parent }).click();
+      await page
+        .getByRole("option")
+        .getByText(Data?.Parent, { exact: true })
+        .click();
       await page.getByTestId("save-button").click();
       await expect(page).toHaveURL("/master-data/classifications");
       await page.getByRole("button", { name: "OK" }).click();
@@ -91,11 +96,16 @@ class Classification {
       await page
         .getByRole("textbox", { name: "Parent Classification" })
         .click();
-      await page.getByRole("option", { name: Data?.Parent }).click();
+      await page
+        .getByRole("option")
+        .getByText(Data?.Parent, { exact: true })
+        .click();
       await page.getByTestId("save-button").click();
 
       if (Duplicate) {
-        await page.getByText("Classification with this name already exists");
+        await expect(
+          page.getByText("Classification with this name already exists")
+        ).toBeVisible();
       } else {
         await expect(page).toHaveURL("/master-data/classifications");
         await page.getByRole("button", { name: "OK" }).click();
@@ -171,7 +181,10 @@ class Classification {
       await page
         .getByRole("textbox", { name: "Parent Classification" })
         .click();
-      await page.getByRole("option", { name: DataAfter.Parent }).click();
+      await page
+        .getByRole("option")
+        .getByText(DataAfter?.Parent, { exact: true })
+        .click();
     }
     await page.getByTestId("description").fill(DataAfter.Description);
     await page.getByTestId("edit-button").click();

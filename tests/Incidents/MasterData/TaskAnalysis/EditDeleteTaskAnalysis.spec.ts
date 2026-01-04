@@ -5,10 +5,14 @@ import TaskAnalysis from "../../../../Pages/MasterData/TaskAnalysis/TaskAnalysis
 //Data
 import Data from "../../../../Data/MasterData/TaskAnalysis.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
-  await MasterDataPage.GoToTaskAnalysis(page, expect);
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterData.GoToTaskAnalysis(page, expect);
 });
 
 test("Edit (Questions)", async ({ page }) => {

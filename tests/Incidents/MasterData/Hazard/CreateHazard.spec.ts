@@ -6,9 +6,13 @@ import Hazards from "../../../../Pages/MasterData/Hazards/Hazards";
 import Data from "../../../../Data/MasterData/Hazard.json";
 import { TableSearch } from "../../../../utils/utils";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
+  const MasterDataPage = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterDataPage.GoToHazards(page, expect);
 });
 

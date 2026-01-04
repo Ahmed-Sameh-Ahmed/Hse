@@ -27,13 +27,9 @@ class RootCauseAnalysis {
 
     // Empty
     await page.getByTestId("save-configuration-button").click();
-    await expect(await page.getByText("Required field missing")).toBeVisible();
-    await expect(
-      await page.getByText("This field is required").nth(0)
-    ).toBeVisible();
-    await expect(
-      await page.getByText("This field is required").nth(1)
-    ).toBeVisible();
+    await expect(page.getByText("Required field missing")).toBeVisible();
+    await expect(page.getByText("This field is required").nth(0)).toBeVisible();
+    await expect(page.getByText("This field is required").nth(1)).toBeVisible();
 
     //Required
 
@@ -62,20 +58,22 @@ class RootCauseAnalysis {
       .textContent();
 
     console.log(Number(CardNumber));
-    try {
-      await expect(
-        await page.getByTestId(`pillars.${Number(CardNumber) - 1}.title`)
-      ).toHaveValue(Data.name + this.randomNumber);
-    } catch (error) {
-      await selectedCard.click();
-    }
+    // try {
+    //   await expect(
+    //     page.getByTestId(`pillars.${Number(CardNumber) - 1}.title`)
+    //   ).toHaveValue(Data.name + this.randomNumber);
+    // } catch (error) {
+    //   await selectedCard.click();
+    // }
 
+    await expect(selectedCard).toBeVisible({ timeout: 10000 });
+    await selectedCard.click();
     // check Data
     await expect(
-      await page.getByTestId(`pillars.${Number(CardNumber) - 1}.title`)
+      page.getByTestId(`pillars.${Number(CardNumber) - 1}.title`)
     ).toHaveValue(Data.name + this.randomNumber);
     await expect(
-      await page.getByTestId(
+      page.getByTestId(
         `pillars.${Number(CardNumber) - 1}.causes.${0}.definition`
       )
     ).toHaveValue(Data.PossibleCauses);

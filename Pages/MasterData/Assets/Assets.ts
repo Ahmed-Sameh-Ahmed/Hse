@@ -109,7 +109,13 @@ class Assets {
     });
     if (!Found) {
       await this.GoToCreateAsset({ page, expect });
-      await this.CreateAsset({ page, expect, Data, notRandomNumberName: true });
+      await this.CreateAsset({
+        page,
+        expect,
+        Data,
+        notRandomNumberName: true,
+        notRandomNumber: true,
+      });
       await this.GoToEditAsset({ page, expect, Data });
     }
   }
@@ -129,9 +135,9 @@ class Assets {
       page.getByRole("textbox", { name: "Asset Type *" })
     ).toHaveValue(DataBefore.Type);
 
-    // await expect(page.getByTestId("serial_number")).toHaveValue(
-    //   DataBefore.Serial
-    // );
+    await expect(page.getByTestId("serial_number")).toHaveValue(
+      DataBefore.Serial
+    );
     await expect(page.getByRole("textbox", { name: "Location *" })).toHaveValue(
       DataBefore.Location
     );
@@ -166,9 +172,7 @@ class Assets {
     await page.getByTestId("name").fill(DataAfter.name);
     await page.getByRole("textbox", { name: "Asset Type *" }).click();
     await page.getByRole("option", { name: DataAfter.Type }).click();
-    await page
-      .getByTestId("serial_number")
-      .fill(DataAfter.Serial + this.randomNumber);
+    await page.getByTestId("serial_number").fill(DataAfter.Serial);
     await page.getByRole("textbox", { name: "Location *" }).click();
     await page.getByRole("option", { name: DataAfter.Location }).click();
     await page.getByRole("textbox", { name: "Site *" }).click();
@@ -218,9 +222,7 @@ class Assets {
     await expect(page.getByTestId("name")).toHaveValue(Data.name);
     await expect(page.getByTestId("asset_type.name")).toHaveValue(Data.Type);
 
-    // await expect(page.getByTestId("serial_number")).toHaveValue(
-    //   DataBefore.Serial
-    // );
+    await expect(page.getByTestId("serial_number")).toHaveValue(Data.Serial);
     await expect(page.getByTestId("location.name")).toHaveValue(Data.Location);
     await expect(page.getByTestId("site.site_name")).toHaveValue(Data.Site);
     await expect(page.getByTestId("responsible_person.name")).toHaveValue(

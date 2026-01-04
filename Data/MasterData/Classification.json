@@ -2,25 +2,25 @@
   "Create": {
     "Primary": {
       "Required": {
-        "Name": "Name_PP1",
+        "Name": "name",
         "Parent": "",
         "Description": ""
       },
       "AllFields": {
-        "Name": "Name_PP1",
+        "Name": "name",
         "Parent": "",
         "Description": "Description"
       }
     },
     "Secondary": {
       "Required": {
-        "Name": "Name_SS1",
-        "Parent": "Near Miss (HiPo – High Potential Incident)",
+        "Name": "name",
+        "Parent": "name",
         "Description": ""
       },
       "AllFields": {
-        "Name": "Name_SS1",
-        "Parent": "Near Miss (HiPo – High Potential Incident)",
+        "Name": "name",
+        "Parent": "name",
         "Description": "Description"
       }
     }
@@ -28,13 +28,13 @@
   "Edit": {
     "Primary": {
       "Before": {
-        "Name": "Edit_PP1",
+        "Name": "Edit_P",
         "Parent": "",
         "Description": "",
         "status": "Active"
       },
       "After": {
-        "Name": "Edit_PP1",
+        "Name": "Edit_P",
         "Parent": "",
         "Description": "",
         "status": "Active"
@@ -42,14 +42,14 @@
     },
     "Secondary": {
       "Before": {
-        "Name": "Edit_SS1",
-        "Parent": "Environmental Incident",
+        "Name": "Edit_S",
+        "Parent": "name",
         "Description": "",
         "status": "Active"
       },
       "After": {
-        "Name": "Edit_SS1",
-        "Parent": "Environmental Incident",
+        "Name": "Edit_S",
+        "Parent": "name",
         "Description": "",
         "status": "Active"
       }

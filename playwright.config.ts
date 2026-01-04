@@ -49,6 +49,10 @@ export default defineConfig({
     //   name: "Edge",
     //   use: { ...devices["Desktop Edge"] },
     // },
+    // {
+    //   name: "iPhone",
+    //   use: { ...devices["iPhone 15 Pro Max"] },
+    // },
 
     /* Test against mobile viewports. */
     // {

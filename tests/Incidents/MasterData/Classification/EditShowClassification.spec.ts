@@ -6,12 +6,16 @@ import Data from "../../../../Data/MasterData/Classification.json";
 import Classification from "../../../../Pages/MasterData/Classification/Classification";
 import { TableSearch } from "../../../../utils/utils";
 
-test.beforeEach(async ({ page }) => {
-  const home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterData = await home.GoToMasterData(page, expect);
+test.beforeEach(async ({ page }, { project }) => {
+  const Home = await new Login().login(page, "admin@admin.com", "123456");
+  const MasterData = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterData.GoToClassifications(page, expect);
 });
-
+// Edit
 test("Edit Classification (primary)", async ({ page }) => {
   const classification = new Classification();
 
@@ -49,6 +53,7 @@ test("Edit Classification (Secondary)", async ({ page }) => {
   });
 });
 
+// Show
 test("Show Classification (primary)", async ({ page }) => {
   const Found = await TableSearch({
     page,
