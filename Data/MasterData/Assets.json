@@ -14,7 +14,8 @@
       "Serial": "1122aass",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
       "Site": "name410",
-      "Responsible_Person": "Super Admin"
+      "Responsible_Person": "Super Admin",
+      "Status": "Active"
     },
     "After": {
       "name": "Edit",
@@ -22,7 +23,8 @@
       "Serial": "1122aass",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
       "Site": "name410",
-      "Responsible_Person": "Super Admin"
+      "Responsible_Person": "Super Admin",
+      "Status": "Active"
     }
   }
 }
