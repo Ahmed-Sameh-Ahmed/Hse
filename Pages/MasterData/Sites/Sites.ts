@@ -1,5 +1,6 @@
 import { table } from "console";
 import { randomNumber, ChangeStatus, TableSearch } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   name: string;
@@ -14,7 +15,7 @@ class Sites {
   // Crate
   async GoToCreateSite({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("button", { name: "Create Site" }).click();
-    await expect(page).toHaveURL("/master-data/sites/create");
+    await expect(page).toHaveURL(ROUTES.SITES_CREATE);
   }
   async CreateSite({
     page,
@@ -38,13 +39,13 @@ class Sites {
     if (Empty) {
       await page.getByTestId("save-button").click();
       await expect(
-        page.getByText("This field is required").nth(0)
+        page.getByText("This field is required").nth(0),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(1)
+        page.getByText("This field is required").nth(1),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(2)
+        page.getByText("This field is required").nth(2),
       ).toBeVisible();
     } else {
       if (Required) {
@@ -62,12 +63,12 @@ class Sites {
           .click();
         await page.getByTestId("save-button").click();
         await page.getByRole("button", { name: "OK" }).click();
-        await expect(page).toHaveURL("/master-data/sites");
+        await expect(page).toHaveURL(ROUTES.SITES);
       } else {
         await page
           .getByTestId("site_name")
           .fill(
-            NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`
+            NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`,
           );
         await page.getByTestId("goe_coordinates").fill(Data?.Coordinates);
         if (Wrong) {
@@ -88,11 +89,11 @@ class Sites {
           await expect(page.getByText("Invalid format")).toBeVisible();
         } else if (Duplicate) {
           await expect(
-            page.getByText("Site with this name already")
+            page.getByText("Site with this name already"),
           ).toBeVisible();
         } else {
           await page.getByRole("button", { name: "OK" }).click();
-          await expect(page).toHaveURL("/master-data/sites");
+          await expect(page).toHaveURL(ROUTES.SITES);
         }
       }
     }
@@ -127,19 +128,19 @@ class Sites {
     Data: TData;
   }) {
     await expect(page.locator("input[data-testid='site_name']")).toHaveValue(
-      Data.name
+      Data.name,
     );
     await expect(
-      page.locator("input[data-testid='goe_coordinates']")
+      page.locator("input[data-testid='goe_coordinates']"),
     ).toHaveValue(Data.Coordinates);
     await expect(page.locator("input[id='location.id']")).toHaveValue(
-      Data.Location
+      Data.Location,
     );
     await expect(
       page
         .locator(".react-select-container")
         .locator("div", { hasText: Data.ResponsiblePerson })
-        .nth(2)
+        .nth(2),
     ).toHaveText(Data.ResponsiblePerson);
 
     await page.locator("input[data-testid='site_name']").clear();
@@ -164,7 +165,7 @@ class Sites {
       .click();
     await page.getByTestId("edit-button").click();
     await page.getByRole("button", { name: "OK" }).click();
-    await expect(page).toHaveURL("/master-data/sites");
+    await expect(page).toHaveURL(ROUTES.SITES);
   }
 
   // Show
@@ -189,16 +190,16 @@ class Sites {
     Data: TData;
   }) {
     await expect(page.locator("input[data-testid='site_name']")).toHaveValue(
-      Data.name
+      Data.name,
     );
     await expect(
-      page.locator("input[data-testid='goe_coordinates']")
+      page.locator("input[data-testid='goe_coordinates']"),
     ).toHaveValue(Data.Coordinates);
     await expect(
-      page.locator("input[data-testid='location.name']")
+      page.locator("input[data-testid='location.name']"),
     ).toHaveValue(Data.Location);
     await expect(
-      page.locator("input[data-testid='responsible_person.name']")
+      page.locator("input[data-testid='responsible_person.name']"),
     ).toHaveValue(Data.ResponsiblePerson);
   }
 }

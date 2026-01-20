@@ -4,6 +4,7 @@ import {
   randomNumber,
   TableSearch,
 } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type props = {
   page: any;
@@ -29,7 +30,7 @@ class Consequences {
   // Create Consequences
   async GoToCreateConsequences({ page, expect }: props) {
     await page.getByRole("button", { name: "Add Consequence" }).click();
-    await expect(page).toHaveURL("/master-data/consequences/create");
+    await expect(page).toHaveURL(ROUTES.CONSEQUENCES_CREATE);
   }
   async CreateConsequences({
     page,
@@ -45,8 +46,8 @@ class Consequences {
         Empty
           ? ""
           : Edit
-          ? Data?.ConsequencesName
-          : `${Data?.ConsequencesName}${this.randomNumber}`
+            ? Data?.ConsequencesName
+            : `${Data?.ConsequencesName}${this.randomNumber}`,
       );
     await page.getByTestId("description").fill(Empty ? "" : Data?.Description);
 
@@ -54,7 +55,7 @@ class Consequences {
       await expect(
         await page
           .locator(".mb-3")
-          .locator(".text-red-600", { hasText: "This field is required" })
+          .locator(".text-red-600", { hasText: "This field is required" }),
       ).toBeVisible();
     } else {
       await page.getByTestId("save-button").click();
@@ -62,10 +63,10 @@ class Consequences {
         await expect(
           page.locator(".mb-3").locator("p", {
             hasText: "Consequence with this name already exists.",
-          })
+          }),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/consequences");
+        await expect(page).toHaveURL(ROUTES.CONSEQUENCES);
         await page.getByRole("button", { name: "OK" }).click();
       }
     }
@@ -87,7 +88,7 @@ class Consequences {
         expect: expect,
         Edit: true,
       });
-      await expect(page).toHaveURL("/master-data/consequences");
+      await expect(page).toHaveURL(ROUTES.CONSEQUENCES);
       await page.getByRole("button", { name: "OK" }).click();
       await this.GoToEditConsequencesFormTable({ page, Data, expect });
     }
@@ -96,14 +97,14 @@ class Consequences {
     await expect(page.getByTestId("name")).toHaveValue(Data?.ConsequencesName);
     await page.getByTestId("name").clear();
     await expect(page.getByTestId("description")).toHaveValue(
-      Data?.Description
+      Data?.Description,
     );
     await page.getByTestId("description").clear();
 
     await page.getByTestId("name").fill(Data?.ConsequencesName);
     await page.getByTestId("description").fill(Data?.Description);
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/consequences");
+    await expect(page).toHaveURL(ROUTES.CONSEQUENCES);
     await page.getByRole("button", { name: "OK" }).click();
   }
 
@@ -113,10 +114,10 @@ class Consequences {
   }
   async ShowConsequences({ page, Data, expect }: props) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      Data?.ConsequencesName
+      Data?.ConsequencesName,
     );
     await expect(
-      page.locator("textarea[data-testid='description']")
+      page.locator("textarea[data-testid='description']"),
     ).toHaveValue(Data?.Description);
   }
 

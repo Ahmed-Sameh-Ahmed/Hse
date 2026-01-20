@@ -1,4 +1,5 @@
 import { randomNumber, TableSearch } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   name: string;
@@ -17,7 +18,7 @@ class Assets {
 
     await page.getByRole("button", { name: "Add Asset" }).click();
 
-    await expect(page).toHaveURL("/master-data/assets/create");
+    await expect(page).toHaveURL(ROUTES.ASSETS_CREATE);
   }
   async CreateAsset({
     page,
@@ -40,22 +41,22 @@ class Assets {
     if (Empty) {
       await page.getByTestId("save-button").click();
       await expect(
-        page.getByText("This field is required").nth(0)
+        page.getByText("This field is required").nth(0),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(1)
+        page.getByText("This field is required").nth(1),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(2)
+        page.getByText("This field is required").nth(2),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(3)
+        page.getByText("This field is required").nth(3),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(4)
+        page.getByText("This field is required").nth(4),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(5)
+        page.getByText("This field is required").nth(5),
       ).toBeVisible();
     } else {
       await page
@@ -63,14 +64,14 @@ class Assets {
         .fill(
           notRandomNumber || notRandomNumberName
             ? Data.name
-            : `${Data.name}${this.randomNumber}`
+            : `${Data.name}${this.randomNumber}`,
         );
       await page.getByRole("textbox", { name: "Asset Type *" }).click();
       await page.getByRole("option", { name: Data.Type }).click();
       await page
         .getByTestId("serial_number")
         .fill(
-          notRandomNumber ? Data.Serial : `${Data.Serial}${this.randomNumber}`
+          notRandomNumber ? Data.Serial : `${Data.Serial}${this.randomNumber}`,
         );
       await page.getByRole("textbox", { name: "Location *" }).click();
       await page.getByRole("option", { name: Data.Location }).click();
@@ -84,10 +85,10 @@ class Assets {
       await page.getByTestId("save-button").click();
       if (Duplicate) {
         await expect(
-          page.getByText("Asset with this serial number already exists")
+          page.getByText("Asset with this serial number already exists"),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/assets");
+        await expect(page).toHaveURL(ROUTES.ASSETS);
         await page.getByRole("button", { name: "OK" }).click();
       }
     }
@@ -132,23 +133,23 @@ class Assets {
   }) {
     await expect(page.getByTestId("name")).toHaveValue(DataBefore.name);
     await expect(
-      page.getByRole("textbox", { name: "Asset Type *" })
+      page.getByRole("textbox", { name: "Asset Type *" }),
     ).toHaveValue(DataBefore.Type);
 
     await expect(page.getByTestId("serial_number")).toHaveValue(
-      DataBefore.Serial
+      DataBefore.Serial,
     );
     await expect(page.getByRole("textbox", { name: "Location *" })).toHaveValue(
-      DataBefore.Location
+      DataBefore.Location,
     );
     await expect(page.getByRole("textbox", { name: "Site *" })).toHaveValue(
-      DataBefore.Site
+      DataBefore.Site,
     );
     await expect(
       page
         .locator(".react-select-container")
         .locator("div", { hasText: DataBefore.Responsible_Person })
-        .nth(2)
+        .nth(2),
     ).toHaveText(DataBefore.Responsible_Person);
 
     //------------------------------------------------------------------------------
@@ -188,7 +189,7 @@ class Assets {
       .click();
 
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/assets");
+    await expect(page).toHaveURL(ROUTES.ASSETS);
     await page.getByRole("button", { name: "OK" }).click();
   }
   // Show
@@ -226,7 +227,7 @@ class Assets {
     await expect(page.getByTestId("location.name")).toHaveValue(Data.Location);
     await expect(page.getByTestId("site.site_name")).toHaveValue(Data.Site);
     await expect(page.getByTestId("responsible_person.name")).toHaveValue(
-      Data.Responsible_Person
+      Data.Responsible_Person,
     );
   }
 }

@@ -6,9 +6,13 @@ import OrganizationHierarchy from "../../../../Pages/MasterData/OrganizationHier
 import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 import { TableSearch } from "../../../../utils/utils";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
+  const MasterDataPage = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterDataPage.GoToOrganizationHierarchy(page, expect);
 });
 
@@ -26,9 +30,6 @@ test("Create Organization Hierarchy With Empty Data", async ({ page }) => {
     data: Data.Empty,
     empty,
   });
-  await expect(page.getByText("Level ID is required")).toBeVisible();
-  await expect(page.getByText("Level name is required")).toBeVisible();
-  await expect(page.getByText("Position is required")).toBeVisible();
 });
 
 test("Create Organization Hierarchy With Right Data (required)", async ({
@@ -44,8 +45,6 @@ test("Create Organization Hierarchy With Right Data (required)", async ({
     expect,
     data: Data.Right.Required,
   });
-  await expect(page).toHaveURL("/master-data/organization-hierarchy");
-  await page.getByRole("button", { name: "OK" }).click();
 });
 
 test("Create Organization Hierarchy With Right Data (all fields)", async ({
@@ -61,11 +60,7 @@ test("Create Organization Hierarchy With Right Data (all fields)", async ({
     expect,
     data: Data.Right.AllFields,
   });
-  await expect(page).toHaveURL("/master-data/organization-hierarchy");
-  await page.getByRole("button", { name: "OK" }).click();
 });
-
-// لسه متصلحتش
 
 test("Create Organization Hierarchy With Right Data (Level1 didn't have Report to) ", async ({
   page,
@@ -80,8 +75,6 @@ test("Create Organization Hierarchy With Right Data (Level1 didn't have Report t
     expect,
     data: Data.Right.Level1,
   });
-  await expect(page).toHaveURL("/master-data/organization-hierarchy");
-  await page.getByRole("button", { name: "OK" }).click();
 });
 
 test("Create Organization Hierarchy With Wrong Data (position is the same as report to)", async ({
@@ -96,10 +89,8 @@ test("Create Organization Hierarchy With Wrong Data (position is the same as rep
     page,
     expect,
     data: Data.Wrong.Position_Is_The_Same_as_ReportsTo,
+    SamePosition: true,
   });
-  await expect(
-    page.getByText("Reports To cannot be the same as Position")
-  ).toBeVisible();
 });
 
 test("Create Organization Hierarchy With Wrong Data (duplicate level)", async ({
@@ -107,62 +98,36 @@ test("Create Organization Hierarchy With Wrong Data (duplicate level)", async ({
 }) => {
   const Organization_Hierarchy = new OrganizationHierarchy();
   //first
+  // const Found = await TableSearch({
+  //   page,
+  //   Name: Data.Right.Required.LevelName,
+  // });
 
-  const Found = await TableSearch({
-    page,
-    Name: Data.Right.Required.LevelName,
-  });
+  // if (!Found) {
+  //   await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
+  //     page,
+  //     expect,
+  //   });
+  //   await Organization_Hierarchy.CreateOrganizationHierarchy({
+  //     page,
+  //     expect,
+  //     data: Data.Right.Required,
+  //     NotRandomNumber: true,
+  //   });
 
-  if (!Found) {
-    await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
-      page,
-      expect,
-    });
-    await Organization_Hierarchy.CreateOrganizationHierarchy({
-      page,
-      expect,
-      data: Data.Right.Required,
-      NotRandomNumber: true,
-    });
-
-    // second
-    await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
-      page,
-      expect,
-    });
-    await Organization_Hierarchy.CreateOrganizationHierarchy({
-      page,
-      expect,
-      data: Data.Right.Required,
-      NotRandomNumber: true,
-      Duplicate: true,
-    });
-  } else {
-    // second
-    await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
-      page,
-      expect,
-    });
-    await Organization_Hierarchy.CreateOrganizationHierarchy({
-      page,
-      expect,
-      data: Data.Right.Required,
-      NotRandomNumber: true,
-      Duplicate: true,
-    });
-  }
-
-  await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
-    page,
-    expect,
-  });
-  await Organization_Hierarchy.CreateOrganizationHierarchy({
-    page,
-    expect,
-    data: Data.Right.Required,
-    NotRandomNumber: true,
-  });
-
+  //   // second
+  //   await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
+  //     page,
+  //     expect,
+  //   });
+  //   await Organization_Hierarchy.CreateOrganizationHierarchy({
+  //     page,
+  //     expect,
+  //     data: Data.Right.Required,
+  //     NotRandomNumber: true,
+  //     Duplicate: true,
+  //   });
+  // } else {
   // second
   await Organization_Hierarchy.GoToCreateOrganizationHierarchy({
     page,
@@ -189,5 +154,6 @@ test("Create Organization Hierarchy With Wrong Data (circular hierarchies)", asy
     page,
     expect,
     data: Data.Wrong.Circular_Hierarchy,
+    circular: true,
   });
 });

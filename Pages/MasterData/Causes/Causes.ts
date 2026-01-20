@@ -5,6 +5,7 @@ import {
   CheckFilteredData,
   TableSearch,
 } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   Name: string;
@@ -21,7 +22,7 @@ class Causes {
   //Create
   async GoToCreateCause({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("button", { name: "Add Cause" }).click();
-    await expect(page).toHaveURL("/master-data/causes/create");
+    await expect(page).toHaveURL(ROUTES.CAUSES_CREATE);
   }
   async CreateCause({
     page,
@@ -52,21 +53,21 @@ class Causes {
         await page.getByTestId("save-button").click();
 
         await expect(
-          page.getByText("This field is required").nth(0)
+          page.getByText("This field is required").nth(0),
         ).toBeVisible();
 
         await expect(
-          page.getByText("This field is required").nth(1)
+          page.getByText("This field is required").nth(1),
         ).toBeVisible();
       } else {
         await page.getByTestId("save-button").click();
 
         await expect(
-          page.getByText("This field is required").nth(0)
+          page.getByText("This field is required").nth(0),
         ).toBeVisible();
 
         await expect(
-          page.getByText("This field is required").nth(1)
+          page.getByText("This field is required").nth(1),
         ).toBeVisible();
       }
     } else {
@@ -87,10 +88,10 @@ class Causes {
       await page.getByTestId("save-button").click();
       if (Duplicate) {
         await expect(
-          page.getByText("Cause with this name already")
+          page.getByText("Cause with this name already"),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/causes");
+        await expect(page).toHaveURL(ROUTES.CAUSES);
         await page.getByRole("button", { name: "OK" }).click();
       }
     }
@@ -120,7 +121,7 @@ class Causes {
         NotRandomNumber: true,
         subCause,
       });
-      await expect(page).toHaveURL("/master-data/causes");
+      await expect(page).toHaveURL(ROUTES.CAUSES);
       await this.GoToEditCause({ page, Data, expect, subCause });
     }
   }
@@ -140,11 +141,11 @@ class Causes {
   }) {
     await expect(page.getByTestId("name")).toHaveValue(DataBefore.Name);
     await expect(page.getByRole("textbox", { name: "Type *" })).toHaveValue(
-      DataBefore.Type
+      DataBefore.Type,
     );
     if (!Category) {
       await expect(
-        page.getByRole("textbox", { name: "Parent Cause *" })
+        page.getByRole("textbox", { name: "Parent Cause *" }),
       ).toHaveValue(DataBefore?.ParentCause);
     }
     await page.getByTestId("name").clear();
@@ -175,7 +176,7 @@ class Causes {
     }
 
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/causes");
+    await expect(page).toHaveURL(ROUTES.CAUSES);
     await page.getByRole("button", { name: "OK" }).click();
   }
 
@@ -208,16 +209,16 @@ class Causes {
     Category?: boolean;
   }) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      Data?.Name
+      Data?.Name,
     );
     await expect(page.locator("input[id='type']")).toHaveValue(Data?.Type);
     if (!Category) {
       await expect(
-        page.locator("input[data-testid='parent_cause.name']")
+        page.locator("input[data-testid='parent_cause.name']"),
       ).toHaveValue(Data?.ParentCause);
     }
     await expect(
-      page.locator("textarea[data-testid='description']")
+      page.locator("textarea[data-testid='description']"),
     ).toHaveValue(Data?.Description);
   }
 
@@ -238,7 +239,7 @@ class Causes {
     if (isCategory) {
       await page.getByRole("button", { name: "Filter" }).first().click();
       await expect(
-        await page.getByRole("heading", { name: "Filter" })
+        await page.getByRole("heading", { name: "Filter" }),
       ).toBeVisible();
       await page.getByTestId("name").fill(DataAfterCategory?.Name);
       await page.getByTestId("apply-filters").click();
@@ -255,7 +256,7 @@ class Causes {
         await CheckFilteredData(AllNames, DataAfterCategory?.Name);
         await page.getByRole("button", { name: "Filter" }).first().click();
         await expect(
-          page.getByRole("heading", { name: "Filter" })
+          page.getByRole("heading", { name: "Filter" }),
         ).toBeVisible();
         await page.getByRole("textbox", { name: "Type" }).click();
         await page
@@ -279,11 +280,11 @@ class Causes {
           await CheckFilteredData(AllNames, DataAfterCategory?.Name);
           await CheckFilteredData(
             AllTypes,
-            DataAfterCategory?.CustomType?.toLowerCase()
+            DataAfterCategory?.CustomType?.toLowerCase(),
           );
           await page.getByRole("button", { name: "Filter" }).first().click();
           await expect(
-            page.getByRole("heading", { name: "Filter" })
+            page.getByRole("heading", { name: "Filter" }),
           ).toBeVisible();
           await page.getByRole("textbox", { name: "Status" }).click();
           await page
@@ -312,7 +313,7 @@ class Causes {
             await CheckFilteredData(AllNames, DataAfterCategory?.Name);
             await CheckFilteredData(
               AllTypes,
-              DataAfterCategory?.CustomType?.toLowerCase()
+              DataAfterCategory?.CustomType?.toLowerCase(),
             );
             await CheckFilteredData(AllStatus, DataAfterCategory?.Status, true);
           }
@@ -336,7 +337,7 @@ class Causes {
         await CheckFilteredData(AllNames, DataAfter.Name);
         await page.getByRole("button", { name: "Filter" }).first().click();
         await expect(
-          page.getByRole("heading", { name: "Filter" })
+          page.getByRole("heading", { name: "Filter" }),
         ).toBeVisible();
         await page.getByRole("textbox", { name: "Type" }).click();
         await page
@@ -361,7 +362,7 @@ class Causes {
           await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
           await page.getByRole("button", { name: "Filter" }).first().click();
           await expect(
-            page.getByRole("heading", { name: "Filter" })
+            page.getByRole("heading", { name: "Filter" }),
           ).toBeVisible();
           await page.getByRole("textbox", { name: "Parent Cause" }).click();
           await page
@@ -388,11 +389,11 @@ class Causes {
             await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
             await CheckFilteredData(
               AllParentCause,
-              `${DataAfter?.ParentCause}`
+              `${DataAfter?.ParentCause}`,
             );
             page.getByRole("button", { name: "Filter" }).first().click();
             await expect(
-              page.getByRole("heading", { name: "Filter" })
+              page.getByRole("heading", { name: "Filter" }),
             ).toBeVisible();
             await page.getByRole("textbox", { name: "Status" }).click();
             await page
@@ -422,7 +423,7 @@ class Causes {
               await CheckFilteredData(AllTypes, DataAfter.Type.toLowerCase());
               await CheckFilteredData(
                 AllParentCause,
-                `${DataAfter?.ParentCause}`
+                `${DataAfter?.ParentCause}`,
               );
               await CheckFilteredData(AllStatus, DataAfter.Status, true);
             }

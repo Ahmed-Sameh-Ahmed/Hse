@@ -6,10 +6,14 @@ import OrganizationHierarchy from "../../../../Pages/MasterData/OrganizationHier
 // Data
 import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
-  Home.GoToMasterData(page, expect);
-  // await MasterDataPage.GoToOrganizationHierarchy(page, expect);
+  const MasterDataPage = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
+  await MasterDataPage.GoToOrganizationHierarchy(page, expect);
 });
 
 test("Filter Orgnization Hierarchy", async ({ page }) => {

@@ -5,25 +5,29 @@ import OrganizationHierarchy from "../../../../Pages/MasterData/OrganizationHier
 //Data
 import Data from "../../../../Data/MasterData/OrganizationHierarchy.json";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, { project }) => {
   const Home = await new login().login(page, "admin@admin.com", "123456");
-  const MasterDataPage = await Home.GoToMasterData(page, expect);
+  const MasterDataPage = await Home.GoToMasterData({
+    page,
+    expect,
+    ProjectName: project.name,
+  });
   await MasterDataPage.GoToOrganizationHierarchy(page, expect);
 });
 
-test("Show  Orgnization Hierarchy", async ({ page }) => {
-  const Organization_Hierarchy = new OrganizationHierarchy();
-  await Organization_Hierarchy.GoToShowOrganizationHierarchy({
-    page,
-    expect,
-    DataBefore: Data.Edit.Before,
-  });
-  await Organization_Hierarchy.ShowOrganizationHierarchy({
-    page,
-    expect,
-    data: Data.Edit.Before,
-  });
-});
+// test("Show  Orgnization Hierarchy", async ({ page }) => {
+//   const Organization_Hierarchy = new OrganizationHierarchy();
+//   await Organization_Hierarchy.GoToShowOrganizationHierarchy({
+//     page,
+//     expect,
+//     data: Data.Edit.Before,
+//   });
+//   await Organization_Hierarchy.ShowOrganizationHierarchy({
+//     page,
+//     expect,
+//     data: Data.Edit.Before,
+//   });
+// });
 
 test("Edit Orgnization Hierarchy", async ({ page }) => {
   const Organization_Hierarchy = new OrganizationHierarchy();

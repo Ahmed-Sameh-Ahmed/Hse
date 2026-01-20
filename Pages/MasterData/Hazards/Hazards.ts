@@ -4,6 +4,7 @@ import {
   randomNumber,
   TableSearch,
 } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   Name: string;
@@ -28,7 +29,7 @@ class Hazards {
   // Create Hazard
   async GoToCrateHazard({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("button", { name: "Create Hazard" }).click();
-    expect(page).toHaveURL("/master-data/hazards/create");
+    expect(page).toHaveURL(ROUTES.HAZARDS_CREATE);
   }
   async CreateHazard({
     page,
@@ -48,19 +49,19 @@ class Hazards {
     if (Empty) {
       await page.getByTestId("save-button").click();
       await expect(
-        page.getByText("This field is required").nth(0)
+        page.getByText("This field is required").nth(0),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(1)
+        page.getByText("This field is required").nth(1),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(2)
+        page.getByText("This field is required").nth(2),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(3)
+        page.getByText("This field is required").nth(3),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(4)
+        page.getByText("This field is required").nth(4),
       ).toBeVisible();
     } else {
       await page
@@ -91,11 +92,11 @@ class Hazards {
         await expect(
           page.locator(".mb-3").locator("p", {
             hasText: "Hazard with the same name and category already exists.",
-          })
+          }),
         ).toBeVisible();
       } else {
         await page.getByRole("button", { name: "OK" }).click();
-        await expect(page).toHaveURL("/master-data/hazards");
+        await expect(page).toHaveURL(ROUTES.HAZARDS);
       }
     }
   }
@@ -136,29 +137,29 @@ class Hazards {
   }) {
     await expect(page.getByTestId("name")).toHaveValue(currentData?.Name);
     await expect(page.getByRole("textbox", { name: "Category *" })).toHaveValue(
-      currentData.Category
+      currentData.Category,
     );
     await expect(page.getByRole("textbox", { name: "Severity *" })).toHaveValue(
-      currentData.Severity
+      currentData.Severity,
     );
     await expect(page.getByTestId("associated_caution")).toHaveValue(
-      currentData.Associated_Caution
+      currentData.Associated_Caution,
     );
     await expect(page.getByTestId("how_to_detect")).toHaveValue(
-      currentData.How_to_Detect
+      currentData.How_to_Detect,
     );
     await expect(page.getByTestId("contamination_procedure")).toHaveValue(
-      currentData.Contamination_Procedure
+      currentData.Contamination_Procedure,
     );
     await expect(
-      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl")
+      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl"),
     ).toBeVisible();
 
     await page.getByTestId("name").clear();
     await page.locator(".mantine-focus-auto").first().click();
     await page
       .locator(
-        "div:nth-child(3) > .m_46b77525 > .m_6c018570 > .m_82577fc2 > .mantine-focus-auto"
+        "div:nth-child(3) > .m_46b77525 > .m_6c018570 > .m_82577fc2 > .mantine-focus-auto",
       )
       .click();
     await page.getByTestId("associated_caution").clear();
@@ -198,7 +199,7 @@ class Hazards {
 
     await page.getByTestId("edit-button").click();
     await page.getByRole("button", { name: "OK" }).click();
-    await expect(page).toHaveURL("/master-data/hazards");
+    await expect(page).toHaveURL(ROUTES.HAZARDS);
   }
 
   // Show Hazard
@@ -229,25 +230,25 @@ class Hazards {
     Data: TData;
   }) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      Data.Name
+      Data.Name,
     );
     await expect(
-      page.locator("input[data-testid='category.name']")
+      page.locator("input[data-testid='category.name']"),
     ).toHaveValue(Data.Category);
     await expect(page.locator("[data-testid='severity']")).toHaveValue(
-      Data.Severity.toLowerCase()
+      Data.Severity.toLowerCase(),
     );
     await expect(
-      page.locator("input[data-testid='associated_caution']")
+      page.locator("input[data-testid='associated_caution']"),
     ).toHaveValue(Data.Associated_Caution);
     await expect(
-      page.locator("input[data-testid='how_to_detect']")
+      page.locator("input[data-testid='how_to_detect']"),
     ).toHaveValue(Data.How_to_Detect);
     await expect(
-      page.locator("input[data-testid='contamination_procedure']")
+      page.locator("input[data-testid='contamination_procedure']"),
     ).toHaveValue(Data.Contamination_Procedure);
     await expect(
-      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl")
+      page.locator(".flex.items-center.p-1.bg-white.border.rounded-xl"),
     ).toBeVisible();
   }
 
@@ -310,7 +311,7 @@ class Hazards {
         await page.getByRole("button", { name: "Filter" }).first().click();
 
         await expect(
-          page.getByRole("heading", { name: "Filter" })
+          page.getByRole("heading", { name: "Filter" }),
         ).toBeVisible();
 
         await page.getByRole("textbox", { name: "Severity" }).click();
@@ -346,7 +347,7 @@ class Hazards {
           await page.getByRole("button", { name: "Filter" }).first().click();
 
           await expect(
-            page.getByRole("heading", { name: "Filter" })
+            page.getByRole("heading", { name: "Filter" }),
           ).toBeVisible();
 
           await page.getByRole("textbox", { name: "Status" }).click();
