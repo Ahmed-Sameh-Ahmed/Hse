@@ -11,14 +11,14 @@
       "LevelID": "L2",
       "LevelName": "LevelName",
       "Position": "Junior Developer",
-      "ReportsTo": "Senior Developer",
-      "Description": " "
+      "ReportsTo": "Team Leader",
+      "Description": ""
     },
     "AllFields": {
       "LevelID": "L2",
       "LevelName": "LevelName",
       "Position": "Junior Developer",
-      "ReportsTo": "Senior Developer",
+      "ReportsTo": "Technician",
       "Description": "Description"
     },
     "Level1": {
@@ -41,13 +41,13 @@
       "LevelID": "L2",
       "LevelName": "LevelName",
       "Position": "Junior Developer",
-      "ReportsTo": "Senior Developer",
+      "ReportsTo": "Team Leader",
       "Description": "Description"
     },
     "Circular_Hierarchy": {
       "LevelID": "L2",
       "LevelName": "LevelName",
-      "Position": "Senior Developer",
+      "Position": "Team Leader",
       "ReportsTo": "Junior Developer",
       "Description": "Description"
     }
@@ -56,17 +56,17 @@
     "Before": {
       "LevelID": "L2",
       "LevelName": "Edit",
-      "Position": "Intern",
-      "ReportsTo": "Senior Developer",
-      "Description": "Description",
+      "Position": "Junior Developer",
+      "ReportsTo": "Team Leader",
+      "Description": "",
       "Status": "Active"
     },
     "After": {
       "LevelID": "L2",
       "LevelName": "Edit",
-      "Position": "Intern",
-      "ReportsTo": "Senior Developer",
-      "Description": "Description",
+      "Position": "Junior Developer",
+      "ReportsTo": "Team Leader",
+      "Description": "",
       "Status": "Active"
     }
   },
@@ -74,20 +74,14 @@
     "LevelID": "L2",
     "LevelName": "LevelName28563814",
     "Position": "Junior Developer",
-    "ReportsTo": "Senior Developer",
+    "ReportsTo": "Team Leader",
     "Description": ""
   },
-  "ShowInTable": [
-    "LevelName",
-    "L2",
-    "Junior Developer",
-    "Senior Developer",
-    "1"
-  ],
+  "ShowInTable": ["LevelName", "L2", "Junior Developer", "Manager", "1"],
   "Filter": {
     "Level": "L2",
     "PositionName": "Junior Developer",
-    "ReportsTo": "Senior Developer",
+    "ReportsTo": "Team Leader",
     "Status": "Active"
   }
 }
