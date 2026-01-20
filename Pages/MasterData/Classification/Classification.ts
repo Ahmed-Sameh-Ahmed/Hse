@@ -1,4 +1,5 @@
 import { randomNumber, TableSearch } from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   Name: string;
@@ -13,7 +14,7 @@ class Classification {
   // Create
   async GoToCreateClassification({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("button", { name: "Add Classification" }).click();
-    await expect(page).toHaveURL("/master-data/classifications/create");
+    await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS_CREATE);
   }
 
   async CreateClassification({
@@ -42,39 +43,39 @@ class Classification {
     if (Status === "Empty") {
       await page.getByTestId("save-button").click();
       await expect(
-        page.getByText("This field is required").nth(0)
+        page.getByText("This field is required").nth(0),
       ).toBeVisible();
     } else if (Status === "Primary_Required") {
       await page
         .getByTestId("name")
         .fill(
-          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`
+          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`,
         );
       await page.getByTestId("save-button").click();
-      await expect(page).toHaveURL("/master-data/classifications");
+      await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS);
       await page.getByRole("button", { name: "OK" }).click();
     } else if (Status === "Primary_AllFields") {
       await page
         .getByTestId("name")
         .fill(
-          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`
+          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`,
         );
       await page.getByTestId("description").fill(Data?.Description);
       await page.getByTestId("save-button").click();
 
       if (Duplicate) {
         await expect(
-          page.getByText("Classification with this name already exists")
+          page.getByText("Classification with this name already exists"),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/classifications");
+        await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS);
         await page.getByRole("button", { name: "OK" }).click();
       }
     } else if (Status === "Secondary_Required") {
       await page
         .getByTestId("name")
         .fill(
-          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`
+          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`,
         );
       await page
         .getByRole("textbox", { name: "Parent Classification" })
@@ -84,13 +85,13 @@ class Classification {
         .getByText(Data?.Parent, { exact: true })
         .click();
       await page.getByTestId("save-button").click();
-      await expect(page).toHaveURL("/master-data/classifications");
+      await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS);
       await page.getByRole("button", { name: "OK" }).click();
     } else if (Status === "Secondary_AllFields") {
       await page
         .getByTestId("name")
         .fill(
-          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`
+          NotRandomNumber ? Data?.Name : `${Data?.Name}${this.randomNumber}`,
         );
       await page.getByTestId("description").fill(Data?.Description);
       await page
@@ -104,10 +105,10 @@ class Classification {
 
       if (Duplicate) {
         await expect(
-          page.getByText("Classification with this name already exists")
+          page.getByText("Classification with this name already exists"),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/classifications");
+        await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS);
         await page.getByRole("button", { name: "OK" }).click();
       }
     }
@@ -164,10 +165,10 @@ class Classification {
   }) {
     await expect(page.getByTestId("name")).toHaveValue(DataBefore.Name);
     await expect(
-      page.getByRole("textbox", { name: "Parent Classification" })
+      page.getByRole("textbox", { name: "Parent Classification" }),
     ).toHaveValue(DataBefore.Parent);
     await expect(page.getByTestId("description")).toHaveValue(
-      DataBefore.Description
+      DataBefore.Description,
     );
 
     await page.getByTestId("name").clear();
@@ -188,7 +189,7 @@ class Classification {
     }
     await page.getByTestId("description").fill(DataAfter.Description);
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/classifications");
+    await expect(page).toHaveURL(ROUTES.CLASSIFICATIONS);
     await page.getByRole("button", { name: "OK" }).click();
   }
 
@@ -221,10 +222,10 @@ class Classification {
   }) {
     await expect(page.getByTestId("name")).toHaveValue(DataAfter.Name);
     await expect(page.getByTestId("parent_classification.name")).toHaveValue(
-      DataAfter.Parent
+      DataAfter.Parent,
     );
     await expect(page.getByTestId("description")).toHaveValue(
-      DataAfter.Description
+      DataAfter.Description,
     );
   }
 }

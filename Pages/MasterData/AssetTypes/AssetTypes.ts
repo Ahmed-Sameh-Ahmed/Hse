@@ -1,8 +1,14 @@
-import { randomNumber, ChangeStatus, TableSearch } from "../../../utils/utils";
+import {
+  randomNumber,
+  TableSearch,
+  CheckFilteredData,
+} from "../../../utils/utils";
+import { ROUTES } from "../routes";
 
 type TData = {
   name: string;
   Description: string;
+  Status?: string;
 };
 
 class AssetTypes {
@@ -10,7 +16,7 @@ class AssetTypes {
   // Create
   async GoToCreateAssetType({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("button", { name: "Add Asset Type" }).click();
-    await expect(page).toHaveURL("/master-data/asset-types/create");
+    await expect(page).toHaveURL(ROUTES.ASSET_TYPES_CREATE);
   }
   async CreateAssetType({
     page,
@@ -30,22 +36,22 @@ class AssetTypes {
     if (Empty) {
       await page.getByTestId("save-button").click();
       await expect(
-        await page.getByText("This field is required").nth(0)
+        await page.getByText("This field is required").nth(0),
       ).toBeVisible();
     } else {
       await page
         .getByTestId("name")
         .fill(
-          NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`
+          NotRandomNumber ? Data?.name : `${Data?.name}${this.randomNumber}`,
         );
       await page.getByTestId("description").fill(Data?.Description);
       await page.getByTestId("save-button").click();
       if (Duplicate) {
         await expect(
-          page.getByText("Asset Type already exists.")
+          page.getByText("Asset Type already exists."),
         ).toBeVisible();
       } else {
-        await expect(page).toHaveURL("/master-data/asset-types");
+        await expect(page).toHaveURL(ROUTES.ASSET_TYPES);
         await page.getByRole("button", { name: "OK" }).click();
       }
     }
@@ -68,7 +74,7 @@ class AssetTypes {
     if (!isFound) {
       await this.GoToCreateAssetType({ page, expect });
       await this.CreateAssetType({ page, expect, Data, NotRandomNumber: true });
-      await expect(page).toHaveURL("/master-data/asset-types");
+      await expect(page).toHaveURL(ROUTES.ASSET_TYPES);
       await page.getByRole("button", { name: "OK" }).click();
       await this.GoToEditAssetType({ page, expect, Data });
     }
@@ -88,7 +94,7 @@ class AssetTypes {
     await page.getByTestId("name").clear();
 
     await expect(page.getByTestId("description")).toHaveValue(
-      DataBefore.Description
+      DataBefore.Description,
     );
     await page.getByTestId("description").clear();
 
@@ -96,7 +102,7 @@ class AssetTypes {
     await page.getByTestId("description").fill(DataAfter.Description);
 
     await page.getByTestId("edit-button").click();
-    await expect(page).toHaveURL("/master-data/asset-types");
+    await expect(page).toHaveURL(ROUTES.ASSET_TYPES);
     await page.getByRole("button", { name: "OK" }).click();
   }
 
@@ -122,11 +128,62 @@ class AssetTypes {
     Data: TData;
   }) {
     await expect(page.locator("input[data-testid='name']")).toHaveValue(
-      Data.name
+      Data.name,
     );
     await expect(
-      page.locator("textarea[data-testid='description']")
+      page.locator("textarea[data-testid='description']"),
     ).toHaveValue(Data.Description);
+  }
+
+  //Filter
+  async FilterAssetType({
+    page,
+    Data,
+    expect,
+  }: {
+    page: any;
+    Data: TData;
+    expect: any;
+  }) {
+    await page.getByRole("button", { name: "Filter" }).click();
+    await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
+
+    await page.getByTestId("name").fill(Data?.name);
+    await page.getByTestId("apply-filters").click();
+
+    await page.waitForSelector("table tbody tr");
+    const RowCount = await page.locator("table tbody tr").count();
+
+    if (RowCount === 0) {
+      console.log("No Data with this filter");
+    } else {
+      const AllNames = await page
+        .locator("table tbody tr td:nth-of-type(1)")
+        .allTextContents();
+
+      await CheckFilteredData(AllNames, Data?.name);
+
+      await page.getByRole("button", { name: "Filter" }).first().click();
+      await expect(page.getByRole("heading", { name: "Filter" })).toBeVisible();
+      await page.getByRole("textbox", { name: "Status" }).click();
+      await page.getByRole("option", { name: "Active", exact: true }).click();
+
+      await page.getByTestId("apply-filters").click();
+
+      if (RowCount === 0) {
+        console.log("No Data with this filter");
+      } else {
+        const AllNames = await page
+          .locator("table tbody tr td:nth-of-type(1)")
+          .allTextContents();
+
+        const AllStatus = await page
+          .locator("table tbody tr td:nth-of-type(3)")
+          .allTextContents();
+        await CheckFilteredData(AllNames, Data?.name);
+        await CheckFilteredData(AllStatus, Data?.Status, true);
+      }
+    }
   }
 }
 

@@ -4,7 +4,11 @@ import { expect, test } from "@playwright/test";
 import Data from "../../../../Data/MasterData/AssetType.json";
 
 import AssetTypes from "../../../../Pages/MasterData/AssetTypes/AssetTypes";
-import { TableSearch } from "../../../../utils/utils";
+import {
+  TableSearch,
+  validateAllowedCharacters,
+  validateLength,
+} from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(page, "admin@admin.com", "123456");
@@ -47,13 +51,10 @@ test("Create Asset type (All Fields)", async ({ page }) => {
 
 test("Create Asset type (Required) (duplicate)", async ({ page }) => {
   const AssetType = new AssetTypes();
-
   const Found = await TableSearch({ page, Name: Data.Required.name });
-
   if (!Found) {
     //go to create
     await AssetType.GoToCreateAssetType({ page, expect });
-
     //create
     await AssetType.CreateAssetType({
       page,
@@ -61,11 +62,9 @@ test("Create Asset type (Required) (duplicate)", async ({ page }) => {
       Data: Data.Required,
       NotRandomNumber: true,
     });
-
-    //   // _____________________________________________________________________________
+    // _____________________________________________________________________________
     //go to create
     await AssetType.GoToCreateAssetType({ page, expect });
-
     //create
     await AssetType.CreateAssetType({
       page,
@@ -77,7 +76,6 @@ test("Create Asset type (Required) (duplicate)", async ({ page }) => {
   } else {
     //go to create
     await AssetType.GoToCreateAssetType({ page, expect });
-
     //create
     await AssetType.CreateAssetType({
       page,
@@ -88,3 +86,25 @@ test("Create Asset type (Required) (duplicate)", async ({ page }) => {
     });
   }
 });
+
+// test("Create Asset type (Length Characters)", async ({ page }) => {
+//   const field = page.getByTestId("name");
+//   const descriptionField = page.getByTestId("description");
+
+//   const submitBtn = page.getByTestId("save-button");
+//   const errorMsg = page.getByText("length should be between 1 and 255  ");
+
+//   // await validateAllowedCharacters({
+//   //   field,
+//   //   submitBtn,
+//   //   validInputs: [],
+//   // });
+//   await validateLength({
+//     field,
+//     submitBtn,
+//     max: 255,
+//     min: 1,
+//     errorMsg,
+//   });
+// });
+// test("", async ({ page }) => {});

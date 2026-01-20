@@ -1,7 +1,6 @@
 import { expect } from "@playwright/test";
 
 import Home from "../Home/Home";
-
 class login {
   async login(page: any, username: string, password: string) {
     await page.goto("/login");

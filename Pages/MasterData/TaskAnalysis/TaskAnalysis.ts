@@ -1,6 +1,7 @@
 import { duplexPair } from "stream";
 import { randomNumber, TableSearch } from "../../../utils/utils";
 import { table } from "console";
+import { ROUTES } from "../routes";
 
 type TQuestions = {
   Label: string;
@@ -26,7 +27,7 @@ class TaskAnalysis {
   }) {
     await page.getByRole("button", { name: "Add Question" }).click();
     await expect(
-      page.getByRole("heading", { name: "Add Task Analysis Question" })
+      page.getByRole("heading", { name: "Add Task Analysis Question" }),
     ).toBeVisible();
   }
   async CreateTaskAnalysisQuestions({
@@ -54,7 +55,7 @@ class TaskAnalysis {
       await page.getByRole("button", { name: "Create Question" }).click();
       if (Duplicate) {
         await expect(
-          page.getByText("Question label must be unique.")
+          page.getByText("Question label must be unique."),
         ).toBeVisible();
       }
       await page.waitForTimeout(3000);
@@ -151,7 +152,7 @@ class TaskAnalysis {
       await page.getByRole("button", { name: "Add Classification" }).click();
     }
     await expect(
-      page.getByRole("heading", { name: "Add Task Classification" })
+      page.getByRole("heading", { name: "Add Task Classification" }),
     ).toBeVisible();
   }
   async CreateTaskAnalysisClassification({
@@ -174,10 +175,10 @@ class TaskAnalysis {
     if (Empty) {
       await page.getByRole("button", { name: "Create Classification" }).click();
       await expect(
-        page.getByText("This field is required").nth(0)
+        page.getByText("This field is required").nth(0),
       ).toBeVisible();
       await expect(
-        page.getByText("This field is required").nth(1)
+        page.getByText("This field is required").nth(1),
       ).toBeVisible();
     } else {
       if (Required) {
@@ -192,10 +193,10 @@ class TaskAnalysis {
           .click();
         if (Duplicate) {
           await expect(
-            page.getByText("Classification ID must be unique")
+            page.getByText("Classification ID must be unique"),
           ).toBeVisible();
           await expect(
-            page.getByText("Classification name must be unique")
+            page.getByText("Classification name must be unique"),
           ).toBeVisible();
         }
         await page.waitForTimeout(3000);
@@ -260,7 +261,7 @@ class TaskAnalysis {
     await expect(page.getByTestId("class_id")).toHaveValue(DataBefore.ID);
     await expect(page.getByTestId("title")).toHaveValue(DataBefore.Name);
     await expect(page.getByTestId("description")).toHaveValue(
-      DataBefore.Description
+      DataBefore.Description,
     );
     await expect(page.getByTestId("example")).toHaveValue(DataBefore.Example);
     await page.getByTestId("class_id").clear();
