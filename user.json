@@ -1,0 +1,67 @@
+{
+  "cookies": [
+    {
+      "name": "XSRF-TOKEN",
+      "value": "eyJpdiI6Ik55SHJNc0F2RmlWb1lVdWFiRHM4Rmc9PSIsInZhbHVlIjoiRjBsOWx4SDRMM3ljY29JWFJaRmwxd3lVTDhxdllHQzAxOG5HTm11c2xDcGUvWWR0Rlpsb2I4R3BscXQxZlJaVUxoUTFCaUNHb2NBOWVrTGF5MkU4djd0S2FqTEd4U1kvclJLNUdPVGJuRjVHQ05rTDhqdTdNVUZNNkt3TTRDWlciLCJtYWMiOiI0NDVjNDQ1ZTdlYjU0N2U2YTAzZTJjNmZhZDU2MGJjMzFiZDFiZTNiYjJlODAyNjNkODlmNDdjNDA5YTU4MTllIiwidGFnIjoiIn0%3D",
+      "domain": "hse-api.bitwise-solutions.com",
+      "path": "/",
+      "expires": 1768219490.103164,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "hse-session",
+      "value": "eyJpdiI6Ik9XRmFBb1NLNkV2MmlrdzhnRHEwMXc9PSIsInZhbHVlIjoiMzJBbVR1L09zQ1d3SlBCUmJ3UlN4V01aZnF5NTI5WWpLS0hpTEo2amxNdE1uTlBuSWhZVmlhamNCU1pOaDQ3U1dia094MlVUb3dLdDlGbHk3ejBlV2NTSURhTG5NY2M0Mkg2bWlzWFYvOXAxOUNUdVgyNS81a0p0cHZpVy8vU0QiLCJtYWMiOiIyYTM1OGMwMzNiZjVhMmVjMzAxYTU3Yjk5YjJkYWIxODVlYzBkNGFiM2M5ZjU5MjdkOTFhMjM2ODRhN2ZmY2I5IiwidGFnIjoiIn0%3D",
+      "domain": "hse-api.bitwise-solutions.com",
+      "path": "/",
+      "expires": 1768219490.103426,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://hse.bitwise-solutions.com",
+      "localStorage": [
+        {
+          "name": "navbar",
+          "value": "navbar-sticky"
+        },
+        {
+          "name": "i18nextLng",
+          "value": "en"
+        },
+        {
+          "name": "theme",
+          "value": "light"
+        },
+        {
+          "name": "animation",
+          "value": "animate__fadeIn"
+        },
+        {
+          "name": "semidark",
+          "value": "false"
+        },
+        {
+          "name": "layout",
+          "value": "full"
+        },
+        {
+          "name": "rtlClass",
+          "value": "ltr"
+        },
+        {
+          "name": "menu",
+          "value": "vertical"
+        },
+        {
+          "name": "authData",
+          "value": "{\"id\":1,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTlCNzg2MS1GOTQ0LTcyNEQtOUM2Ny0zREQ1RDU1MkQ2MzEiLCJqdGkiOiJkMTc2OWU2M2M2MTM1MTY1MDBhMDlmYjg3YTA5MzgwYjVlOTViNmZkODU5NzQ4ZWY3MmY2NWRiYzYwYTgxZWQzYTBkY2NlMmExYjM3NzI4ZCIsImlhdCI6MTc2ODIxMjI4OS43NDc4ODMsIm5iZiI6MTc2ODIxMjI4OS43NDc4ODQsImV4cCI6MTc5OTc0ODI4OS43Mzg5NjIsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.z_aet9p0jlv80ciG_wiApKsH2d_jDmeS72m7tOh3rPxdEAcAVV_aglO1OhQqWWlviglz9ZpH1cXi8xYSKJ9E6LAjKSf9v1woEKPrlVnjT2sXyJRr5PMi-myzL1XTGaoIhM0Omoebzu6KhGCqLtLGGcV8C5_ZAfQZ_Fdj8tu9O1G4i0L0ph3-qFO5theppt7R3J_UzBCITZpg_bzYwVG0bil_nCgW1swH5UwH2SaSAalc7U2929idLnJTDh_j2BL4AinV51IgyP9_KkmbbzZ2tK6pyIxsArvkZDHm-gL5KKOMuPGbZE3vIMGBj3wFXrndEZIYnK5UW5J9o0b1WxU1NTy-zklUJHwuxrDWA_ESk6f_ZrFoa0RDrmrXbO17Il73LiB_v6HZyn37AOWwy_sLOCYlfM6DeMTQAEHZ2KKChTXfwxSjCgVmu5V1DGwhL5O9hIJ2MadiPQIBtzQ5msqsbpjyJUj0vRUwZMd60yYiM7VrWA6KUg4PBX4x71j3dqtPYtDrZISzpj5snsUDz7e9AnHx2zse_2Eb1EBBIxfv4K2cQq_35JleV1M2bcJeXssrlcpgOO2Lok8IEoq_J1H13bf1FtNzX0QcekJEV4fs6v64XDgVGGaYF9IqG9ewCfFU9qCZ6SgCUzvC6BIlZaaOZD4PAYUQSHAHD_MQYFtLXfI\",\"name\":\"Super Admin\",\"email\":\"admin@admin.com\",\"image\":\"https://hse-api.bitwise-solutions.com/\",\"roles\":[{\"id\":2,\"name\":\"dsdsadsads\",\"display_name\":\"Dsdsadsads\",\"is_system_role\":false,\"created_at\":\"2026-01-11\",\"updated_at\":\"2026-01-11\"}],\"permissions\":[{\"subject\":\"all\",\"abilities\":[\"manage\"]}],\"menus\":[{\"id\":\"users_management\",\"name\":\"users management\",\"icon\":\"UserPlus\",\"path\":\"/users-management\",\"children\":[{\"id\":\"users\",\"name\":\"users\",\"icon\":\"UserPlus\",\"path\":\"/users-management/users\"},{\"id\":\"groups\",\"name\":\"groups\",\"icon\":\"Users\",\"path\":\"/users-management/groups\"},{\"id\":\"roles\",\"name\":\"Roles\",\"icon\":\"Lock\",\"path\":\"/users-management/roles\"}]},{\"id\":\"master_data\",\"name\":\"Master Data\",\"icon\":\"Database\",\"path\":\"/master-data\",\"children\":[{\"id\":\"hierarchy\",\"name\":\"Hierarchy\",\"icon\":\"Minus\",\"path\":\"/master-data/organization-hierarchy\"},{\"id\":\"hazards\",\"name\":\"hazards\",\"icon\":\"AlertTriangle\",\"path\":\"/master-data/hazards\"},{\"id\":\"consequences\",\"name\":\"consequences\",\"icon\":\"Briefcase\",\"path\":\"/master-data/consequences\"},{\"id\":\"causes\",\"name\":\"causes\",\"icon\":\"Target\",\"path\":\"/master-data/causes\"},{\"id\":\"classifications\",\"name\":\"classifications\",\"icon\":\"GitBranch\",\"path\":\"/master-data/classifications\"},{\"id\":\"sites\",\"name\":\"sites\",\"icon\":\"MapPin\",\"path\":\"/master-data/sites\"},{\"id\":\"asset_types\",\"name\":\"Asset Types\",\"icon\":\"Layers\",\"path\":\"/master-data/asset-types\"},{\"id\":\"assets\",\"name\":\"Assets\",\"icon\":\"Box\",\"path\":\"/master-data/assets\"},{\"id\":\"severity_matrix\",\"name\":\"severity matrix\",\"icon\":\"BarChart\",\"path\":\"/master-data/severity-matrix\"},{\"id\":\"task_analysis\",\"name\":\"Task Analysis\",\"icon\":\"Activity\",\"path\":\"/master-data/task-analysis\"},{\"id\":\"root_cause_analysis\",\"name\":\"Root Cause Analysis\",\"icon\":\"Target\",\"path\":\"/master-data/root-cause-pillars\"}]},{\"id\":\"settings\",\"name\":\"Settings\",\"icon\":\"Settings\",\"path\":\"/settings\",\"children\":[{\"id\":\"general\",\"name\":\"General\",\"icon\":\"Settings\",\"path\":\"/settings/general\"},{\"id\":\"display&_localization\",\"name\":\"Display & Localization\",\"icon\":\"Globe\",\"path\":\"/settings/translations\"},{\"id\":\"time&_date\",\"name\":\"Time & Date\",\"icon\":\"Calendar\",\"path\":\"/settings/time-and-date\"},{\"id\":\"s_m_t_p_configurations\",\"name\":\"SMTP Configurations\",\"icon\":\"Mail\",\"path\":\"/settings/smtp\"}]}],\"groups\":[],\"is_hse_team\":false}"
+        }
+      ]
+    }
+  ]
+}
