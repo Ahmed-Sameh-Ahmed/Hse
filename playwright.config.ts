@@ -23,9 +23,13 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
+  reporter: [
+    ["html", { open: "never", outputFile: "test-results/junit-report.xml" }], // ريبورت تفاعلي بالصور والفيديوهات
+    // ['junit', { outputFile: 'test-results/junit-report.xml' }] // ريبورت للماكينة
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    // actionTimeout:10000,
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: "https://hse.bitwise-solutions.com",
 
@@ -35,23 +39,41 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // {
+    //   name: "setup",
+    //   testMatch: /auth\.setup\.ts/,
+    // },
+    // {
+    //   name: "chromium",
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //     storageState: "playwright/.auth/user.json",
+    //   },
+    //   dependencies: ["setup"],
+    // },
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+      },
     },
-
     // {
     //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //   },
     // },
-
     // {
     //   name: "Edge",
-    //   use: { ...devices["Desktop Edge"] },
+    //   use: {
+    //     ...devices["Desktop Edge"],
+    //   },
     // },
     // {
     //   name: "iPhone",
-    //   use: { ...devices["iPhone 15 Pro Max"] },
+    //   use: {
+    //     ...devices["iPhone 15 Pro Max"],
+    //   },
     // },
 
     /* Test against mobile viewports. */
