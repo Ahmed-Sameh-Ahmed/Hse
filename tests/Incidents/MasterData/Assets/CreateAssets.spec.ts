@@ -16,16 +16,16 @@ test.beforeEach(async ({ page }, { project }) => {
   await MasterData.GoToAssets(page, expect);
 });
 
-// test("Empty", async ({ page }) => {
-//   const assets = new Assets();
-//   await assets.GoToCreateAsset({ page, expect });
-//   await assets.CreateAsset({ page, expect, Data: Data.Create, Empty: true });
-// });
-// test("Create all Fields (Required)", async ({ page }) => {
-//   const assets = new Assets();
-//   await assets.GoToCreateAsset({ page, expect });
-//   await assets.CreateAsset({ page, expect, Data: Data.Create });
-// });
+test("Empty", async ({ page }) => {
+  const assets = new Assets();
+  await assets.GoToCreateAsset({ page, expect });
+  await assets.CreateAsset({ page, expect, Data: Data.Create, Empty: true });
+});
+test("Create all Fields (Required)", async ({ page }) => {
+  const assets = new Assets();
+  await assets.GoToCreateAsset({ page, expect });
+  await assets.CreateAsset({ page, expect, Data: Data.Create });
+});
 test("Create all Fields (Required) (Duplicate)", async ({ page }) => {
   const assets = new Assets();
 
