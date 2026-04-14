@@ -75,9 +75,8 @@ class Causes {
         .getByTestId("name")
         .fill(NotRandomNumber ? Data!.Name : Data!.Name + this.randomNumber);
       await page.getByRole("textbox", { name: "Type *" }).click();
-      await page
-        .locator(".m_c0783ff9")
-        .locator("span", { hasText: Data?.Type })
+      await page.
+        getByRole('listbox').filter(Data?.Type)
         .click();
       if (subCause) {
         await page.getByRole("textbox", { name: "Parent Cause *" }).click();
@@ -431,6 +430,69 @@ class Causes {
         }
       }
     }
+  }
+
+  // Full E2E Workflow: Create -> Show -> Edit -> Inactive
+  async E2ECauseWorkflow({
+    page,
+    expect,
+    initialData,
+    editedData,
+    isSubCause = false,
+  }: {
+    page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+    isSubCause?: boolean;
+  }) {
+    // 1. تجهيز الداتا برقم عشوائي فريد للـ Workflow ده
+    const uniqueNum = randomNumber();
+    const dataToCreate = {
+      ...initialData,
+      Name: `${initialData.Name}-${uniqueNum}`,
+    };
+    const dataToEdit = {
+      ...editedData,
+      Name: `${editedData.Name}-${uniqueNum}`,
+    };
+
+    // 2. Create Cause (Category or Sub-Cause)
+    await this.GoToCreateCause({ page, expect });
+    await this.CreateCause({
+      page,
+      expect,
+      Data: dataToCreate,
+      subCause: isSubCause,
+      NotRandomNumber: true, // بنستخدم الاسم اللي جهزناه فوق
+    });
+
+    // 3. Show Cause & Verify Data
+    await this.GoToShowCause({ page, expect, Data: dataToCreate });
+    await this.ShowCause({ 
+        page, 
+        expect, 
+        Data: dataToCreate, 
+        Category: !isSubCause 
+    });
+
+    // ارجع لصفحة الـ Table عشان نكمل الـ Edit
+    await page.goto(ROUTES.CAUSES);
+
+    // 4. Edit Cause (تعديل كل الحقول)
+    await this.GoToEditCause({ 
+        page, 
+        expect, 
+        Data: dataToCreate, 
+        subCause: isSubCause 
+    });
+    await this.EditCause({
+      page,
+      expect,
+      DataBefore: dataToCreate,
+      DataAfter: dataToEdit,
+      Category: !isSubCause,
+    });
   }
 }
 

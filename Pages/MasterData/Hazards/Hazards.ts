@@ -392,6 +392,56 @@ class Hazards {
       }
     }
   }
+
+
+  // Full E2E Workflow: Create -> Show -> Edit -> Inactive
+ async E2EHazardWorkflow({
+ page,
+expect,
+ initialData,
+ editedData,
+  }: {
+ page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+  }) {
+    // 1. تجهيز الداتا برقم عشوائي ثابت للسيناريو ده عشان نعرف نبحث عنه
+    const uniqueNum = randomNumber();
+    const dataToCreate = { ...initialData, Name: `${initialData.Name}-${uniqueNum}` };
+    const dataToEdit = { ...editedData, Name: `${editedData.Name}-${uniqueNum}` };
+
+    // 2. Create Hazard
+    await this.GoToCrateHazard({ page, expect });
+    await this.CreateHazard({
+      page,
+      expect,
+      Data: dataToCreate,
+      NotFillRandomNumber: true, // بنبعت true لأننا ضفنا الرقم العشوائي بنفسنا في الخطوة اللي فاتت
+    });
+
+    // 3. Show Hazard & Verify Data
+    await this.GoToShowHazard({ page, expect, Data: dataToCreate });
+    await this.ShowHazard({ page, expect, Data: dataToCreate });
+
+    // نرجع لصفحة الجدول الأساسية عشان نقدر نعمل Edit
+    // (لو زرار الـ Back بيعمل كده ممكن تضغط عليه، أو نستخدم الـ URL مباشرة)
+    await page.goto(ROUTES.HAZARDS);
+
+    // 4. Edit Hazard
+    await this.GoToEditHazardFromTable({ page, expect, Data: dataToCreate });
+    await this.EditHazard({
+      page,
+      expect,
+      currentData: dataToCreate,
+      newData: dataToEdit,
+    });
+
+//     // 5. Make it Inactive
+//     // هنستخدم الفنكشن ChangeStatus اللي انت عاملها Import
+//     // بفرض إنها بتاخد الـ page واسم العنصر عشان تعمله Inactive
+//     await ChangeStatus({ page, Name: dataToEdit.Name });
+  }
 }
 
 export default Hazards;

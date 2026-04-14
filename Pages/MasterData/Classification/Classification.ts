@@ -99,7 +99,7 @@ class Classification {
         .click();
       await page
         .getByRole("option")
-        .getByText(Data?.Parent, { exact: true })
+        .getByText(Data?.Parent)
         .click();
       await page.getByTestId("save-button").click();
 
@@ -228,5 +228,65 @@ class Classification {
       DataAfter.Description,
     );
   }
+
+// Full E2E Workflow: Create -> Show -> Edit -> Inactive
+  async E2EClassificationWorkflow({
+    page,
+    expect,
+    initialData,
+    editedData,
+    isSecondary = false,
+  }: {
+    page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+    isSecondary?: boolean;
+  }) {
+    // 1. تجهيز الداتا برقم عشوائي ثابت
+    const uniqueNum = randomNumber();
+    const dataToCreate = {
+      ...initialData,
+      Name: `${initialData.Name}-${uniqueNum}`,
+    };
+    const dataToEdit = {
+      ...editedData,
+      Name: `${editedData.Name}-${uniqueNum}`,
+    };
+
+    // 2. Create Classification
+    await this.GoToCreateClassification({ page, expect });
+    await this.CreateClassification({
+      page,
+      expect,
+      Status: isSecondary ? "Secondary_AllFields" : "Primary_AllFields",
+      Data: dataToCreate,
+      NotRandomNumber: true,
+    });
+
+    // 3. Show & Verify
+    await this.GoToShowClassification({ page, DataAfter: dataToCreate });
+    await this.ShowClassification({ page, expect, DataAfter: dataToCreate });
+
+    // ارجع للجدول عشان تعمل Edit
+    await page.goto(ROUTES.CLASSIFICATIONS);
+
+    // 4. Edit All Fields
+    await this.GoToEditClassification({
+      page,
+      expect,
+      Data: dataToCreate,
+      Secondary: isSecondary,
+    });
+    await this.EditClassification({
+      page,
+      expect,
+      DataBefore: dataToCreate,
+      DataAfter: dataToEdit,
+      Secondary: isSecondary,
+    });
+    
+  }
+  
 }
 export default Classification;

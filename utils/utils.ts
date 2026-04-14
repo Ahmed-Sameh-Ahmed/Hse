@@ -54,12 +54,14 @@ const TableSearch = async ({
   Edit,
   Show,
   Button,
+  User,
 }: {
   page: any;
   Name: string;
   Edit?: boolean;
   Show?: boolean;
   Button?: boolean;
+  User?: boolean;
 }) => {
   let isFound = false;
 
@@ -79,8 +81,11 @@ const TableSearch = async ({
       // نتحقق من النص داخل أول خلية (td) في الصف الحالي
       // إذا كنت تريد البحث في الصف كله وليس الخلية الأولى فقط، استخدم currentRow مباشرة
       const firstCellText = await currentRow.locator("td").first().innerText();
+      const secondCellText = await currentRow.locator("td").nth(1).innerText();
 
-      if (firstCellText.trim() === Name) {
+      if (
+        !User ? firstCellText.trim() === Name : secondCellText.trim() === Name
+      ) {
         matchedRow = currentRow; // وجدنا الصف المطلوب
         isFound = true;
         break; // نخرج من الـ for loop لنبدأ التعامل مع الصف
@@ -98,13 +103,17 @@ const TableSearch = async ({
         } else {
           await ChangeStatus({ page, Row });
           await Row.locator("a").first().click();
+          await page.waitForLoadState("networkidle");
+
           await expect(page.url()).toContain("/edit");
         }
       } else if (Show) {
         if (Button) {
-          await Row.locator("button").last().click();
+          await Row.locator("button").nth(1).click();
         } else {
-          await Row.locator("a").last().click();
+          await Row.locator("a").nth(1).click();
+          await page.waitForLoadState("networkidle");
+
           await expect(page.url()).toContain("/show");
         }
       }

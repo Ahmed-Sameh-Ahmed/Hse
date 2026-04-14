@@ -1,6 +1,6 @@
 {
   "Right": {
-    "Category": {
+    "Cause": {
       "Required": {
         "Name": "Cause",
         "Type": "Parent Cause",
@@ -30,14 +30,14 @@
   "Edit": {
     "Cause": {
       "Before": {
-        "Name": "Edit_C",
+        "Name": "Cause",
         "Type": "Parent Cause",
         "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       },
       "After": {
-        "Name": "Edit_C",
+        "Name": "Cause-e",
         "Type": "Parent Cause",
         "CustomType": "Parent-Cause",
         "ParentCause": "name",
@@ -47,14 +47,14 @@
     },
     "SubCause": {
       "Before": {
-        "Name": "Edit_S",
+        "Name": "Sub-Cause",
         "Type": "Sub-Cause",
         "ParentCause": "name",
         "Description": "",
         "Status": "Active"
       },
       "After": {
-        "Name": "Edit_S",
+        "Name": "Sub-Cause-e-",
         "Type": "Sub-Cause",
         "ParentCause": "name",
         "Description": "",

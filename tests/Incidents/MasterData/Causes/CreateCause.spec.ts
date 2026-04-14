@@ -30,7 +30,7 @@ test("Create Cause (Parent Cause) (Required Fields) ", async ({ page }) => {
   await causes.CreateCause({
     page,
     expect,
-    Data: Data.Right.Category.Required,
+    Data: Data.Right.Cause.Required,
   });
 });
 
@@ -40,7 +40,7 @@ test("Create Cause (Parent Cause) (All Fields) ", async ({ page }) => {
   await causes.CreateCause({
     page,
     expect,
-    Data: Data.Right.Category.AllFields,
+    Data: Data.Right.Cause.AllFields,
   });
 });
 
@@ -60,7 +60,7 @@ test("Create Cause (Sub Cause) With (Required Fields) ", async ({ page }) => {
     expect,
     Data: Data.Right.SubCause.Required,
     subCause: true,
-    CategoryData: Data.Right.Category.AllFields,
+    CategoryData: Data.Right.Cause.AllFields,
   });
 });
 test("Create Cause (Sub Cause) With (All Fields) ", async ({ page }) => {
@@ -71,7 +71,7 @@ test("Create Cause (Sub Cause) With (All Fields) ", async ({ page }) => {
     expect,
     Data: Data.Right.SubCause.AllFields,
     subCause: true,
-    CategoryData: Data.Right.Category.AllFields,
+    CategoryData: Data.Right.Cause.AllFields,
   });
 });
 
@@ -84,7 +84,7 @@ test("Create Cause (Parent Cause) (All Fields) (Duplicate Name) ", async ({
 
   const Found = await TableSearch({
     page,
-    Name: Data.Right.Category.Required.Name,
+    Name: Data.Right.Cause.Required.Name,
   });
 
   if (!Found) {
@@ -92,7 +92,7 @@ test("Create Cause (Parent Cause) (All Fields) (Duplicate Name) ", async ({
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.Category.Required,
+      Data: Data.Right.Cause.Required,
       NotRandomNumber: true,
     });
 
@@ -100,7 +100,7 @@ test("Create Cause (Parent Cause) (All Fields) (Duplicate Name) ", async ({
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.Category.Required,
+      Data: Data.Right.Cause.Required,
       NotRandomNumber: true,
       Duplicate: true,
     });
@@ -109,7 +109,7 @@ test("Create Cause (Parent Cause) (All Fields) (Duplicate Name) ", async ({
     await causes.CreateCause({
       page,
       expect,
-      Data: Data.Right.Category.Required,
+      Data: Data.Right.Cause.Required,
       NotRandomNumber: true,
       Duplicate: true,
     });
@@ -132,7 +132,7 @@ test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
       page,
       expect,
       Data: Data.Right.SubCause.Required,
-      CategoryData: Data.Right.Category.Required,
+      CategoryData: Data.Right.Cause.Required,
       NotRandomNumber: true,
       subCause: true,
     });
@@ -141,7 +141,7 @@ test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
       page,
       expect,
       Data: Data.Right.SubCause.Required,
-      CategoryData: Data.Right.Category.Required,
+      CategoryData: Data.Right.Cause.Required,
       NotRandomNumber: true,
       subCause: true,
       Duplicate: true,
@@ -152,7 +152,7 @@ test("Create Cause (Sub Cause) (All Fields) (Duplicate Name) ", async ({
       page,
       expect,
       Data: Data.Right.SubCause.AllFields,
-      CategoryData: Data.Right.Category.AllFields,
+      CategoryData: Data.Right.Cause.AllFields,
       NotRandomNumber: true,
       subCause: true,
       Duplicate: true,

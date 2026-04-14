@@ -185,6 +185,57 @@ class AssetTypes {
       }
     }
   }
+
+  // Full E2E Workflow: Create -> Show -> Edit -> Inactive
+  async E2EAssetTypeWorkflow({
+    page,
+    expect,
+    initialData,
+    editedData,
+  }: {
+    page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+  }) {
+    // 1. تجهيز الداتا برقم عشوائي ثابت للسيناريو
+    const uniqueNum = randomNumber();
+    const dataToCreate = {
+      ...initialData,
+      name: `${initialData.name}-${uniqueNum}`,
+    };
+    const dataToEdit = {
+      ...editedData,
+      name: `${editedData.name}-${uniqueNum}`,
+    };
+
+    // 2. Create Asset Type
+    await this.GoToCreateAssetType({ page, expect });
+    await this.CreateAssetType({
+      page,
+      expect,
+      Data: dataToCreate,
+      NotRandomNumber: true, // بنبعت true لأننا ضفنا الرقم العشوائي فوق
+    });
+
+    // 3. Show Asset Type & Verify Data
+    await this.GoToShowAssetType({ page, expect, Data: dataToCreate });
+    await this.ShowAssetType({ page, expect, Data: dataToCreate });
+
+    // نرجع لصفحة الجدول الأساسية عشان نقدر نعمل Edit
+    await page.goto(ROUTES.ASSET_TYPES);
+
+    // 4. Edit Asset Type
+    await this.GoToEditAssetType({ page, expect, Data: dataToCreate });
+    await this.EditAssetType({
+      page,
+      expect,
+      DataBefore: dataToCreate,
+      DataAfter: dataToEdit,
+    });
+
+    // 5. Make it Inactive (تأكد من إضافة ChangeStatus في الـ imports)
+  }
 }
 
 export default AssetTypes;

@@ -16,14 +16,14 @@
   },
   "Edit": {
     "Before": {
-      "name": "Edit",
+      "name": "name",
       "Coordinates": "",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
       "ResponsiblePerson": "Super Admin",
       "Status": "Active"
     },
     "After": {
-      "name": "Edit",
+      "name": "name-e-",
       "Coordinates": "",
       "Location": "Alexandria – Borg El Arab Industrial Zone",
       "ResponsiblePerson": "Super Admin",

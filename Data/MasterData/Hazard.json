@@ -52,12 +52,12 @@
       "Status": "Active"
     },
     "After": {
-      "Name": "Edit",
+      "Name": "Edit-e-",
       "Category": "Physical",
       "Severity": "Low",
-      "Associated_Caution": "Warming",
-      "How_to_Detect": "like that",
-      "Contamination_Procedure": "call 911",
+      "Associated_Caution": "Warming-e-",
+      "How_to_Detect": "like that-e-",
+      "Contamination_Procedure": "call 911-e-",
       "Image": "Assets/hazardimg.jpg",
       "Status": "Active"
     }

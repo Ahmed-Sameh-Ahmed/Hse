@@ -8,6 +8,8 @@ import { ROUTES } from "../routes";
 
 type props = {
   page: any;
+  EditData?:TData;
+  currentData?:TData;
   Data?: TData;
   expect: any;
   Empty?: Boolean;
@@ -93,16 +95,16 @@ class Consequences {
       await this.GoToEditConsequencesFormTable({ page, Data, expect });
     }
   }
-  async EditConsequences({ page, Data, expect }: props) {
-    await expect(page.getByTestId("name")).toHaveValue(Data?.ConsequencesName);
+  async EditConsequences({ page, currentData,EditData, expect }: props) {
+    await expect(page.getByTestId("name")).toHaveValue(currentData?.ConsequencesName);
     await page.getByTestId("name").clear();
     await expect(page.getByTestId("description")).toHaveValue(
-      Data?.Description,
+      currentData?.Description,
     );
     await page.getByTestId("description").clear();
 
-    await page.getByTestId("name").fill(Data?.ConsequencesName);
-    await page.getByTestId("description").fill(Data?.Description);
+    await page.getByTestId("name").fill(EditData?.ConsequencesName);
+    await page.getByTestId("description").fill(EditData?.Description);
     await page.getByTestId("edit-button").click();
     await expect(page).toHaveURL(ROUTES.CONSEQUENCES);
     await page.getByRole("button", { name: "OK" }).click();
@@ -166,6 +168,55 @@ class Consequences {
     await page.waitForTimeout(2000);
     await page.getByRole("button", { name: "Reset" }).click();
     await page.waitForTimeout(3000);
+  }
+
+  // Full E2E Workflow: Create -> Show -> Edit -> Inactive
+  async E2EConsequencesWorkflow({
+    page,
+    expect,
+    initialData,
+    editedData,
+  }: {
+    page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+  }) {
+    // 1. توليد رقم عشوائي ثابت لهذا الاختبار لضمان التفرد
+    const uniqueNum = randomNumber();
+    const dataToCreate = {
+      ...initialData,
+      ConsequencesName: `${initialData.ConsequencesName}-${uniqueNum}`,
+    };
+    const dataToEdit = {
+      ...editedData,
+      ConsequencesName: `${editedData.ConsequencesName}-${uniqueNum}`,
+    };
+
+    // 2. خطوة الإنشاء (Create)
+    await this.GoToCreateConsequences({ page, expect });
+    await this.CreateConsequences({
+      page,
+      expect,
+      Data: dataToCreate,
+      Edit: true, // استخدمنا Edit هنا عشان نبعت الاسم اللي فيه الرقم العشوائي جاهز
+    });
+
+    // 3. خطوة العرض والتأكد من البيانات (Show)
+    await this.GoToShowConsequences({ page, expect, Data: dataToCreate });
+    await this.ShowConsequences({ page, expect, Data: dataToCreate });
+
+    // العودة للجدول الأساسي للقيام بعملية التعديل
+    await page.goto(ROUTES.CONSEQUENCES);
+
+    // 4. خطوة التعديل على كل الحقول (Edit)
+    await this.GoToEditConsequencesFormTable({ page, expect, Data: dataToCreate });
+    await this.EditConsequences({
+      page,
+      expect,
+      currentData: dataToCreate,
+      EditData: dataToEdit
+    });
   }
 }
 

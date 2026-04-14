@@ -7,6 +7,7 @@ class login {
     await page.getByTestId("email").fill(username);
     await page.getByTestId("password").fill(password);
     await page.getByRole("button", { name: "Sign In" }).click();
+    await page.waitForLoadState("networkidle");
     await expect(page).toHaveURL("/home");
     return new Home();
   }

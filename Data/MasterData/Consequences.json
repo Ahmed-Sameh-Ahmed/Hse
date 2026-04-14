@@ -18,13 +18,13 @@
 
   "Edit": {
     "Before": {
-      "ConsequencesName": "Edit",
+      "ConsequencesName": "ConsequencesName",
       "Description": "Description",
       "Status": "Active"
     },
     "After": {
-      "ConsequencesName": "Edit",
-      "Description": "Description",
+      "ConsequencesName": "ConsequencesName-e-",
+      "Description": "Description-e-",
       "Status": "Active"
     }
   }

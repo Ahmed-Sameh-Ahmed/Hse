@@ -110,7 +110,7 @@ class OrganizationHierarchy {
         ).toBeVisible();
       } else if (circular) {
         await expect(
-          page.getByText("Circular hierarchy is not allowed."),
+          page.getByText("The hierarchy cannot contain circular references."),
         ).toBeVisible();
       } else if (SamePosition) {
         await expect(

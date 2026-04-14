@@ -2,8 +2,8 @@ import Groups from "./Groups/Groups";
 
 class UserManagement {
   async GoToUsers({ page, expect }: { page: any; expect: any }) {
-    await page.getByRole("link", { name: "Users" }).click();
-    await expect(page).toHaveURL("/users-management/groups");
+    await page.getByRole("link", { name: "Users", exact: true }).click();
+    await expect(page).toHaveURL("/users-management/users");
   }
   async GoToGroups({ page, expect }: { page: any; expect: any }) {
     await page.getByRole("link", { name: "Groups" }).click();

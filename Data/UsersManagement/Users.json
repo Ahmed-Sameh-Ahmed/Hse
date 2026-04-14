@@ -1,0 +1,157 @@
+{
+  "Create": {
+    "Required": {
+      "fullname": "user",
+      "gender": "Male",
+      "date_of_birth": {
+        "day": "1",
+        "month": "0",
+        "year": "1990"
+      },
+      "contact_number": "12wq1",
+      "email": "user",
+      "image": "",
+      "employee_id": "user",
+      "employee_type": "Full Time",
+      "entity_type": "Employee",
+      "position": "CEO",
+      "company_number": "",
+      "site": "",
+      "occupation": "",
+      "resignation_date": {
+        "day": "0",
+        "month": "0",
+        "year": "0"
+      },
+      "is_hse_team": false,
+      "report_to": "sameh",
+      "escalate_to": "",
+      "disabilities": [],
+      "roles": ["qqq", "test"],
+      "password": "123456789"
+    },
+
+    "all_fields": {
+      "fullname": "user",
+      "gender": "Male",
+      "date_of_birth": {
+        "day": "1",
+        "month": "0",
+        "year": "1990"
+      },
+      "contact_number": "12wq1",
+      "email": "user",
+      "image": "Assets/userimg.png",
+      "employee_id": "user",
+      "employee_type": "Full Time",
+      "entity_type": "Employee",
+      "position": "CEO",
+      "company_number": "1221",
+      "site": "Cairo Tire Manufacturing Facility",
+      "occupation": "1221q",
+      "resignation_date": {
+        "day": "25",
+        "month": "0",
+        "year": "2020"
+      },
+      "is_hse_team": false,
+      "report_to": "sameh",
+      "escalate_to": "sameh",
+      "disabilities": ["Diabetes", "Hearing Loss", "Hypertension"],
+      "roles": ["qqq", "test"],
+      "password": "123456789"
+    }
+  },
+  "Show": {
+    "fullname": "show",
+    "gender": "Male",
+    "date_of_birth": {
+      "day": "1",
+      "month": "0",
+      "year": "1990"
+    },
+    "contact_number": "12wq1",
+    "email": "user",
+    "image": "Assets/userimg.png",
+    "employee_id": "user",
+    "employee_type": "Full Time",
+    "entity_type": "Employee",
+    "position": "CEO",
+    "company_number": "1221",
+    "site": "Cairo Tire Manufacturing",
+    "occupation": "1221q",
+    "resignation_date": {
+      "day": "25",
+      "month": "0",
+      "year": "2020"
+    },
+    "is_hse_team": false,
+    "report_to": "sameh",
+    "escalate_to": "sameh",
+    "disabilities": ["Diabetes", "Hearing Loss", "Hypertension"],
+    "roles": ["qqq", "test"],
+    "password": "123456789"
+  },
+  "Edit": {
+    "before": {
+      "fullname": "Edit-b",
+      "gender": "Male",
+      "date_of_birth": {
+        "day": "1",
+        "month": "0",
+        "year": "1990"
+      },
+      "contact_number": "12wq1",
+      "email": "user",
+      "image": "Assets/userimg.png",
+      "employee_id": "user",
+      "employee_type": "Full Time",
+      "entity_type": "Employee",
+      "position": "CEO",
+      "company_number": "1221",
+      "site": "Cairo Tire Manufacturing Facility",
+      "occupation": "1221q",
+      "resignation_date": {
+        "day": "25",
+        "month": "0",
+        "year": "2020"
+      },
+      "is_hse_team": false,
+      "report_to": "sameh",
+      "escalate_to": "sameh",
+      "disabilities": ["Diabetes", "Hearing Loss", "Hypertension"],
+      "roles": ["qqq", "test"],
+      "password": "123456789"
+    },
+    "after": {
+      "fullname": "Edit-a",
+      "gender": "Male",
+      "date_of_birth": {
+        "day": "1",
+        "month": "0",
+        "year": "1990"
+      },
+      "contact_number": "12wq1",
+      "email": "user",
+      "image": "Assets/userimg.png",
+      "employee_id": "user",
+      "employee_type": "Full Time",
+      "entity_type": "Employee",
+      "position": "CEO",
+      "company_number": "1221",
+      "site": "Cairo Tire Manufacturing",
+      "occupation": "1221q",
+      "resignation_date": {
+        "day": "25",
+        "month": "0",
+        "year": "2020"
+      },
+      "is_hse_team": false,
+      "report_to": "sameh",
+      "escalate_to": "sameh",
+      "disabilities": ["Diabetes", "Hearing Loss", "Hypertension"],
+      "roles": ["qqq", "test"],
+      "password": "123456789"
+    }
+  }
+}

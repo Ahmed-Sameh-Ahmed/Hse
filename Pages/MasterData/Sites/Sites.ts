@@ -202,5 +202,55 @@ class Sites {
       page.locator("input[data-testid='responsible_person.name']"),
     ).toHaveValue(Data.ResponsiblePerson);
   }
+
+
+  // Full E2E Workflow: Create -> Show -> Edit -> Inactive
+  async E2ESiteWorkflow({
+    page,
+    expect,
+    initialData,
+    editedData,
+  }: {
+    page: any;
+    expect: any;
+    initialData: TData;
+    editedData: TData;
+  }) {
+    // 1. تجهيز الداتا برقم عشوائي لضمان عدم تكرار الاسم
+    const uniqueNum = randomNumber();
+    const dataToCreate = {
+      ...initialData,
+      name: `${initialData.name}-${uniqueNum}`,
+    };
+    const dataToEdit = {
+      ...editedData,
+      name: `${editedData.name}-Updated-${uniqueNum}`,
+    };
+
+    // 2. خطوة الإنشاء (Create Site)
+    await this.GoToCreateSite({ page, expect });
+    await this.CreateSite({
+      page,
+      expect,
+      Data: dataToCreate,
+      NotRandomNumber: true, // عشان يستخدم الاسم اللي فيه uniqueNum جاهز
+    });
+
+    // 3. خطوة العرض والتأكد من البيانات (Show)
+    await this.GoToShowSite({ page, expect, Data: dataToCreate });
+    await this.ShowSite({ page, expect, Data: dataToCreate });
+
+    // ارجع للجدول الأساسي عشان تقدر تعمل Edit
+    await page.goto(ROUTES.SITES);
+
+    // 4. خطوة التعديل (Edit Site)
+    // هنعدل البيانات من dataToCreate إلى dataToEdit
+    await this.GoToEditSite({ page, expect, Data: dataToCreate });
+    await this.EditSite({
+      page,
+      expect,
+      Data: dataToEdit, 
+    });
+  }
 }
 export default Sites;

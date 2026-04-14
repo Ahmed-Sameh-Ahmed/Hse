@@ -15,12 +15,12 @@
     "Secondary": {
       "Required": {
         "Name": "name",
-        "Parent": "name",
+        "Parent": "Fatality",
         "Description": ""
       },
       "AllFields": {
         "Name": "name",
-        "Parent": "name",
+        "Parent": "Fatality",
         "Description": "Description"
       }
     }
@@ -28,29 +28,29 @@
   "Edit": {
     "Primary": {
       "Before": {
-        "Name": "Edit_P",
+        "Name": "name_P",
         "Parent": "",
-        "Description": "",
+        "Description": "Description-e-",
         "status": "Active"
       },
       "After": {
-        "Name": "Edit_P",
+        "Name": "name_P-e-",
         "Parent": "",
-        "Description": "",
+        "Description": "Description-e-",
         "status": "Active"
       }
     },
     "Secondary": {
       "Before": {
-        "Name": "Edit_S",
-        "Parent": "name",
-        "Description": "",
+        "Name": "name_S-e-",
+        "Parent": "Fatality",
+        "Description": "Description-e-",
         "status": "Active"
       },
       "After": {
-        "Name": "Edit_S",
-        "Parent": "name",
-        "Description": "",
+        "Name": "name_S-e-",
+        "Parent": "Fatality",
+        "Description": "Description-e-",
         "status": "Active"
       }
     }

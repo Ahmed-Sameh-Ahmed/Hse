@@ -31,12 +31,12 @@ class Home {
     ProjectName: string;
   }) {
     if (["chromium", "firefox", "Edge"].includes(ProjectName)) {
-      await page.getByRole("link", { name: "Master Data" }).click();
-      await expect(page).toHaveURL("/master-data");
+      await page.getByRole("link", { name: "Incidents Management" }).click();
+      await expect(page).toHaveURL("/incidents-management");
     } else {
       await page.locator("header button").first().click();
-      await page.getByRole("link", { name: "Master Data" }).click();
-      await expect(page).toHaveURL("/master-data");
+      await page.getByRole("link", { name: "Incidents Management" }).click();
+      await expect(page).toHaveURL("/incidents-management");
     }
     return new MasterData();
   }
