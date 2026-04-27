@@ -53,6 +53,9 @@ export const ROUTES = {
 
   // SEVERITY_MATRIX
   SEVERITY_MATRIX: "/incidents-management/severity-matrix",
+
+  // Organization Hierarchy
+  INCIDENT: "/incidents-management/incidents",
 } as const;
 
 export default ROUTES;

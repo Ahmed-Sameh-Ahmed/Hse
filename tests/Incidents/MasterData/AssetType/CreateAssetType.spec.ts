@@ -2,6 +2,7 @@ import Login from "../../../../Pages/Login/Login";
 import { expect, test } from "@playwright/test";
 
 import Data from "../../../../Data/MasterData/AssetType.json";
+import user from "../../../../Data/User.json";
 
 import AssetTypes from "../../../../Pages/MasterData/AssetTypes/AssetTypes";
 import {
@@ -11,7 +12,11 @@ import {
 } from "../../../../utils/utils";
 
 test.beforeEach(async ({ page }, { project }) => {
-  const Home = await new Login().login(page, "admin@admin.com", "123456");
+  const Home = await new Login().login(
+    page,
+    user.test1.username,
+    user.test1.password,
+  );
 
   const MasterData = await Home.GoToMasterData({
     page,

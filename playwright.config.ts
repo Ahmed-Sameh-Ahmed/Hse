@@ -28,15 +28,22 @@ export default defineConfig({
     // ['junit', { outputFile: 'test-results/junit-report.xml' }] // ريبورت للماكينة
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
   use: {
     // actionTimeout:10000,
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: "https://hse.bitwise-solutions.com",
+    launchOptions: {
+      slowMo: 500,
+    },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
-
+  timeout: 12000000, // خلي التيست الكلي دقيقتين عشان الـ Flow طويل
+  expect: {
+    timeout: 10000, // أي expect يصبر 10 ثواني تلقائياً
+  },
   /* Configure projects for major browsers */
   projects: [
     // {

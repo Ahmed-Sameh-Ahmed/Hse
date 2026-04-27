@@ -53,6 +53,7 @@ const TableSearch = async ({
   Name,
   Edit,
   Show,
+  password,
   Button,
   User,
 }: {
@@ -60,6 +61,7 @@ const TableSearch = async ({
   Name: string;
   Edit?: boolean;
   Show?: boolean;
+  password?: boolean;
   Button?: boolean;
   User?: boolean;
 }) => {
@@ -116,6 +118,15 @@ const TableSearch = async ({
 
           await expect(page.url()).toContain("/show");
         }
+      } else if (password) {
+        if (Button) {
+          await Row.locator("button").nth(2).click();
+        } else {
+          await Row.locator("a").nth(2).click();
+          await page.waitForLoadState("networkidle");
+
+          await expect(page.url()).toContain("/change-password");
+        }
       }
       break; // نخرج من الـ while loop
     } else {
@@ -129,7 +140,7 @@ const TableSearch = async ({
 
       if ((await nextButton.isVisible()) && (await nextButton.isEnabled())) {
         await nextButton.click();
-        await page.waitForTimeout(1000);
+        // await page.waitForTimeout(1000);
       } else {
         break; // وصلنا للنهاية ولم نجد شيئاً
       }

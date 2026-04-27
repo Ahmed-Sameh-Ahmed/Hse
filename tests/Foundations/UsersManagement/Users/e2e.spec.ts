@@ -12,11 +12,12 @@ import {
 } from "../../../../utils/utils";
 
 import Users from "../../../../Pages/UsersManagement/Users/Users";
+
 test.beforeEach(async ({ page }, { project }) => {
   const Home = await new Login().login(
     page,
-    User.test1.username,
-    User.test1.password,
+    User.admin.username,
+    User.admin.password,
   );
 
   const UsersManagement = await Home.GoToUsersManagement({
@@ -27,16 +28,7 @@ test.beforeEach(async ({ page }, { project }) => {
   await UsersManagement.GoToUsers({ page, expect });
 });
 
-test("Change User Password", async ({ page }) => {
+test("e2e user", async ({ page }) => {
   const Userss = new Users();
-  await Userss.GoToChangeUserPassword({
-    page,
-    expect,
-    Data,
-  });
-  await Userss.ChangeUserPassword({
-    page,
-    expect,
-    Data,
-  });
+  await Userss.ExecuteFullUserFlow({ page, expect, Data });
 });

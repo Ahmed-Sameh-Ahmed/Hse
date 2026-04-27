@@ -124,33 +124,39 @@
       "password": "123456789"
     },
     "after": {
-      "fullname": "Edit-a",
-      "gender": "Male",
+      "fullname": "Edit-a-",
+      "gender": "Female",
       "date_of_birth": {
-        "day": "1",
-        "month": "0",
-        "year": "1990"
+        "day": "15",
+        "month": "4",
+        "year": "1999"
       },
-      "contact_number": "12wq1",
-      "email": "user",
+      "contact_number": "12zz121",
+      "email": "user-a-",
       "image": "Assets/userimg.png",
-      "employee_id": "user",
-      "employee_type": "Full Time",
-      "entity_type": "Employee",
-      "position": "CEO",
-      "company_number": "1221",
+      "employee_id": "user-a-",
+      "employee_type": "Contract",
+      "entity_type": "Contractor",
+      "position": "CTO",
+      "company_number": "111221111",
       "site": "Cairo Tire Manufacturing",
-      "occupation": "1221q",
+      "occupation": "1221q-a-",
       "resignation_date": {
-        "day": "25",
-        "month": "0",
+        "day": "20",
+        "month": "5",
         "year": "2020"
       },
-      "is_hse_team": false,
-      "report_to": "sameh",
-      "escalate_to": "sameh",
-      "disabilities": ["Diabetes", "Hearing Loss", "Hypertension"],
-      "roles": ["qqq", "test"],
+      "is_hse_team": true,
+      "report_to": "magdy",
+      "escalate_to": "magdy",
+      "disabilities": [
+        "Diabetes",
+        "Hearing Loss",
+        "Hypertension",
+        "Asthma",
+        "Heart Disease"
+      ],
+      "roles": ["qqq", "test", "admin"],
       "password": "123456789"
     }
   }

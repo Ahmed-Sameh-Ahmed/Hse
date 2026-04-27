@@ -1,0 +1,37 @@
+{
+  "incident": {
+    "title": "automation",
+    "Shift": "Evening",
+    "incident_datetime": {
+      "day": "1",
+      "month": "1",
+      "year": "1999",
+      "hour": "10",
+      "minute": "30"
+    },
+    "reported_at": {
+      "day": "20",
+      "month": "5",
+      "year": "2020",
+      "hour": "14",
+      "minute": "30"
+    },
+    "reported_by": "Test1",
+    "location": "10th of Ramadan - Industrial Zone",
+    "site": "Cairo Tire Manufacturing Facility",
+    "department": "Production | الإنتاج",
+    "initial_description": "This is an automation test This is an automation test This is an automation test This is an automation test This is an automation test",
+    "image": "Assets/userimg.png",
+    "Links": {
+      "linktitle0": "google",
+      "URL0": "https://www.google.com/",
+      "linktitle1": "facebook",
+      "URL1": "https://www.facebook.com/"
+    },
+    "consequences": [
+      "quo recusandae esse Consequence",
+      "ad quia illo Consequence",
+      "atque eaque vel Consequence"
+    ]
+  }
+}

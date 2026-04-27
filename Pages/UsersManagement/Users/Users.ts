@@ -102,7 +102,7 @@ class Users {
       await page.getByTestId("contact_number").fill(Data.contact_number);
       await page
         .getByTestId("email")
-        .fill(Data.email + uniqueNum + "@face.com");
+        .fill(NotRandom ? Data.email : Data.email + uniqueNum + "@face.com");
       if (!Required) {
         await page.getByTestId("avatar").setInputFiles(Data.image);
       }
@@ -189,6 +189,7 @@ class Users {
           await page.getByRole("option", { name: disease }).click();
         }
       }
+      await page.getByText("Chronic Diseases/Disabilities").click();
       await page.getByTestId("roles").click();
       for (const role of Data.roles) {
         await page.getByRole("option", { name: role }).click();
@@ -224,7 +225,7 @@ class Users {
         Required: false,
         NotRandom: true,
       });
-      this.GoToShowUser({ page, expect, Data });
+      await this.GoToShowUser({ page, expect, Data });
     }
   }
   async ShowUser({
@@ -236,25 +237,25 @@ class Users {
     expect: any;
     Data: any;
   }) {
-    const FullName = page.locator("div .flex.items-start.gap-3 ").nth(0);
-    const Email = page.locator("div .flex.items-start.gap-3 ").nth(1);
-    const Contact_Number = page.locator("div .flex.items-start.gap-3 ").nth(2);
-    const Gender = page.locator("div .flex.items-start.gap-3 ").nth(3);
-    const Date_of_Birth = page.locator("div .flex.items-start.gap-3 ").nth(4);
-    const Employee_ID = page.locator("div .flex.items-start.gap-3 ").nth(5);
-    const Company_Number = page.locator("div .flex.items-start.gap-3 ").nth(6);
-    const Occupation = page.locator("div .flex.items-start.gap-3 ").nth(7);
-    const Entity_Type = page.locator("div .flex.items-start.gap-3 ").nth(8);
-    const Employee_Type = page.locator("div .flex.items-start.gap-3 ").nth(9);
-    const Site = page.locator("div .flex.items-start.gap-3 ").nth(10);
-    const Position = page.locator("div .flex.items-start.gap-3 ").nth(11);
-    const Report_To = page.locator("div .flex.items-start.gap-3 ").nth(12);
-    const Escalate_To = page.locator("div .flex.items-start.gap-3 ").nth(13);
-    const Roles = page.locator("div .flex.items-start.gap-3 ").nth(14);
+    const FullName = page.locator("div .flex.items-start.gap-3").nth(0);
+    const Email = page.locator("div .flex.items-start.gap-3").nth(1);
+    const Contact_Number = page.locator("div .flex.items-start.gap-3").nth(2);
+    const Gender = page.locator("div .flex.items-start.gap-3").nth(3);
+    const Date_of_Birth = page.locator("div .flex.items-start.gap-3").nth(4);
+    const Employee_ID = page.locator("div .flex.items-start.gap-3").nth(5);
+    const Company_Number = page.locator("div .flex.items-start.gap-3").nth(6);
+    const Occupation = page.locator("div .flex.items-start.gap-3").nth(7);
+    const Entity_Type = page.locator("div .flex.items-start.gap-3").nth(8);
+    const Employee_Type = page.locator("div .flex.items-start.gap-3").nth(9);
+    const Site = page.locator("div .flex.items-start.gap-3").nth(10);
+    const Position = page.locator("div .flex.items-start.gap-3").nth(11);
+    const Report_To = page.locator("div .flex.items-start.gap-3").nth(12);
+    const Escalate_To = page.locator("div .flex.items-start.gap-3").nth(13);
+    const Roles = page.locator("div .flex.items-start.gap-3").nth(14);
     const Resignation_Date = page
-      .locator("div .flex.items-start.gap-3 ")
+      .locator("div .flex.items-start.gap-3")
       .nth(15);
-    const Disabilities = page.locator("div .flex.items-start.gap-3 ").nth(16);
+    const Disabilities = page.locator("div .flex.items-start.gap-3").nth(16);
 
     await page.waitForLoadState("networkidle");
 
@@ -396,7 +397,7 @@ class Users {
         Required: false,
         NotRandom: true,
       });
-      this.GoToEditUser({ page, expect, Data });
+      await this.GoToEditUser({ page, expect, Data });
     }
   }
   async EditUser({
@@ -444,7 +445,18 @@ class Users {
     await expect(page.locator("#occupation")).toHaveValue(
       DataBefore.occupation,
     );
-    // await expect(page.locator("#resignation_date")).toHaveValue(DataBefore.resignation_date);
+
+    // 1. استخراج البيانات من الـ Object
+    const { day, month, year } = DataBefore.resignation_date;
+    // 2. تحويل الشهر ليصبح رقمين (مثلاً من "0" إلى "01")
+    const formattedMonth = (parseInt(month) + 1).toString().padStart(2, "0");
+    const formattedDay = day.padStart(2, "0");
+    // 3. تركيب النص النهائي بنفس شكل الموقع (YYYY/MM/DD)
+    const expectedDateString = `${year}/${formattedMonth}/${formattedDay}`;
+
+    const DateLocator = page.getByTestId("resignation_date");
+    const DateValue = await DateLocator.inputValue();
+    await expect(DateValue).toEqual(expectedDateString);
 
     if (DataBefore.is_hse_team) {
       await expect(page.locator("#is_hse_team")).toBeChecked();
@@ -452,36 +464,366 @@ class Users {
       await expect(page.locator("#is_hse_team")).not.toBeChecked();
     }
     // Reporting to
-    await expect(page.locator("div .mb-3").nth(16)).toHaveText(
+
+    await expect(page.locator("div .mb-3").nth(16)).toContainText(
       DataBefore.report_to,
     );
+
     // Escalate to
-    await expect(page.locator("div .mb-3").nth(17)).toHaveText(
+    await expect(page.locator("div .mb-3").nth(17)).toContainText(
       DataBefore.escalate_to,
     );
 
-    // 1. امسك الحاوية اللي فيها الأمراض المزمنة
+    // 1. تحديد الحاوية (استخدمنا last() بناءً على هيكلة صفحتك)
     const disabilitiesContainer = page.locator("div.md\\:col-span-2").last();
-    // 2. هات كل الـ spans اللي موجودة جوه الحاوية دي في مصفوفة
-    const allSpans = await disabilitiesContainer.locator("span").all();
-    // 3. ابدأ اللوب الكبيرة على الداتا اللي عندك (Array)
-    for (const disease of DataBefore.disabilities) {
-      let found = false;
-      // 4. ابدأ اللوب الصغيرة: لف على كل span موجود في الـ UI حالياً
-      for (const span of allSpans) {
-        const text = await span.innerText();
-        // قارن النص اللي في الـ UI باللي في الداتا
-        if (text.trim() === disease.trim()) {
-          found = true;
-          break; // لو لقاه، اخرج من اللوب الصغيرة وادخل على المرض اللي بعده
-        }
+
+    // 2. جلب كل نصوص الـ spans مرة واحدة
+    const uiDisabilities = await disabilitiesContainer
+      .locator("span")
+      .allInnerTexts();
+
+    // 3. تنظيف البيانات ومسح التكرار (Unique Values)
+    // استخدمنا Set لأن الـ UI عندك بيقرأ كل كلمة مرتين
+    const cleanedUiData = [
+      ...new Set(
+        uiDisabilities
+          .map((text: string) => text.trim())
+          .filter((text: string) => text !== ""),
+      ),
+    ];
+
+    const expectedData = [
+      ...new Set(DataBefore.disabilities.map((d: string) => d.trim())),
+    ];
+
+    // 4. المقارنة النهائية بعد الترتيب لضمان مطابقة المحتوى بغض النظر عن أماكنهم
+    expect(cleanedUiData.sort()).toEqual(expectedData.sort());
+    // ____________________________________________________________________________________________________________________________________-
+    // 1. مسك الحاوية الأب
+    const rolesContainer = page
+      .locator('div[style*="--mantine-spacing-md"]')
+      .first();
+
+    // 2. جلب كل النصوص من عناصر الـ p اللي جواها مرة واحدة في Array
+    // دالة allInnerTexts() بتوفر عليك اللوب وبتجيبلك النصوص كلها كـ Array of strings
+    const uiRoles = await rolesContainer.locator("p").allInnerTexts();
+
+    // 3. تنظيف النصوص (لو فيه مسافات زيادة)
+    const cleanedUiRoles = uiRoles.map((text: string) => text.trim());
+    const expectedRoles = DataBefore.roles.map((role: string) => role.trim());
+
+    // 4. المقارنة النهائية (العدد والمحتوى بالظبط)
+    // toEqual بتقارن المصفوفات ببعضها من حيث العناصر والترتيب والعدد
+    expect(cleanedUiRoles.sort()).toEqual(expectedRoles.sort());
+
+    // مسح البيانات القديمه
+    const clearGender = await page.locator(".mantine-focus-auto").first();
+    const clearimage = await page.locator(".cursor-pointer.shrink-0");
+    const clearEmployeeType = await page.locator(".mantine-focus-auto");
+    const clearEntityType = await page.locator(".mantine-focus-auto");
+    const clearPosition = await page.locator(".mantine-focus-auto");
+    const clearSite = await page.locator(".mantine-focus-auto");
+    const clearDisabilities = await page
+      .getByText("Chronic Diseases/DisabilitiesDiabetes")
+      .locator('div[data-position="right"]');
+    const clearReportingTo = await page
+      .getByText("Reporting & Health InformationReporting To ")
+      .locator("svg")
+      .nth(0);
+    const clearEscalateTo = await await page
+      .getByText("Reporting & Health InformationReporting To ")
+      .locator("svg")
+      .nth(1);
+
+    const clearRoles = await page
+      .locator('div[style*="display: flex"][style*="flex-wrap: wrap"]')
+      .locator("svg");
+
+    await page.getByTestId("name").clear();
+    await clearGender.click();
+    // await page.getByTestId("date_of_birth").clear();
+    await page.getByTestId("contact_number").clear();
+    await page.getByTestId("email").clear();
+    await clearimage.click();
+    await page.getByTestId("employee_id").clear();
+    await clearEmployeeType.first().click();
+    await clearEntityType.first().click();
+    await clearPosition.first().click();
+    await page.getByTestId("company_number").clear();
+    await clearSite.first().click();
+    await page.getByTestId("occupation").clear();
+    // await page.getByTestId("resignation_date").clear();
+    await clearReportingTo.click();
+    await clearEscalateTo.click();
+    await clearDisabilities.click();
+
+    while ((await clearRoles.count()) > 0) {
+      // دايماً بنضغط على أول عنصر متاح (index 0)
+      // لأن بعد كل مسحة، العناصر الباقية بتترتب تاني
+      await clearRoles.first().click();
+
+      // اختيارياً: ممكن تنتظر لحظة بسيطة لو المسح فيه Animation عشان ميحصلش Error
+      // await page.waitForTimeout(300);
+    }
+
+    // تعديل البيانات
+    const uniqueNum = randomNumber();
+    await page.getByTestId("name").fill(DataAfter.fullname + uniqueNum);
+    await page.getByRole("textbox", { name: "Gender *" }).click();
+    await page
+      .getByRole("option", { name: DataAfter.gender, exact: true })
+      .click();
+    // 1. اضغط على الـ input لفتح التقويم
+    await page.getByTestId("date_of_birth").click();
+
+    // 1. افتح التقويم
+    const dateInput = page.getByTestId("date_of_birth");
+    await dateInput.click();
+
+    // 2. اختيار السنة (Flatpickr عادة بيستخدم input من نوع number للسنة)
+    // بنعمل fill للسنة اللي محتاجينها
+    await page
+      .locator(".flatpickr-calendar.open .cur-year")
+      .fill(DataAfter.date_of_birth.year);
+    await page.keyboard.press("Enter");
+
+    // 3. اختيار الشهر (يكون عبارة عن select dropdown)
+    // بنختار الشهر بالاسم أو بالترتيب (0 = January)
+    await page
+      .locator(".flatpickr-calendar.open .flatpickr-monthDropdown-months")
+      .selectOption(DataAfter.date_of_birth.month); // June مثلاً
+
+    // 4. اختيار اليوم
+    // بنستخدم filter عشان نضمن إننا بنختار اليوم "المتاح" مش يوم من الشهر اللي قبله أو اللي بعده
+    await page
+      .locator(".flatpickr-calendar.open .flatpickr-day")
+      // 1. فلتر بالرقم بالضبط
+      .filter({ hasText: DataAfter.date_of_birth.day, exact: true })
+      // 2. فلتر عشان تستبعد أيام الشهر اللي فات
+      .filter({ hasNot: page.locator(".prevMonthDay") })
+      // 3. فلتر عشان تستبعد أيام الشهر اللي جاي
+      .filter({ hasNot: page.locator(".nextMonthDay") })
+      .first()
+      .click();
+
+    await page.getByTestId("contact_number").fill(DataAfter.contact_number);
+    await page
+      .getByTestId("email")
+      .fill(DataAfter.email + uniqueNum + "@face.com");
+    await page.getByTestId("avatar").setInputFiles(DataAfter.image);
+
+    await page
+      .getByTestId("employee_id")
+      .fill(DataAfter.employee_id + uniqueNum);
+    await page.getByRole("textbox", { name: "Employee Type *" }).click();
+    await page.getByRole("option", { name: DataAfter.employee_type }).click();
+
+    await page.getByRole("textbox", { name: "Entity Type *" }).click();
+    await page.getByRole("option", { name: DataAfter.entity_type }).click();
+
+    await page.getByRole("textbox", { name: "Position *" }).click();
+    await page
+      .getByRole("option", { name: DataAfter.position, exact: true })
+      .click();
+    await page.getByTestId("company_number").fill(DataAfter.company_number);
+
+    await page.getByRole("textbox", { name: "Site" }).click();
+    await page.getByRole("option", { name: DataAfter.site }).click();
+
+    await page.getByTestId("occupation").fill(DataAfter.occupation);
+
+    // 1. اضغط على الـ input لفتح التقويم
+    await page.getByTestId("resignation_date").click();
+
+    // 1. افتح التقويم
+    const dateeInput = page.getByTestId("resignation_date");
+    await dateeInput.click();
+
+    // 2. اختيار السنة (Flatpickr عادة بيستخدم input من نوع number للسنة)
+    // بنعمل fill للسنة اللي محتاجينها
+    await page
+      .locator(".flatpickr-calendar.open .cur-year")
+      .fill(DataAfter.resignation_date.year);
+    await page.keyboard.press("Enter");
+
+    // 3. اختيار الشهر (يكون عبارة عن select dropdown)
+    // بنختار الشهر بالاسم أو بالترتيب (0 = January)
+    await page
+      .locator(".flatpickr-calendar.open .flatpickr-monthDropdown-months")
+      .selectOption(DataAfter.resignation_date.month); // June مثلاً
+
+    // 4. اختيار اليوم
+    // بنستخدم filter عشان نضمن إننا بنختار اليوم "المتاح" مش يوم من الشهر اللي قبله أو اللي بعده
+    await page
+      .locator(".flatpickr-calendar.open .flatpickr-day")
+      // 1. فلتر بالرقم بالضبط
+      .filter({ hasText: DataAfter.resignation_date.day, exact: true })
+      // 2. فلتر عشان تستبعد أيام الشهر اللي فات
+      .filter({ hasNot: page.locator(".prevMonthDay") })
+      // 3. فلتر عشان تستبعد أيام الشهر اللي جاي
+      .filter({ hasNot: page.locator(".nextMonthDay") })
+      .first()
+      .click();
+
+    if (DataAfter.is_hse_team) {
+      const s = await page.getByTestId("is_hse_team").isChecked();
+      if (!s) {
+        await page.getByText("Is HSE Team Member").click();
       }
-      // 5. تأكد إن المرض ده اتوجد في أي span من اللي لفينا عليهم
-      expect(found, `المرض "${disease}" مش موجود في أي span على الشاشة!`).toBe(
-        true,
-      );
+
+      await page.getByTestId("is_hse_team").check({ force: true });
+    } else {
+      const s = await page.getByTestId("is_hse_team").isChecked();
+      if (s) {
+        await page.getByText("Is HSE Team Member").click();
+      }
+    }
+
+    await page.locator("#react-select-3-input").type(DataAfter.report_to);
+    await page
+      .getByRole("option", { name: DataAfter.report_to, exact: true })
+      .click();
+
+    await page.locator("#react-select-5-input").fill(DataAfter.escalate_to);
+    await page
+      .getByRole("option", { name: DataAfter.escalate_to, exact: true })
+      .click();
+    await page
+      .getByRole("textbox", { name: "Select Chronic Diseases/" })
+      .click();
+    for (const disease of DataAfter.disabilities) {
+      await page.getByRole("option", { name: disease }).click();
+    }
+    await page.getByText("Chronic Diseases/Disabilities").click();
+
+    await page.getByTestId("roles").click();
+    for (const role of DataAfter.roles) {
+      await page.getByRole("option", { name: role }).click();
+    }
+    await page.getByTestId("edit-button").click();
+    await page.getByRole("button", { name: "OK" }).click();
+  }
+
+  async GoToChangeUserPassword({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: any;
+  }) {
+    // Implementation for going to change user password
+    const isFound = await TableSearch({
+      Name: Data.Edit.before.fullname,
+      page,
+      password: true,
+      User: true,
+    });
+
+    if (!isFound) {
+      await this.GoToCreateUser({ page, expect });
+      await this.CreateUser({
+        page,
+        expect,
+        Data: Data,
+        Required: false,
+        NotRandom: true,
+      });
+
+      await this.GoToChangeUserPassword({ page, expect, Data });
     }
   }
-}
+  async ChangeUserPassword({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: any;
+  }) {
+    await page.getByTestId("password").fill(Data.Edit.before.password);
+    await page
+      .getByTestId("password_confirmation")
+      .fill(Data.Edit.before.password);
+    await page.getByTestId("save-button").click();
+    await page.waitForTimeout(3000);
+  }
 
+  async ExecuteFullUserFlow({
+    page,
+    expect,
+    Data,
+  }: {
+    page: any;
+    expect: any;
+    Data: any;
+  }) {
+    // 1. توليد الرقم العشوائي مرة واحدة فقط للعملية كلها
+    const sharedUniqueNum = randomNumber();
+
+    // 2. تجهيز كائن (Object) جديد فيه البيانات النهائية "المطبوخة"
+    const finalData = {
+      ...Data,
+      Edit: {
+        before: {
+          ...Data.Edit.before,
+          fullname: Data.Edit.before.fullname + sharedUniqueNum,
+          email: Data.Edit.before.email + sharedUniqueNum + "@face.com",
+          employee_id: Data.Edit.before.employee_id + sharedUniqueNum,
+        },
+        after: {
+          ...Data.Edit.after,
+          // لو عاوز الـ Edit يغير الاسم لاسم جديد خالص برقم جديد ممكن تعمل randomNumber تاني هنا
+          fullname: Data.Edit.after.fullname + randomNumber(),
+          email: Data.Edit.after.email,
+          employee_id: Data.Edit.after.employee_id + randomNumber(),
+        },
+      },
+    };
+
+    const targetUser = finalData.Edit.before.fullname;
+    console.log(`🛠️ Starting Flow for User: ${targetUser}`);
+
+    // --- المرحلة 1: Create ---
+    await this.GoToCreateUser({ page, expect });
+    await this.CreateUser({
+      page,
+      expect,
+      Data: finalData.Edit.before,
+      Required: false,
+      NotRandom: true, // بنقوله متضيفش أرقام من عندك، أنا بعتلك الداتا جاهزة
+    });
+
+    // --- المرحلة 2: Show ---
+    // بنبحث بالاسم اللي إحنا لسه مألفينه فوق
+    await TableSearch({ page, Name: targetUser, Show: true, User: true });
+    await this.ShowUser({ page, expect, Data: finalData });
+
+    // ارجع للجدول عشان الخطوة اللي بعدها
+    await page.goto("/users-management/users");
+
+    // --- المرحلة 3: Change Password ---
+    // لاحظ: بعد الـ Edit الاسم اتغير لـ finalData.Edit.after.fullname
+    await TableSearch({
+      page,
+      Name: finalData.Edit.before.fullname,
+      password: true,
+      User: true,
+    });
+    await this.ChangeUserPassword({ page, expect, Data: finalData });
+
+    console.log(`✅ All operations done for: ${targetUser}`);
+
+    // --- المرحلة 4: Edit ---
+    await TableSearch({ page, Name: targetUser, Edit: true, User: true });
+    await this.EditUser({
+      page,
+      expect,
+      DataBefore: finalData.Edit.before,
+      DataAfter: finalData.Edit.after,
+    });
+  }
+}
 export default Users;

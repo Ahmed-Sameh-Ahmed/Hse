@@ -63,6 +63,11 @@ class MasterData {
     await expect(page).toHaveURL(ROUTES.ROOT_CAUSE_ANALYSIS);
     return new RootCauseAnalysis();
   }
+  async GoToIncident(page: any, expect: any) {
+    await page.getByRole("link", { name: "Incidents", exact: true }).click();
+    await expect(page).toHaveURL(ROUTES.INCIDENT);
+    return new RootCauseAnalysis();
+  }
 }
 
 export default MasterData;
