@@ -56,6 +56,7 @@ const TableSearch = async ({
   password,
   Button,
   User,
+  incident,
 }: {
   page: any;
   Name: string;
@@ -64,6 +65,7 @@ const TableSearch = async ({
   password?: boolean;
   Button?: boolean;
   User?: boolean;
+  incident?: boolean;
 }) => {
   let isFound = false;
 
@@ -102,6 +104,8 @@ const TableSearch = async ({
       if (Edit) {
         if (Button) {
           await Row.locator("button").first().click();
+        } else if (incident) {
+          await Row.locator("a").first().click();
         } else {
           await ChangeStatus({ page, Row });
           await Row.locator("a").first().click();

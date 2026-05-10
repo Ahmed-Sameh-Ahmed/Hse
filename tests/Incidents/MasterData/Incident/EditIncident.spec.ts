@@ -28,5 +28,5 @@ test.beforeEach(async ({ page }, { project }) => {
 
 test("Create Incident", async ({ page }) => {
   const incident = new Incident();
-  await incident.createIncident({ page, expect, Data, NotRandom: true });
+  await incident.EditIncident({ page, expect, Data });
 });

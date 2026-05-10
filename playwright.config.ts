@@ -32,7 +32,7 @@ export default defineConfig({
   use: {
     // actionTimeout:10000,
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: "https://hse.bitwise-solutions.com",
+    baseURL: "https://hse-test.bitwise-solutions.com",
     launchOptions: {
       slowMo: 500,
     },

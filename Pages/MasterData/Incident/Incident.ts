@@ -116,6 +116,7 @@ class Incident {
     });
     // .fill(Data.incident.reported_at.minute);
     await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "OK" }).click();
   }
   async EditIncident({
     page,
@@ -126,14 +127,15 @@ class Incident {
     expect: any;
     Data: any;
   }) {
-    const Found = TableSearch({
+    const Found = await TableSearch({
       page,
       Name: Data.incident.title,
       Edit: true,
+      incident: true,
     });
     if (!Found) {
-      this.createIncident({ page, expect, Data, NotRandom: true });
-      this.EditIncident({ page, expect, Data });
+      await this.createIncident({ page, expect, Data, NotRandom: true });
+      await this.EditIncident({ page, expect, Data });
     }
     await expect(page.getByTestId("initial_information.title")).toHaveValue(
       Data.incident.title,
